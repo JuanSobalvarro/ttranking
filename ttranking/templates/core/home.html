@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Home - Table Tennis Ranking{% endblock %}
+
+{% block hero %}
+    <h1 class="hero-text">Welcome to the Table Tennis Ranking System</h1>
+    <p class="lead">Track player performances and see the latest rankings.</p>
+    <a class="btn btn-primary" href="{% url 'player_list' %}">View Players</a>
+    <a class="btn btn-primary" href="{% url 'match_list' %}">View Matches</a>
+{% endblock %}
+
+{% block content %}
+<!-- Additional content for the homepage can be added here if needed -->
+{% endblock %}

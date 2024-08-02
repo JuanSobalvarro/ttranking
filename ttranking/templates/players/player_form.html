@@ -1,0 +1,90 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">
+        {% if form.instance.pk %}
+            Edit Player
+        {% else %}
+            Add New Player
+        {% endif %}
+    </h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.first_name.label_tag(class="form-label") }}
+                    {{ form.first_name|add_class:"form-control" }}
+                    {% if form.first_name.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.first_name.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.last_name.label_tag(class="form-label") }}
+                    {{ form.last_name|add_class:"form-control" }}
+                    {% if form.last_name.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.last_name.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            {{ form.date_of_birth.label_tag(class="form-label") }}
+            {{ form.date_of_birth|add_class:"form-control" }}
+            {% if form.date_of_birth.errors %}
+                <div class="invalid-feedback">
+                    {% for error in form.date_of_birth.errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.nationality.label_tag(class="form-label") }}
+            {{ form.nationality|add_class:"form-control" }}
+            {% if form.nationality.errors %}
+                <div class="invalid-feedback">
+                    {% for error in form.nationality.errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.ranking.label_tag(class="form-label") }}
+            {{ form.ranking|add_class:"form-control" }}
+            {% if form.ranking.errors %}
+                <div class="invalid-feedback">
+                    {% for error in form.ranking.errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.photo.label_tag(class="form-label") }}
+            {{ form.photo|add_class:"form-control" }}
+            {% if form.photo.errors %}
+                <div class="invalid-feedback">
+                    {% for error in form.photo.errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <a class="btn btn-secondary mt-3" href="{% url 'player_list' %}">Back to List</a>
+</div>
+{% endblock %}

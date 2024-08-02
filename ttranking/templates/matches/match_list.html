@@ -1,0 +1,65 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h1>Match List</h1>
+
+<h2>Singles Matches</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Player 1</th>
+            <th>Player 2</th>
+            <th>Score</th>
+            <th>Winner</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for match in singles_matches %}
+        <tr>
+            <td>{{ match.date }}</td>
+            <td>{{ match.player1 }}</td>
+            <td>{{ match.player2 }}</td>
+            <td>{{ match.score }}</td>
+            <td>{{ match.winner }}</td>
+            <td>
+                <a href="{% url 'match_update' match_id=match.id %}?match_type=S" class="btn btn-primary">Edit</a>
+                <a href="{% url 'match_delete' match_id=match.id %}?match_type=S" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Doubles Matches</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Team 1</th>
+            <th>Team 2</th>
+            <th>Score</th>
+            <th>Winner</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for match in doubles_matches %}
+        <tr>
+            <td>{{ match.date }}</td>
+            <td>{{ match.team1_player1 }} & {{ match.team1_player2 }}</td>
+            <td>{{ match.team2_player1 }} & {{ match.team2_player2 }}</td>
+            <td>{{ match.score }}</td>
+            <td>{{ match.get_winner_display }}</td>
+            <td>
+                <a href="{% url 'match_update' match_id=match.id %}?match_type=D" class="btn btn-primary">Edit</a>
+                <a href="{% url 'match_delete' match_id=match.id %}?match_type=D" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'match_add' %}" class="btn btn-success">Add New Match</a>
+{% endblock %}

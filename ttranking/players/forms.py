@@ -6,6 +6,3 @@ class PlayerForm(forms.ModelForm):
     class Meta:
         model = Player
         fields = ['first_name', 'last_name', 'date_of_birth', 'nationality', 'ranking', 'photo']
-        widgets = {
-            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
-        }

@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Player List</h2>
+    <a class="btn btn-success mb-3" href="{% url 'player_create' %}">Add New Player</a>
+    <div class="row">
+        {% for player in players %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if player.photo %}
+                        <img src="{{ player.photo.url }}" class="card-img-top" alt="{{ player.first_name }} {{ player.last_name }}">
+                    {% else %}
+                        <img src="{% static 'images/default_player.png' %}" class="card-img-top" alt="Default Player">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ player.first_name }} {{ player.last_name }}</h5>
+                        <p class="card-text">Ranking: {{ player.ranking }}</p>
+                        <a href="{% url 'player_detail' player.id %}" class="btn btn-primary">View Details</a>
+                        <a href="{% url 'player_update' player.id %}" class="btn btn-warning">Edit</a>
+                        <a href="{% url 'player_delete' player.id %}" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
