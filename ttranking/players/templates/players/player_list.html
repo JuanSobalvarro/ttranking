@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Player List</h2>
+<a class="btn btn-primary mb-3" href="{% url 'player_create' %}">Add New Player</a>
+<ul class="list-group">
+  {% for player in players %}
+    <li class="list-group-item">
+      <a href="{% url 'player_detail' player.id %}">
+        {{ player.first_name }} {{ player.last_name }} - Ranking: {{ player.ranking }}
+      </a>
+      <a class="btn btn-warning btn-sm float-end mx-1" href="{% url 'player_update' player.id %}">Edit</a>
+      <a class="btn btn-danger btn-sm float-end" href="{% url 'player_delete' player.id %}">Delete</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

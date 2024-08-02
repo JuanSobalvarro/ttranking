@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Match List</h2>
+<a class="btn btn-primary mb-3" href="{% url 'match_create' %}">Create New Match</a>
+<ul class="list-group">
+  {% for match in matches %}
+    <li class="list-group-item">
+      <a href="{% url 'match_detail' match.id %}">
+        {{ match.player1 }} vs {{ match.player2 }} - {{ match.date }} - {{ match.score }}
+      </a>
+      <a class="btn btn-warning btn-sm float-end mx-1" href="{% url 'match_update' match.id %}">Edit</a>
+      <a class="btn btn-danger btn-sm float-end" href="{% url 'match_delete' match.id %}">Delete</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{% if form.instance.pk %}Edit Match{% else %}Create Match{% endif %}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+<a class="btn btn-secondary mt-3" href="{% url 'match_list' %}">Back to List</a>
+{% endblock %}

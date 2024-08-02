@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Confirm Delete</h2>
+<p>Are you sure you want to delete the profile of {{ player.first_name }} {{ player.last_name }}?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Confirm</button>
+    <a class="btn btn-secondary" href="{% url 'player_list' %}">Cancel</a>
+</form>
+{% endblock %}

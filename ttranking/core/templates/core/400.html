@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bad Request</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'match_list' %}">Matches</a></li>
+                <li><a href="{% url 'player_list' %}">Players</a></li>
+                <!-- Add more links as needed -->
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>400 - Bad Request</h1>
+        <p>Sorry, there was a problem with your request. Please check your input and try again.</p>
+        <a href="{% url 'home' %}">Return to the homepage</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Table Tennis Ranking. All rights reserved.</p>
+    </footer>
+</body>
+</html>
