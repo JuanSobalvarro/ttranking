@@ -1,5 +1,3 @@
-/* core/static/css/styles.css */
-
 /* Primary Colors */
 :root {
     --primary-color: #007f3d; /* Green */
@@ -9,51 +7,14 @@
     --border-color: #e0e0e0; /* Light Gray for Borders */
 }
 
-/* Main content area */
-main {
-    padding: 2rem;
-    margin-bottom: 4rem; /* Ensure space for the footer */
-}
-
-body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-
+/* Apply primary and secondary colors to the header and footer */
 header {
-    background: var(--primary-color);
+    background-color: var(--primary-color);
     color: var(--accent-color);
-    padding: 1rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-}
-
-nav ul li {
-    margin: 0 1rem;
-}
-
-nav ul li a {
-    color: var(--accent-color);
-    text-decoration: none;
-    font-weight: bold;
-}
-
-nav ul li a:hover {
-    text-decoration: underline;
-}
-
-footer {
-    background: var(--primary-color);
+.footer {
+    background-color: var(--primary-color);
     color: var(--accent-color);
     text-align: center;
     padding: 1rem;
@@ -62,6 +23,49 @@ footer {
     width: 100%;
 }
 
+/* Navbar custom styles */
+.navbar {
+    background-color: var(--primary-color); /* Set background color */
+}
+
+.nav-link {
+    color: var(--accent-color); /* Set text color */
+}
+
+.nav-link.active {
+    border-bottom: 2px solid;
+    color: var(--accent-color);
+    border-radius: 2px;
+}
+
+.nav-link:hover {
+    color: var(--primary-color); /* Change text color on hover */
+    background-color: rgba(255, 255, 255, 0.1); /* Slight background color on hover */
+}
+
+/* Hero Section */
+.hero-section {
+    background: var(--primary-color); /* Background color for hero section */
+    color: var(--accent-color);
+    padding: 2rem 0;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Main Content Area */
+main {
+    padding: 2rem;
+    margin-bottom: 4rem; /* Ensure space for the footer */
+}
+
+/* Container */
+.container {
+    width: 100%;
+    margin: auto;
+    padding: 2rem;
+}
+
+/* Headings */
 h1, h2, h3, h4, h5, h6 {
     color: var(--text-color);
     margin-top: 0;
@@ -72,6 +76,18 @@ h1 {
     padding-bottom: 0.5rem;
 }
 
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    color: var(--accent-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Additional Styling for Links and Cards */
 a {
     color: var(--primary-color);
     font-weight: bold;
@@ -80,12 +96,6 @@ a {
 a:hover {
     color: var(--secondary-color);
     text-decoration: none;
-}
-
-.container {
-    max-width: 960px;
-    margin: auto;
-    padding: 2rem;
 }
 
 .card {
@@ -106,16 +116,12 @@ a:hover {
     padding: 1rem;
 }
 
-.form-group label {
-    font-weight: bold;
-}
+/* SPECIFIC STYLES */
 
-.btn-primary {
-    background-color: var(--primary-color);
-    border: none;
-    color: var(--accent-color);
-}
-
-.btn-primary:hover {
+#nav-header {
     background-color: var(--secondary-color);
+}
+
+.text-white {
+    color: #FFFFFF;
 }

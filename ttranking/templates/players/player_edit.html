@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Edit Player{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Edit Player: {{ player.first_name }} {{ player.last_name }}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a class="btn btn-secondary" href="{% url 'player_list' %}">Cancel</a>
+    </form>
+</div>
+{% endblock %}

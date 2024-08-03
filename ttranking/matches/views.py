@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import SinglesMatch, DoublesMatch
 from .forms import SinglesMatchForm, DoublesMatchForm
 
+
 def match_list(request):
     singles_matches = SinglesMatch.objects.all()
     doubles_matches = DoublesMatch.objects.all()
@@ -10,6 +11,7 @@ def match_list(request):
         'singles_matches': singles_matches,
         'doubles_matches': doubles_matches,
     })
+
 
 def match_detail(request, match_id):
     match_type = request.GET.get('match_type')
@@ -19,6 +21,7 @@ def match_detail(request, match_id):
         match = get_object_or_404(DoublesMatch, id=match_id)
 
     return render(request, 'matches/match_detail.html', {'match': match, 'match_type': match_type})
+
 
 def match_add(request):
     match_type = request.GET.get('match_type')
@@ -44,6 +47,7 @@ def match_add(request):
         'form_doubles': form_doubles,
     })
 
+
 def match_update(request, match_id):
     match_type = request.GET.get('match_type')
     if match_type == 'S':
@@ -64,6 +68,7 @@ def match_update(request, match_id):
             return redirect('match_list')
 
     return render(request, 'matches/match_update.html', {'form': form, 'match_type': match_type})
+
 
 def match_delete(request, match_id):
     match_type = request.GET.get('match_type')

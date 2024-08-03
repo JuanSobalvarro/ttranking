@@ -1,9 +1,11 @@
 # ttranking/core/views.py
 from django.shortcuts import render
+from players.models import Player
 
 
 def home(request):
-    return render(request, 'core/home.html')
+    ranking = Player.objects.all().order_by('-ranking')[:20]
+    return render(request, 'core/home.html', {'ranking': ranking})
 
 
 def bad_request(request, exception):

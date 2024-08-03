@@ -3,6 +3,7 @@ from django import forms
 from .models import SinglesMatch, DoublesMatch
 from players.models import Player
 
+
 class SinglesMatchForm(forms.ModelForm):
     class Meta:
         model = SinglesMatch
@@ -20,7 +21,15 @@ class SinglesMatchForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['player1'].queryset = Player.objects.all().order_by('ranking')
         self.fields['player2'].queryset = Player.objects.all().order_by('ranking')
-        self.fields['winner'].queryset = Player.objects.all().order_by('ranking')
+
+        if self.instance and self.instance.pk:
+            # Only show the players involved in the match as potential winners
+            self.fields['winner'].queryset = Player.objects.filter(
+                id__in=[self.instance.player1.id, self.instance.player2.id]
+            )
+        else:
+            self.fields['winner'].queryset = Player.objects.none()
+
 
 class DoublesMatchForm(forms.ModelForm):
     class Meta:
@@ -39,6 +48,13 @@ class DoublesMatchForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Filtering out the winner_team to be either 'Team1' or 'Team2' based on the players in the teams
+        if 'team1_player1' in self.data and 'team1_player2' in self.data and 'team2_player1' in self.data and 'team2_player2' in self.data:
+            self.fields['winner_team'].choices = [('Team1', 'Team 1'), ('Team2', 'Team 2')]
+        else:
+            self.fields['winner_team'].choices = [('', 'Select Team')]
+
+        # Ensure team members are distinct
         self.fields['team1_player1'].queryset = Player.objects.all().order_by('ranking')
         self.fields['team1_player2'].queryset = Player.objects.all().order_by('ranking')
         self.fields['team2_player1'].queryset = Player.objects.all().order_by('ranking')

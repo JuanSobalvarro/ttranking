@@ -22,19 +22,20 @@ def player_create(request):
             return redirect('player_list')
     else:
         form = PlayerForm()
-    return render(request, 'players/player_form.html', {'form': form})
+    return render(request, 'players/player_add.html', {'form': form})
 
 
-def player_update(request, player_id):
+def player_edit(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     if request.method == 'POST':
         form = PlayerForm(request.POST, request.FILES, instance=player)
         if form.is_valid():
             form.save()
-            return redirect('player_detail', player_id=player.id)
+            return redirect('player_list')  # Redirect to the player list or detail view
     else:
         form = PlayerForm(instance=player)
-    return render(request, 'players/player_form.html', {'form': form})
+
+    return render(request, 'players/player_edit.html', {'form': form, 'player': player})
 
 
 def player_delete(request, player_id):

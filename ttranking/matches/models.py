@@ -2,6 +2,7 @@
 from django.db import models
 from players.models import Player
 
+
 class SinglesMatch(models.Model):
     date = models.DateTimeField()
     player1 = models.ForeignKey(Player, related_name='singles_matches_as_player1', on_delete=models.CASCADE)
@@ -10,8 +11,13 @@ class SinglesMatch(models.Model):
     player2_score = models.IntegerField(default=0)
     winner = models.ForeignKey(Player, related_name='singles_matches_won', on_delete=models.CASCADE, null=True, blank=True)
 
+    @property
+    def score(self) -> str:
+        return f"{self.player1_score} - {self.player2_score}"
+
     def __str__(self):
         return f"{self.player1} vs {self.player2} - {self.date}"
+
 
 class DoublesMatch(models.Model):
     date = models.DateTimeField()
@@ -21,10 +27,15 @@ class DoublesMatch(models.Model):
     team2_player2 = models.ForeignKey(Player, related_name='doubles_matches_team2_player2', on_delete=models.CASCADE)
     team1_score = models.IntegerField(default=0)
     team2_score = models.IntegerField(default=0)
-    winner_team = models.CharField(max_length=10, choices=[('Team1', 'Team 1'), ('Team2', 'Team 2')], blank=True, null=True)
+    winner_team = models.CharField(max_length=10, blank=True, null=True)
+
+    @property
+    def score(self) -> str:
+        return f"{self.team1_score} - {self.team2_score}"
 
     def __str__(self):
         return f"Team 1: {self.team1_player1} & {self.team1_player2} vs Team 2: {self.team2_player1} & {self.team2_player2} - {self.date}"
+
 
 class MatchStats(models.Model):
     match = models.OneToOneField(SinglesMatch, on_delete=models.CASCADE, null=True, blank=True)
