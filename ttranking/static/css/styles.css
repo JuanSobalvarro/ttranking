@@ -17,10 +17,9 @@ header {
     background-color: var(--primary-color);
     color: var(--accent-color);
     text-align: center;
-    padding: 1rem;
-    position: fixed;
     bottom: 0;
     width: 100%;
+    margin-bottom: 0;
 }
 
 /* Navbar custom styles */
@@ -60,7 +59,6 @@ main {
 
 /* Container */
 .container {
-    width: 100%;
     margin: auto;
     padding: 2rem;
 }
@@ -124,4 +122,8 @@ a:hover {
 
 .text-white {
     color: #FFFFFF;
+}
+
+.spotlight {
+    background: #FFFFFF;
 }

@@ -7,14 +7,13 @@ from players.models import Player
 class SinglesMatchForm(forms.ModelForm):
     class Meta:
         model = SinglesMatch
-        fields = ['date', 'player1', 'player2', 'player1_score', 'player2_score', 'winner']
+        fields = ['date', 'player1', 'player2', 'player1_score', 'player2_score']
         widgets = {
             'date': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'player1': forms.Select(attrs={'class': 'form-control'}),
             'player2': forms.Select(attrs={'class': 'form-control'}),
             'player1_score': forms.NumberInput(attrs={'class': 'form-control'}),
             'player2_score': forms.NumberInput(attrs={'class': 'form-control'}),
-            'winner': forms.Select(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -22,19 +21,21 @@ class SinglesMatchForm(forms.ModelForm):
         self.fields['player1'].queryset = Player.objects.all().order_by('ranking')
         self.fields['player2'].queryset = Player.objects.all().order_by('ranking')
 
-        if self.instance and self.instance.pk:
-            # Only show the players involved in the match as potential winners
-            self.fields['winner'].queryset = Player.objects.filter(
-                id__in=[self.instance.player1.id, self.instance.player2.id]
-            )
-        else:
-            self.fields['winner'].queryset = Player.objects.none()
+    def clean(self):
+        cleaned_data = super().clean()
+        player1 = cleaned_data.get('player1')
+        player2 = cleaned_data.get('player2')
+
+        if player1 == player2:
+            raise forms.ValidationError("Player 1 and Player 2 cannot be the same.")
+
+        return cleaned_data
 
 
 class DoublesMatchForm(forms.ModelForm):
     class Meta:
         model = DoublesMatch
-        fields = ['date', 'team1_player1', 'team1_player2', 'team2_player1', 'team2_player2', 'team1_score', 'team2_score', 'winner_team']
+        fields = ['date', 'team1_player1', 'team1_player2', 'team2_player1', 'team2_player2', 'team1_score', 'team2_score']
         widgets = {
             'date': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'team1_player1': forms.Select(attrs={'class': 'form-control'}),
@@ -43,19 +44,29 @@ class DoublesMatchForm(forms.ModelForm):
             'team2_player2': forms.Select(attrs={'class': 'form-control'}),
             'team1_score': forms.NumberInput(attrs={'class': 'form-control'}),
             'team2_score': forms.NumberInput(attrs={'class': 'form-control'}),
-            'winner_team': forms.Select(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Filtering out the winner_team to be either 'Team1' or 'Team2' based on the players in the teams
-        if 'team1_player1' in self.data and 'team1_player2' in self.data and 'team2_player1' in self.data and 'team2_player2' in self.data:
-            self.fields['winner_team'].choices = [('Team1', 'Team 1'), ('Team2', 'Team 2')]
-        else:
-            self.fields['winner_team'].choices = [('', 'Select Team')]
-
         # Ensure team members are distinct
         self.fields['team1_player1'].queryset = Player.objects.all().order_by('ranking')
         self.fields['team1_player2'].queryset = Player.objects.all().order_by('ranking')
         self.fields['team2_player1'].queryset = Player.objects.all().order_by('ranking')
         self.fields['team2_player2'].queryset = Player.objects.all().order_by('ranking')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        team1_player1 = cleaned_data.get('team1_player1')
+        team1_player2 = cleaned_data.get('team1_player2')
+        team2_player1 = cleaned_data.get('team2_player1')
+        team2_player2 = cleaned_data.get('team2_player2')
+
+        if team1_player1 == team1_player2:
+            raise forms.ValidationError("Team 1 players cannot be the same.")
+        if team2_player1 == team2_player2:
+            raise forms.ValidationError("Team 2 players cannot be the same.")
+        all_players = {team1_player1, team1_player2, team2_player1, team2_player2}
+        if len(all_players) < 4:
+            raise forms.ValidationError("Players cannot be repeated across teams.")
+
+        return cleaned_data

@@ -5,7 +5,8 @@ from players.models import Player
 
 def home(request):
     ranking = Player.objects.all().order_by('-ranking')[:20]
-    return render(request, 'core/home.html', {'ranking': ranking})
+    top = ranking[:3]
+    return render(request, 'core/home.html', {'ranking': ranking, 'top': top})
 
 
 def bad_request(request, exception):

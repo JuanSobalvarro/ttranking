@@ -1,5 +1,11 @@
 # ttranking/players/models.py
 from django.db import models
+from django.core.files.base import ContentFile
+from datetime import date
+from PIL import Image
+import io
+import os
+from uuid import uuid4
 
 
 # Define a tuple of tuples with country code and country name
@@ -199,14 +205,71 @@ COUNTRY_CHOICES = [
     ('ZW', 'Zimbabwe'),
 ]
 
+DESIRED_SIZE = (300, 300)
+
+
+def get_image_upload_path(instance, filename):
+    # Generate a unique filename
+    ext = filename.split('.')[-1]
+    new_filename = f'{uuid4().hex}.{ext}'
+    return os.path.join('player_photos/', new_filename)
+
 
 class Player(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(null=True, blank=True)
     nationality = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
-    ranking = models.IntegerField()
-    photo = models.ImageField(upload_to='player_photos/', blank=True, null=True)
+    ranking = models.IntegerField(default=0, blank=True)
+    photo = models.ImageField(upload_to=get_image_upload_path, blank=True, null=True)
+
+    @property
+    def age(self) -> int:
+        if self.date_of_birth is None:
+            return None
+        today = date.today()
+        return today.year - self.date_of_birth.year - ((today.month, today.day) < (today.year, today.year))
+
+    def add_points(self, points):
+        self.ranking += points
+        self.save()
+
+    def remove_points(self, points):
+        self.ranking -= points
+        self.save()
+
+    def save(self, *args, **kwargs):
+        if self.photo:
+            # Open the image file
+            image = Image.open(self.photo)
+
+            # Resize and crop the image
+            image = self.resize_and_crop(image, DESIRED_SIZE)
+
+            # Save the image to a BytesIO object
+            buffer = io.BytesIO()
+            image.save(buffer, format='PNG')
+            buffer.seek(0)
+            self.photo.save(self.photo.name, ContentFile(buffer.read()), save=False)
+
+        super().save(*args, **kwargs)
+
+    def resize_and_crop(self, image, size):
+        # Resize and crop the image
+        image = image.convert('RGB')
+        width, height = image.size
+        target_width, target_height = size
+
+        # Calculate cropping box
+        left = (width - target_width) / 2
+        top = (height - target_height) / 2
+        right = (width + target_width) / 2
+        bottom = (height + target_height) / 2
+
+        # Crop the image
+        image = image.crop((left, top, right, bottom))
+        image = image.resize(size)
+        return image
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

@@ -1,5 +1,8 @@
 # ttranking/players/forms.py
 from django import forms
+from django.core.exceptions import ValidationError
+import imghdr
+
 from .models import Player, COUNTRY_CHOICES
 
 
@@ -18,3 +21,13 @@ class PlayerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def clean_photo(self):
+        photo = self.cleaned_data.get('photo')
+        if photo:
+            # Ensure photo is a valid image
+            image_type = imghdr.what(photo)
+            if image_type not in ['jpeg', 'png']:
+                raise ValidationError("Unsupported file type. Please upload a JPEG or PNG image.")
+        return photo
+

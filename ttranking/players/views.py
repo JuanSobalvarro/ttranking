@@ -1,5 +1,6 @@
 # ttrankin/players/views.py
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from .models import Player
 from .forms import PlayerForm
 
@@ -31,7 +32,10 @@ def player_edit(request, player_id):
         form = PlayerForm(request.POST, request.FILES, instance=player)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Player updated successfully!')
             return redirect('player_list')  # Redirect to the player list or detail view
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = PlayerForm(instance=player)
 
