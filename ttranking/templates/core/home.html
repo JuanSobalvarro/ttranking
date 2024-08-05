@@ -113,7 +113,9 @@
                                          class="rounded-circle img-fluid me-2"
                                          style="width: 50px; height: 50px; object-fit: cover;">
                                 {% else %}
-                                    <span class="text-muted">N/A</span>
+                                    <img
+                                        src="{% static 'players/images/default' %}"
+                                    >
                                 {% endif %}
                                 <div>
                                     <strong>{{ player.first_name }} {{ player.last_name }}</strong>
