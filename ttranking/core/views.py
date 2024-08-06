@@ -6,10 +6,13 @@ from players.models import Player
 
 
 def home(request):
+    if request.method == 'GET':
+        ranking = Player.objects.all().order_by('-ranking')[:20]
+        top = ranking[:3]
+        return render(request, 'core/home.html', {'ranking': ranking, 'top': top})
     ranking = Player.objects.all().order_by('-ranking')[:20]
     top = ranking[:3]
-    return render(request, 'core/home.html', {'ranking': ranking, 'top': top})
-
+    return render(request, 'core/home.html')
 
 def bad_request(request, exception):
     return render(request, 'core/400.html', status=400)
