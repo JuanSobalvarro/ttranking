@@ -1,10 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import SinglesMatch, DoublesMatch
-from .forms import SinglesMatchForm, DoublesMatchForm
-
-
-
 
 
 def match_list(request):
@@ -18,9 +14,13 @@ def match_list(request):
 
 def match_detail(request, match_id):
     match_type = request.GET.get('match_type')
-    match, _ = get_match_and_form(match_id, match_type)
+    if match_type == 'SinglesMatch':
+        singles_match = get_object_or_404(SinglesMatch, pk=match_id)
+        return render(request, 'matches/match_detail.html', {'match': singles_match, 'match_type': match_type})
 
-    return render(request, 'matches/match_detail.html', {'match': match, 'match_type': match_type})
+    else:
+        doubles_match = get_object_or_404(DoublesMatch, pk=match_id)
+        return render(request, 'matches/match_detail.html', {'match': doubles_match, 'match_type': match_type})
 
 
 
