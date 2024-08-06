@@ -3,8 +3,8 @@ from mysql.connector import errorcode
 
 # Database configuration
 config = {
-    'user': 'root',  # MySQL root user
-    'password': 'root',  # MySQL root password
+    'user': 'ubuntu',  # MySQL root user
+    'password': 'uwunyanichan',  # MySQL root password
     'host': 'localhost',  # MySQL server host
     'port': 3306,
 }
@@ -12,7 +12,7 @@ config = {
 # Database and user details
 db_name = 'ttranking'
 db_user = 'ubuntu'
-db_password = 'password'
+db_password = 'uwunyanichan'
 
 def main():
     cursor = None
