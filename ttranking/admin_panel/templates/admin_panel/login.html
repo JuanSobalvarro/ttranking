@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="{% static 'admin_panel/css/styles.css' %}">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Admin Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Login</button>
+        </form>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Return to Home</a>
+    </div>
+</body>
+</html>

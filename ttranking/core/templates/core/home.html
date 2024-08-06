@@ -40,13 +40,14 @@
                             <img src="{{ player.photo.url }}"
                                  class="player-headshot-img img-fluid"
                                  alt="Player image"
-                                style="margin-left: 20%"
+                                style="margin-left: 7%"
                             >
                         </div>
                         <div class="col-md-8 col-sm-12 custom-margin">
                             <div class="row" style="padding-bottom: 10%">
                                 <div class="col-12 mb-3">
-                                    <span class="bigbolder" style="font-size: 3rem">{{ player.first_name }} {{player.last_name}}</span>
+                                    <span class="bigbolder" style="font-size: 3rem">{{ player.first_name }} {{player.last_name}}</span><br>
+                                    <span class="text-white fs-6 fst-italic">{% if player.alias %}{{ player.alias }}{%endif%}</span>
                                 </div>
                                     <div class="col-md-6">
                                         <span class="thinlabeler d-block">Ranking</span>
@@ -65,11 +66,11 @@
                                                 <span class="text-muted">N/A</span>
                                             {% endif %}
                                         </span><br>
-                                        {% if player.age != None %}
-                                        <span class="thinlabeler">Age</span>
-                                        <span class="thickmedium">
-                                        &nbsp;{{ player.age }}
-                                        </span><br>
+                                        {% if player.age%}
+                                            <span class="thinlabeler">Age</span>
+                                            <span class="thickmedium">
+                                            &nbsp;{{ player.age }}
+                                            </span><br>
                                         {% endif %}
                                     </div>
                             </div>
@@ -92,7 +93,7 @@
     <div class="container my-4">
     <h2 class="text-center">Top 20 Players</h2>
     <div class="table-responsive">
-        <table class="table table-hover table-bordered align-middle">
+        <table class="table table-hover table-bordered align-middle" style="min-width: 600px;">
             <thead class="table-dark">
                 <tr>
                     <th scope="col">Rank</th>
@@ -106,20 +107,16 @@
                     <tr>
                         <td class="rank text-center">{{ forloop.counter }}</td>
                         <td class="d-flex align-items-center">
-                            <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none" href="{% url 'player_detail' player.id %}">
-                                {% if player.photo %}
-                                    <img src="{{ player.photo.url }}"
-                                         alt="{{ player.first_name }} {{ player.last_name }}"
-                                         class="rounded-circle img-fluid me-2"
-                                         style="width: 50px; height: 50px; object-fit: cover;">
-                                {% else %}
-                                    <img
-                                        src="{% static 'players/images/default' %}"
-                                    >
-                                {% endif %}
-                                <div>
-                                    <strong>{{ player.first_name }} {{ player.last_name }}</strong>
-                                    <div class="text-muted">{{ player.nickname }}</div>
+                            <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
+                               href="{% url 'player_detail' player.id %}"
+                                style="">
+                                <img src="{% if player.photo %}{{ player.photo.url }}{% else %}{% static 'players/images/default/player.png' %}{% endif %}"
+                                     alt="{{ player.first_name }} {{ player.last_name }}"
+                                     class="rounded-circle img-fluid me-2"
+                                     style="width: 50px; height: 50px; object-fit: cover;">
+                                <div class="overflow-hidden">
+                                    <strong class="d-block fs-6 fs-md-4 fs-lg-5">{{ player.first_name }} {{ player.last_name }}</strong>
+                                    <div class="text-muted fs-6">{% if player.alias %}{{ player.alias }}{%endif%}</div>
                                 </div>
                             </a>
                         </td>

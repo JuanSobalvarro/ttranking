@@ -9,11 +9,12 @@ from .models import Player, COUNTRY_CHOICES
 class PlayerForm(forms.ModelForm):
     class Meta:
         model = Player
-        fields = ['first_name', 'last_name', 'date_of_birth', 'nationality', 'ranking', 'photo']
+        fields = ['first_name', 'last_name', 'alias', 'date_of_birth', 'nationality', 'ranking', 'photo']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'date_of_birth': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'alias': forms.TextInput(attrs={'class': 'form-control'}),
+            'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'nationality': forms.Select(attrs={'class': 'form-control'}, choices=COUNTRY_CHOICES),
             'ranking': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Initial Ranking Points'}),
             'photo': forms.FileInput(attrs={'class': 'form-control'}),
@@ -21,6 +22,10 @@ class PlayerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Set initial value for date_of_birth
+        if self.instance and self.instance.pk:
+            self.fields['photo'].initial = self.instance.photo
+            # self.fields['date_of_birth'].initial = self.instance.date_of_birth
 
     def clean_photo(self):
         photo = self.cleaned_data.get('photo')

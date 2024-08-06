@@ -13,38 +13,3 @@ def player_list(request):
 def player_detail(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     return render(request, 'players/player_detail.html', {'player': player})
-
-
-def player_create(request):
-    if request.method == 'POST':
-        form = PlayerForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('player_list')
-    else:
-        form = PlayerForm()
-    return render(request, 'players/player_add.html', {'form': form})
-
-
-def player_edit(request, player_id):
-    player = get_object_or_404(Player, id=player_id)
-    if request.method == 'POST':
-        form = PlayerForm(request.POST, request.FILES, instance=player)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Player updated successfully!')
-            return redirect('player_list')  # Redirect to the player list or detail view
-        else:
-            messages.error(request, 'Please correct the errors below.')
-    else:
-        form = PlayerForm(instance=player)
-
-    return render(request, 'players/player_edit.html', {'form': form, 'player': player})
-
-
-def player_delete(request, player_id):
-    player = get_object_or_404(Player, id=player_id)
-    if request.method == 'POST':
-        player.delete()
-        return redirect('player_list')
-    return render(request, 'players/player_confirm_delete.html', {'player': player})

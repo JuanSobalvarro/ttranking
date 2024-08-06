@@ -12,7 +12,6 @@
             <th>Player 2</th>
             <th>Score</th>
             <th>Winner</th>
-            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -23,10 +22,6 @@
             <td>{{ match.player2 }}</td>
             <td>{{ match.score }}</td>
             <td>{{ match.winner }}</td>
-            <td>
-                <a href="{% url 'match_update' match_id=match.id %}?match_type=S" class="btn btn-primary">Edit</a>
-                <a href="{% url 'match_delete' match_id=match.id %}?match_type=S" class="btn btn-danger">Delete</a>
-            </td>
         </tr>
         {% endfor %}
     </tbody>
@@ -41,7 +36,6 @@
             <th>Team 2</th>
             <th>Score</th>
             <th>Winner</th>
-            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -52,14 +46,8 @@
             <td>{{ match.team2_player1 }} & {{ match.team2_player2 }}</td>
             <td>{{ match.score }}</td>
             <td>{{ match.get_winner_display }}</td>
-            <td>
-                <a href="{% url 'match_update' match_id=match.id %}?match_type=D" class="btn btn-primary">Edit</a>
-                <a href="{% url 'match_delete' match_id=match.id %}?match_type=D" class="btn btn-danger">Delete</a>
-            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-
-<a href="{% url 'match_add' %}" class="btn btn-success">Add New Match</a>
 {% endblock %}

@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-xfbsaylhh*wxxlzs8x!kclhcdvp+jqo!fudbs(ni266o%iq*_k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'admin_panel',
     'core',
     'matches',
     'players',
@@ -80,8 +81,12 @@ WSGI_APPLICATION = 'ttranking.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ttranking',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -121,7 +126,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = BASE_DIR / 'static'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'admin_panel/static'),
+    os.path.join(BASE_DIR, 'core/static'),
+    os.path.join(BASE_DIR, 'players/static'),
+    os.path.join(BASE_DIR, 'matches/static'),
+]
 
 # URL to use when referring to media files
 MEDIA_URL = 'media/'
@@ -133,3 +144,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/admin-panel/login/'

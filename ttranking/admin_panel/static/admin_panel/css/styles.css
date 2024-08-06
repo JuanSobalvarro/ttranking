@@ -1,0 +1,111 @@
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.login-container form input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.login-container form button {
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-container form button:hover {
+    background-color: #0056b3;
+}
+
+.login-container .btn-secondary {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #6c757d;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.login-container .btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Dashboard */
+.dashboard-container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 20px;
+}
+
+.dashboard-container h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.dashboard-container .section {
+    margin-bottom: 20px;
+}
+
+.dashboard-container .section h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.dashboard-container .section table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dashboard-container .section table th,
+.dashboard-container .section table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.dashboard-container .section table th {
+    background-color: #f4f4f4;
+}

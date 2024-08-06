@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('matches/', include('matches.urls')),
     path('players/', include('players.urls')),
+    path('admin-panel/', include('admin_panel.urls')),  # Include the admin panel URLs
     path('', include('core.urls')),  # Include core app urls
 ]
 

@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Player List</h2>
+
+    <!-- Search and Sorting Form -->
+    <form method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control" placeholder="Search players" value="{{ search_query }}">
+            </div>
+            <div class="col-md-3">
+                <select name="sort" class="form-control">
+                    <option value="last_name" {% if sort_by == 'last_name' %}selected{% endif %}>Sort by Last Name</option>
+                    <option value="ranking" {% if sort_by == 'ranking' %}selected{% endif %}>Sort by Ranking</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Player Cards -->
+    <div class="row">
+        {% for player in players %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if player.photo %}
+                        <img src="{{ player.photo.url }}" class="card-img-top" alt="{{ player.first_name }} {{ player.last_name }}">
+                    {% else %}
+                        <img src="{% static 'players/images/default/player.png' %}" class="card-img-top" alt="Default Player">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ player.first_name }} {{ player.last_name }}</h5>
+                        <p class="card-text text-muted">{% if player.alias %}{{ player.alias }}{% endif %}</p>
+                        <p class="card-text text-muted">{{ player.get_gender_display }}</p>
+                        <p class="card-text">Ranking: {{ player.ranking }}</p>
+                        <a href="{% url 'player_detail' player.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

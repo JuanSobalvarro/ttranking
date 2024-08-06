@@ -205,6 +205,11 @@ COUNTRY_CHOICES = [
     ('ZW', 'Zimbabwe'),
 ]
 
+GENDER_CHOICES = [
+    ('M', 'Masculino'),
+    ('F', 'Femenino')
+]
+
 DESIRED_SIZE = (300, 300)
 
 
@@ -218,6 +223,8 @@ def get_image_upload_path(instance, filename):
 class Player(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    alias = models.CharField(max_length=100, null=True, blank=True)
+    gender = models.CharField(max_length=100, null=False, blank=True, choices=GENDER_CHOICES)
     date_of_birth = models.DateField(null=True, blank=True)
     nationality = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
     ranking = models.IntegerField(default=0, blank=True)

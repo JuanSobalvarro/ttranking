@@ -1,0 +1,52 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Dashboard Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3">Admin Dashboard</h1>
+        </div>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="row">
+        <!-- Players Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-4">
+                <div class="card-header">Players</div>
+                <div class="card-body">
+                    <h5 class="card-title">Manage Players</h5>
+                    <p class="card-text">View, add, and edit player details.</p>
+                    <a href="{% url 'admin_panel:player_list' %}" class="btn btn-light">View Players</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Matches Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-4">
+                <div class="card-header">Matches</div>
+                <div class="card-body">
+                    <h5 class="card-title">Manage Matches</h5>
+                    <p class="card-text">Schedule and track match details.</p>
+                    <a href="{% url 'admin_panel:match_list' %}" class="btn btn-light">View Matches</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Sections -->
+    <div class="row">
+        <!-- Example Section -->
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header">Example Section</div>
+                <div class="card-body">
+                    <p>This is an example section where you can add more details or functionalities as needed.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
