@@ -22,9 +22,6 @@
             <td>{{ match.player2 }}</td>
             <td>{{ match.score }}</td>
             <td>{{ match.winner }}</td>
-            <td>
-                <a href="{% url 'matches:match_detail' pk=match.id %}?match_type=S" class="btn btn-info">View Details</a>
-            </td>
         </tr>
         {% endfor %}
     </tbody>
@@ -49,9 +46,6 @@
             <td>{{ match.team2_player1 }} & {{ match.team2_player2 }}</td>
             <td>{{ match.score }}</td>
             <td>{{ match.get_winner_display }}</td>
-            <td>
-                <a href="{% url 'matches:match_detail' pk=match.id %}?match_type=D" class="btn btn-info">View Details</a>
-            </td>
         </tr>
         {% endfor %}
     </tbody>

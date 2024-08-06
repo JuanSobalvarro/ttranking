@@ -13,14 +13,14 @@ def match_list(request):
     })
 
 
-def match_detail(request, match_id):
+def match_detail(request, pk):
     match_type = request.GET.get('match_type')
     if match_type == 'S':
-        singles_match = get_object_or_404(SinglesMatch, pk=match_id)
+        singles_match = get_object_or_404(SinglesMatch, pk=pk)
         return render(request, 'matches/match_detail.html', {'match': singles_match, 'match_type': match_type})
 
     elif match_type == 'D':
-        doubles_match = get_object_or_404(DoublesMatch, pk=match_id)
+        doubles_match = get_object_or_404(DoublesMatch, pk=pk)
         return render(request, 'matches/match_detail.html', {'match': doubles_match, 'match_type': match_type})
 
     else:
