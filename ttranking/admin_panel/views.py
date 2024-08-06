@@ -66,7 +66,7 @@ def player_add(request):
         form = PlayerForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('player_list')
+            return redirect('admin_panel:player_list')
     else:
         form = PlayerForm()
     return render(request, 'admin_panel/players/player_add.html', {'form': form})
@@ -94,7 +94,7 @@ def player_delete(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     if request.method == 'POST':
         player.delete()
-        return redirect('player_list')
+        return redirect('admin_panel:player_list')
     return render(request, 'admin_panel/players/player_delete.html', {'player': player})
 
 
@@ -134,11 +134,11 @@ def match_add(request):
         if match_type == 'S' and form_singles.is_valid():
             form_singles.save()
             messages.success(request, 'Singles match added successfully!')
-            return redirect('match_list')
+            return redirect('admin_panel:match_list')
         elif match_type == 'D' and form_doubles.is_valid():
             form_doubles.save()
             messages.success(request, 'Doubles match added successfully!')
-            return redirect('match_list')
+            return redirect('admin_panel:match_list')
         else:
             messages.error(request, 'The form has errors')
 
@@ -163,7 +163,7 @@ def match_update(request, match_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Match updated successfully!')
-            return redirect('match_list')
+            return redirect('admin_panel:match_list')
         else:
             messages.error(request, 'There was an error with your submission.')
 
@@ -178,6 +178,6 @@ def match_delete(request, match_id):
     if request.method == 'POST':
         match.delete()
         messages.success(request, 'Match deleted successfully!')
-        return redirect('match_list')
+        return redirect('admin_panel:match_list')
 
     return render(request, 'admin_panel/matches/match_delete.html', {'match': match, 'match_type': match_type})
