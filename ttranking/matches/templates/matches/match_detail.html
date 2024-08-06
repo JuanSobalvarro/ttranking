@@ -53,7 +53,7 @@
             <td>{{ match.team1_player1 }} & {{ match.team1_player2 }}</td>
             <td>{{ match.team2_player1 }} & {{ match.team2_player2 }}</td>
             <td>{{ match.score }}</td>
-            <td>{{ match.get_winner_display }}</td>
+            <td>{{ match.winner_display }}</td>
             <td>
                 <a href="{% url 'matches:match_detail' match_id=match.id %}?match_type=D" class="btn btn-info">View Details</a>
                 <a href="{% url 'matches:match_update' match_id=match.id %}?match_type=D" class="btn btn-primary">Edit</a>

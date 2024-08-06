@@ -24,6 +24,16 @@ class SinglesMatch(models.Model):
         else:
             self.winner = None
 
+    @property
+    def winner_display(self):
+        if self.winner:
+            if self.winner == self.player1:
+                return f"{self.player1} won"
+
+            return f"{self.player2} won"
+
+        return f""
+
     def update_player_points(self):
         self.update_winner()
 
@@ -74,6 +84,16 @@ class DoublesMatch(models.Model):
     @property
     def score(self) -> str:
         return f"{self.team1_score} - {self.team2_score}"
+
+    @property
+    def winner_display(self):
+        if self.winner_team:
+            if self.winner_team == "Team 1":
+                return f"{self.team1_player1} and {self.team1_player2} won"
+
+            return f"{self.team2_player1} and {self.team2_player2} won"
+
+        return ""
 
     def update_winner(self):
         if (self.team1_score >= 11 and self.team1_score >= self.team2_score + 2):

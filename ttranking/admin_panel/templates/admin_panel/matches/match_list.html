@@ -23,7 +23,7 @@
             <td>{{ match.player1 }}</td>
             <td>{{ match.player2 }}</td>
             <td>{{ match.score }}</td>
-            <td>{{ match.winner }}</td>
+            <td>{{ match.winner_display }}</td>
             <td>
                 <a href="{% url 'admin_panel:match_update' pk=match.id %}?match_type=S" class="btn btn-primary">Update</a>
                 <a href="{% url 'admin_panel:match_delete' pk=match.id %}?match_type=S" class="btn btn-danger">Delete</a>
@@ -52,7 +52,7 @@
             <td>{{ match.team1_player1 }} & {{ match.team1_player2 }}</td>
             <td>{{ match.team2_player1 }} & {{ match.team2_player2 }}</td>
             <td>{{ match.score }}</td>
-            <td>{{ match.get_winner_display }}</td>
+            <td>{{ match.winner_display }}</td>
             <td>
                 <a href="{% url 'admin_panel:match_update' pk=match.id %}?match_type=D" class="btn btn-primary">Edit</a>
                 <a href="{% url 'admin_panel:match_delete' pk=match.id %}?match_type=D" class="btn btn-danger">Delete</a>
