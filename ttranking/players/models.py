@@ -211,7 +211,7 @@ GENDER_CHOICES = [
     ('F', 'Femenino')
 ]
 
-DESIRED_SIZE = (300, 300)
+DESIRED_SIZE = (400, 400)
 
 
 def get_image_upload_path(instance, filename):
