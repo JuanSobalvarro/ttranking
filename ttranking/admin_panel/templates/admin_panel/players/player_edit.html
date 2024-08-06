@@ -9,7 +9,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a class="btn btn-secondary" href="{% url 'player_list' %}">Cancel</a>
+        <a class="btn btn-secondary" href="{% url 'admin_panel:player_list' %}">Cancel</a>
     </form>
 </div>
 {% endblock %}

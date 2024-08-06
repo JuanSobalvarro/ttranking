@@ -9,7 +9,7 @@
             {% if player.photo %}
                 <img src="{{ player.photo.url }}" alt="{{ player.first_name }} {{ player.last_name }}" class="img-fluid img-thumbnail" style="max-width: 100%; height: auto;">
             {% else %}
-                <img src="{% static 'players/static/images/default/player.png' %}" alt="Default Player Photo" class="img-fluid img-thumbnail" style="max-width: 100%; height: auto;">
+                <img src="{% static 'players/images/default/player.png' %}" alt="Default Player Photo" class="img-fluid img-thumbnail" style="max-width: 100%; height: auto;">
             {% endif %}
         </div>
         <div class="col-md-8">

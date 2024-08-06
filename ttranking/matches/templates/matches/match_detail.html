@@ -25,9 +25,9 @@
             <td>{{ match.score }}</td>
             <td>{{ match.winner }}</td>
             <td>
-                <a href="{% url 'match_detail' match_id=match.id %}?match_type=S" class="btn btn-info">View Details</a>
-                <a href="{% url 'match_update' match_id=match.id %}?match_type=S" class="btn btn-primary">Edit</a>
-                <a href="{% url 'match_delete' match_id=match.id %}?match_type=S" class="btn btn-danger">Delete</a>
+                <a href="{% url 'matches:match_detail' match_id=match.id %}?match_type=S" class="btn btn-info">View Details</a>
+                <a href="{% url 'matches:match_update' match_id=match.id %}?match_type=S" class="btn btn-primary">Edit</a>
+                <a href="{% url 'matches:match_delete' match_id=match.id %}?match_type=S" class="btn btn-danger">Delete</a>
             </td>
         </tr>
         {% endfor %}
@@ -55,9 +55,9 @@
             <td>{{ match.score }}</td>
             <td>{{ match.get_winner_display }}</td>
             <td>
-                <a href="{% url 'match_detail' match_id=match.id %}?match_type=D" class="btn btn-info">View Details</a>
-                <a href="{% url 'match_update' match_id=match.id %}?match_type=D" class="btn btn-primary">Edit</a>
-                <a href="{% url 'match_delete' match_id=match.id %}?match_type=D" class="btn btn-danger">Delete</a>
+                <a href="{% url 'matches:match_detail' match_id=match.id %}?match_type=D" class="btn btn-info">View Details</a>
+                <a href="{% url 'matches:match_update' match_id=match.id %}?match_type=D" class="btn btn-primary">Edit</a>
+                <a href="{% url 'matches:match_delete' match_id=match.id %}?match_type=D" class="btn btn-danger">Delete</a>
             </td>
         </tr>
         {% endfor %}

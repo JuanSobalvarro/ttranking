@@ -72,8 +72,8 @@ def player_add(request):
 
 
 @login_required
-def player_edit(request, player_id):
-    player = get_object_or_404(Player, id=player_id)
+def player_edit(request, pk):
+    player = get_object_or_404(Player, id=pk)
     if request.method == 'POST':
         form = PlayerForm(request.POST, request.FILES, instance=player)
         if form.is_valid():
@@ -89,8 +89,8 @@ def player_edit(request, player_id):
 
 
 @login_required
-def player_delete(request, player_id):
-    player = get_object_or_404(Player, id=player_id)
+def player_delete(request, pk):
+    player = get_object_or_404(Player, id=pk)
     if request.method == 'POST':
         player.delete()
         return redirect('admin_panel:player_list')
@@ -102,17 +102,16 @@ MATCHES VIEWS
 """
 
 
-@login_required
 def get_match_and_form(match_id, match_type):
+    print(match_id, match_type)
+    match = None
+    form = None
     if match_type == 'S':
         match = get_object_or_404(SinglesMatch, id=match_id)
         form = SinglesMatchForm(instance=match)
     elif match_type == 'D':
         match = get_object_or_404(DoublesMatch, id=match_id)
         form = DoublesMatchForm(instance=match)
-    else:
-        match = None
-        form = None
     return match, form
 
 
@@ -149,9 +148,9 @@ def match_add(request):
 
 
 @login_required
-def match_update(request, match_id):
+def match_update(request, pk):
     match_type = request.GET.get('match_type')
-    match, form = get_match_and_form(match_id, match_type)
+    match, form = get_match_and_form(match_id=pk, match_type=match_type)
 
     if request.method == 'POST':
         if match_type == 'S':
@@ -170,9 +169,9 @@ def match_update(request, match_id):
 
 
 @login_required
-def match_delete(request, match_id):
+def match_delete(request, pk):
     match_type = request.GET.get('match_type')
-    match, _ = get_match_and_form(match_id, match_type)
+    match, _ = get_match_and_form(pk, match_type)
 
     if request.method == 'POST':
         match.delete()

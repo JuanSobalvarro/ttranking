@@ -38,7 +38,7 @@
                         <p class="card-text text-muted">{% if player.alias %}{{ player.alias }}{% endif %}</p>
                         <p class="card-text text-muted">{{ player.get_gender_display }}</p>
                         <p class="card-text">Ranking: {{ player.ranking }}</p>
-                        <a href="{% url 'player_detail' player.id %}" class="btn btn-primary">View Details</a>
+                        <a href="{% url 'players:player_detail' player.id %}" class="btn btn-primary">View Details</a>
                     </div>
                 </div>
             </div>

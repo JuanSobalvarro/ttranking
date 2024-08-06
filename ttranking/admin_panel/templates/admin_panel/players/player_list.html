@@ -17,8 +17,8 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ player.first_name }} {{ player.last_name }}</h5>
                         <p class="card-text">Ranking: {{ player.ranking }}</p>
-                        <a href="{% url 'admin_panel:player_edit' player.id %}" class="btn btn-warning">Edit</a>
-                        <a href="{% url 'admin_panel:player_delete' player.id %}" class="btn btn-danger">Delete</a>
+                        <a href="{% url 'admin_panel:player_edit' pk=player.id %}" class="btn btn-warning">Edit</a>
+                        <a href="{% url 'admin_panel:player_delete' pk=player.id %}" class="btn btn-danger">Delete</a>
                     </div>
                 </div>
             </div>
