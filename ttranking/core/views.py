@@ -8,7 +8,7 @@ from players.models import Player
 def home(request):
     ranking = Player.objects.all().order_by('-ranking')[:20]
     top = ranking[:3]
-    return render(request, 'core/home.html')
+    return render(request, 'core/home.html', {'top': top, 'ranking': ranking})
 
 def bad_request(request, exception):
     return render(request, 'core/400.html', status=400)
