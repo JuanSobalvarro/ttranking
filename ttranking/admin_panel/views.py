@@ -6,8 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.views import View
 
-from matches.forms import SinglesMatchForm, DoublesMatchForm
-from players.forms import PlayerForm
+from .forms import SinglesMatchForm, DoublesMatchForm, PlayerForm
 
 from matches.models import SinglesMatch
 from matches.models import DoublesMatch

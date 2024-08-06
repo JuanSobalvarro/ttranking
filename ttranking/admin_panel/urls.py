@@ -13,7 +13,7 @@ urlpatterns = [
     # players
     path('players/', views.player_list, name='player_list'),
     path('players/add/', views.player_add, name='player_add'),
-    path('players/<int:pk>/', views.player_edit, name='player_edit'),
+    path('players/<int:pk>/edit', views.player_edit, name='player_edit'),
     path('players/<int:pk>/delete/', views.player_delete, name='player_delete'),
 
     # matches
