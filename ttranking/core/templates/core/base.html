@@ -16,14 +16,14 @@
 </head>
 <body>
     <header class="d-flex flex-wrap justify-content-center py-3" id="nav-header" style="padding-left: 10%; padding-right: 10%;">
-        <a href="{% url 'home' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+        <a href="{% url 'core:home' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
             <img src="{% static 'core/images/logo-white-48.png' %}" alt="" height="48"/>
             <span class="fs-4 text-white">Table Tennis Ranking System</span>
         </a>
         <ul class="nav">
-            <li class="nav-item"><a href="{% url 'home' %}" class="nav-link" aria-current="page">Home</a></li>
-            <li class="nav-item"><a href="{% url 'player_list' %}" class="nav-link">Players</a></li>
-            <li class="nav-item"><a href="{% url 'match_list' %}" class="nav-link">Matches</a></li>
+            <li class="nav-item"><a href="{% url 'core:home' %}" class="nav-link" aria-current="page">Home</a></li>
+            <li class="nav-item"><a href="{% url 'players:player_list' %}" class="nav-link">Players</a></li>
+            <li class="nav-item"><a href="{% url 'matches:match_list' %}" class="nav-link">Matches</a></li>
             <!-- Login Button -->
             <li class="nav-item ms-3">
                 <a href="{% url 'admin_panel:login' %}" class="btn btn-outline-light">Login</a>

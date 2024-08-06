@@ -8,8 +8,8 @@
         <h1 class="display-4 text-white">Welcome to the Table Tennis Ranking System</h1>
         <p class="lead">Track player performances and see the latest rankings.</p>
         <p>
-            <a class="btn btn-primary btn-lg" href="{% url 'player_list' %}" role="button">View Players</a>
-            <a class="btn btn-primary btn-lg" href="{% url 'match_list' %}" role="button">View Matches</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'players:player_list' %}" role="button">View Players</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'matches:match_list' %}" role="button">View Matches</a>
         </p>
     </div>
 {% endblock %}
@@ -108,7 +108,7 @@
                         <td class="rank text-center">{{ forloop.counter }}</td>
                         <td class="d-flex align-items-center">
                             <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
-                               href="{% url 'player_detail' player.id %}"
+                               href="{% url 'players:player_detail' player.id %}"
                                 style="">
                                 <img src="{% if player.photo %}{{ player.photo.url }}{% else %}{% static 'players/images/default/player.png' %}{% endif %}"
                                      alt="{{ player.first_name }} {{ player.last_name }}"
