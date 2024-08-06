@@ -266,19 +266,8 @@ class Player(models.Model):
         super().save(*args, **kwargs)
 
     def resize_and_crop(self, image, size):
-        # Resize and crop the image
+        # Resize the image without preserving the aspect ratio
         image = image.convert('RGB')
-        width, height = image.size
-        target_width, target_height = size
-
-        # Calculate cropping box
-        left = (width - target_width) / 2
-        top = (height - target_height) / 2
-        right = (width + target_width) / 2
-        bottom = (height + target_height) / 2
-
-        # Crop the image
-        image = image.crop((left, top, right, bottom))
         image = image.resize(size)
         return image
 
