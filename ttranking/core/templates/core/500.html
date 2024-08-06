@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Server Error</title>
-</head>
-<body>
-    <h1>500 - Server Error</h1>
-    <p>Sorry, there was a problem with the server. Please try again later.</p>
-    <a href="{% url 'home' %}">Return to the homepage</a>
-</body>
-</html>
+<!-- ttranking/core/templates/core/500.html -->
+{% extends "core/base_error.html" %}
+
+{% block title %}Server Error{% endblock %}
+
+{% block error_code %}500 - Server Error{% endblock %}
+
+{% block error_message %}
+<p>Something went wrong on our end. Please try again later or contact support if the problem persists.</p>
+{% endblock %}

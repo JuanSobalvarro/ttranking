@@ -1,5 +1,7 @@
 # ttranking/core/views.py
+from django.http import HttpResponseServerError, HttpResponseNotFound, Http404
 from django.shortcuts import render
+from django.template import loader
 from players.models import Player
 
 
@@ -14,9 +16,11 @@ def bad_request(request, exception):
 
 
 def page_not_found(request, exception):
-    return render(request, 'core/404.html', status=404)
+    content = loader.render_to_string('core/404.html', {}, request)
+    return HttpResponseNotFound(content)
 
 
 def server_error(request):
-    return render(request, 'core/500.html', status=500)
+    content = loader.render_to_string('core/500.html', {}, request)
+    return HttpResponseServerError(content)
 

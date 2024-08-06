@@ -24,7 +24,7 @@
 
         <!-- spotlight title -->
         <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-            <img src="{% static 'images/logo-white-48.png' %}"
+            <img src="{% static 'core/images/logo-white-48.png' %}"
                 alt="uwu"
                 style="width: 100px; height: 60px; object-fit: contain;">
             <div class="col-12 title text-white" style="margin-top: -10px; font-size: 2.5rem;">Spotlight</div>
@@ -37,7 +37,7 @@
 
 
                         <div class="col-md-4 col-sm-12">
-                            <img src="{{ player.photo.url }}"
+                            <img src="{% if player.photo %}{{ player.photo.url }}{% else %}{% static 'players/images/default/player.png' %}{% endif %}"
                                  class="player-headshot-img img-fluid"
                                  alt="Player image"
                                 style="margin-left: 7%"

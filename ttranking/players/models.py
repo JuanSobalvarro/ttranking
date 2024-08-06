@@ -1,4 +1,5 @@
 # ttranking/players/models.py
+from django.contrib.auth.models import User
 from django.db import models
 from django.core.files.base import ContentFile
 from datetime import date
@@ -229,6 +230,9 @@ class Player(models.Model):
     nationality = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
     ranking = models.IntegerField(default=0, blank=True)
     photo = models.ImageField(upload_to=get_image_upload_path, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    # updated_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     @property
     def age(self) -> int:

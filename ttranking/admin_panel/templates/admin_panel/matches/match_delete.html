@@ -1,4 +1,5 @@
 {% extends 'admin_panel/base.html' %}
+{% load static %}
 
 {% block content %}
 <h1>Confirm Deletion</h1>
@@ -8,6 +9,6 @@
 <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Delete</button>
-    <a href="{% url 'match_list' %}" class="btn btn-secondary">Cancel</a>
+    <a href="{% url 'admin_panel:match_list' %}" class="btn btn-secondary">Cancel</a>
 </form>
 {% endblock %}

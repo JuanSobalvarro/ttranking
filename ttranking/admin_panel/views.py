@@ -12,6 +12,8 @@ from players.forms import PlayerForm
 from matches.models import SinglesMatch
 from matches.models import DoublesMatch
 
+from players.models import Player
+
 
 class AdminLoginView(View):
     def get(self, request):
@@ -54,10 +56,11 @@ PLAYERS VIEWS
 
 @login_required
 def player_list(request):
-    # Your players list view logic here
-    return render(request, 'admin_panel/players/player_list.html')
+    players = Player.objects.all()
+    return render(request, 'admin_panel/players/player_list.html', {'players': players})
 
 
+@login_required
 def player_add(request):
     if request.method == 'POST':
         form = PlayerForm(request.POST, request.FILES)
@@ -69,6 +72,7 @@ def player_add(request):
     return render(request, 'admin_panel/players/player_add.html', {'form': form})
 
 
+@login_required
 def player_edit(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     if request.method == 'POST':
@@ -76,7 +80,7 @@ def player_edit(request, player_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Player updated successfully!')
-            return redirect('player_list')  # Redirect to the player list or detail view
+            return redirect('admin_panel:player_list')  # Redirect to the player list or detail view
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
@@ -85,6 +89,7 @@ def player_edit(request, player_id):
     return render(request, 'admin_panel/players/player_edit.html', {'form': form, 'player': player})
 
 
+@login_required
 def player_delete(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     if request.method == 'POST':
@@ -98,6 +103,7 @@ MATCHES VIEWS
 """
 
 
+@login_required
 def get_match_and_form(match_id, match_type):
     if match_type == 'S':
         match = get_object_or_404(SinglesMatch, id=match_id)
@@ -113,10 +119,12 @@ def get_match_and_form(match_id, match_type):
 
 @login_required
 def match_list(request):
-    # Logic for listing matches
-    return render(request, 'admin_panel/matches/match_list.html')
+    singles_matches = SinglesMatch.objects.all()
+    doubles_matches = DoublesMatch.objects.all()
+    return render(request, 'admin_panel/matches/match_list.html', {'singles_matches': singles_matches, 'doubles_matches': doubles_matches})
 
 
+@login_required
 def match_add(request):
     match_type = request.GET.get('match_type')
     form_singles = SinglesMatchForm(request.POST or None) if match_type == 'S' else None
@@ -141,6 +149,7 @@ def match_add(request):
     })
 
 
+@login_required
 def match_update(request, match_id):
     match_type = request.GET.get('match_type')
     match, form = get_match_and_form(match_id, match_type)
@@ -161,6 +170,7 @@ def match_update(request, match_id):
     return render(request, 'admin_panel/matches/match_update.html', {'form': form, 'match_type': match_type})
 
 
+@login_required
 def match_delete(request, match_id):
     match_type = request.GET.get('match_type')
     match, _ = get_match_and_form(match_id, match_type)
