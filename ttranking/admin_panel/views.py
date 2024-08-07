@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.views import View
 
@@ -12,6 +13,9 @@ from matches.models import SinglesMatch
 from matches.models import DoublesMatch
 
 from players.models import Player
+
+PLAYERS_PER_PAGE = 10
+MATCHES_PER_PAGE = 10
 
 
 class AdminLoginView(View):
@@ -55,7 +59,17 @@ PLAYERS VIEWS
 
 @login_required
 def player_list(request):
-    players = Player.objects.all()
+    player_list = Player.objects.all()
+    paginator = Paginator(player_list, PLAYERS_PER_PAGE)  # Show PLAYERS_PER_PAGE players per page.
+
+    page = request.GET.get('page')
+    try:
+        players = paginator.page(page)
+    except PageNotAnInteger:
+        players = paginator.page(1)
+    except EmptyPage:
+        players = paginator.page(paginator.num_pages)
+
     return render(request, 'admin_panel/players/player_list.html', {'players': players})
 
 
@@ -117,10 +131,33 @@ def get_match_and_form(match_id, match_type):
 
 @login_required
 def match_list(request):
-    singles_matches = SinglesMatch.objects.all()
-    doubles_matches = DoublesMatch.objects.all()
-    return render(request, 'admin_panel/matches/match_list.html', {'singles_matches': singles_matches, 'doubles_matches': doubles_matches})
+    singles_match_list = SinglesMatch.objects.all()
+    doubles_match_list = DoublesMatch.objects.all()
 
+    singles_paginator = Paginator(singles_match_list, MATCHES_PER_PAGE)  # Show MATCHES_PER_PAGE singles matches per page.
+    doubles_paginator = Paginator(doubles_match_list, MATCHES_PER_PAGE)  # Show MATCHES_PER_PAGE doubles matches per page.
+
+    singles_page = request.GET.get('singles_page')
+    doubles_page = request.GET.get('doubles_page')
+
+    try:
+        singles_matches = singles_paginator.page(singles_page)
+    except PageNotAnInteger:
+        singles_matches = singles_paginator.page(1)
+    except EmptyPage:
+        singles_matches = singles_paginator.page(singles_paginator.num_pages)
+
+    try:
+        doubles_matches = doubles_paginator.page(doubles_page)
+    except PageNotAnInteger:
+        doubles_matches = doubles_paginator.page(1)
+    except EmptyPage:
+        doubles_matches = doubles_paginator.page(doubles_paginator.num_pages)
+
+    return render(request, 'admin_panel/matches/match_list.html', {
+        'singles_matches': singles_matches,
+        'doubles_matches': doubles_matches
+    })
 
 @login_required
 def match_add(request):
