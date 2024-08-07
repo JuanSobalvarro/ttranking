@@ -104,7 +104,6 @@ class DoublesMatch(models.Model):
         else:
             self.winner_team = None
 
-        self.save()
 
     def update_team_points(self):
         self.update_winner()
