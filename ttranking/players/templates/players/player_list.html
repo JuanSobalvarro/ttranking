@@ -5,24 +5,6 @@
 <div class="container mt-4">
     <h2 class="mb-4">Player List</h2>
 
-<!--    &lt;!&ndash; Search and Sorting Form &ndash;&gt;-->
-<!--    <form method="get" class="mb-4">-->
-<!--        <div class="row">-->
-<!--            <div class="col-md-6">-->
-<!--                <input type="text" name="search" class="form-control" placeholder="Search players" value="{{ search_query }}">-->
-<!--            </div>-->
-<!--            <div class="col-md-3">-->
-<!--                <select name="sort" class="form-control">-->
-<!--                    <option value="last_name" {% if sort_by == 'last_name' %}selected{% endif %}>Sort by Last Name</option>-->
-<!--                    <option value="ranking" {% if sort_by == 'ranking' %}selected{% endif %}>Sort by Ranking</option>-->
-<!--                </select>-->
-<!--            </div>-->
-<!--            <div class="col-md-3">-->
-<!--                <button type="submit" class="btn btn-primary">Search</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </form>-->
-
     <!-- Player Cards -->
     <div class="row">
         {% for player in players %}
@@ -43,6 +25,25 @@
                 </div>
             </div>
         {% endfor %}
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if players.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ players.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ players.number }} of {{ players.paginator.num_pages }}.
+            </span>
+
+            {% if players.has_next %}
+                <a href="?page={{ players.next_page_number }}">next</a>
+                <a href="?page={{ players.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
     </div>
 </div>
 {% endblock %}

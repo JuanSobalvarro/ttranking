@@ -27,6 +27,24 @@
     </tbody>
 </table>
 
+<div class="pagination">
+    <span class="step-links">
+        {% if singles_matches.has_previous %}
+            <a href="?singles_page=1">&laquo; first</a>
+            <a href="?singles_page={{ singles_matches.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ singles_matches.number }} of {{ singles_matches.paginator.num_pages }}.
+        </span>
+
+        {% if singles_matches.has_next %}
+            <a href="?singles_page={{ singles_matches.next_page_number }}">next</a>
+            <a href="?singles_page={{ singles_matches.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
 <h2>Doubles Matches</h2>
 <table class="table table-striped">
     <thead>
@@ -50,4 +68,22 @@
         {% endfor %}
     </tbody>
 </table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if doubles_matches.has_previous %}
+            <a href="?doubles_page=1">&laquo; first</a>
+            <a href="?doubles_page={{ doubles_matches.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ doubles_matches.number }} of {{ doubles_matches.paginator.num_pages }}.
+        </span>
+
+        {% if doubles_matches.has_next %}
+            <a href="?doubles_page={{ doubles_matches.next_page_number }}">next</a>
+            <a href="?doubles_page={{ doubles_matches.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}

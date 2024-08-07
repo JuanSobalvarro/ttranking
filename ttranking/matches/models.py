@@ -87,6 +87,7 @@ class DoublesMatch(models.Model):
 
     @property
     def winner_display(self):
+        self.update_winner()
         if self.winner_team:
             if self.winner_team == "Team 1":
                 return f"{self.team1_player1} and {self.team1_player2} won"
@@ -102,6 +103,8 @@ class DoublesMatch(models.Model):
             self.winner_team = "Team 2"
         else:
             self.winner_team = None
+
+        self.save()
 
     def update_team_points(self):
         self.update_winner()

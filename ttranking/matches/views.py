@@ -1,12 +1,37 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.http import HttpResponse
 from .models import SinglesMatch, DoublesMatch
 
+MATCHES_PER_PAGE = 5
+
 
 def match_list(request):
-    singles_matches = SinglesMatch.objects.all()
-    doubles_matches = DoublesMatch.objects.all()
+    # Get all singles matches and paginate
+    singles_match_list = SinglesMatch.objects.all().order_by('-date')
+    singles_page = request.GET.get('singles_page', 1)
+
+    singles_paginator = Paginator(singles_match_list, MATCHES_PER_PAGE)  # Show MATCHES_PER_PAGE singles matches per page
+    try:
+        singles_matches = singles_paginator.page(singles_page)
+    except PageNotAnInteger:
+        singles_matches = singles_paginator.page(1)
+    except EmptyPage:
+        singles_matches = singles_paginator.page(singles_paginator.num_pages)
+
+    # Get all doubles matches and paginate
+    doubles_match_list = DoublesMatch.objects.all().order_by('-date')
+    doubles_page = request.GET.get('doubles_page', 1)
+
+    doubles_paginator = Paginator(doubles_match_list, MATCHES_PER_PAGE)  # Show MATCHES_PER_PAGE doubles matches per page
+    try:
+        doubles_matches = doubles_paginator.page(doubles_page)
+    except PageNotAnInteger:
+        doubles_matches = doubles_paginator.page(1)
+    except EmptyPage:
+        doubles_matches = doubles_paginator.page(doubles_paginator.num_pages)
+
     return render(request, 'matches/match_list.html', {
         'singles_matches': singles_matches,
         'doubles_matches': doubles_matches,
