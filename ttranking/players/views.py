@@ -7,7 +7,7 @@ PLAYERS_PER_PAGE = 6
 
 
 def player_list(request):
-    player_list = Player.objects.all().order_by('ranking')
+    player_list = Player.objects.all().order_by('first_name', 'last_name')
     paginator = Paginator(player_list, PLAYERS_PER_PAGE)  # Show PLAYERS_PER_PAGE players per page
 
     page = request.GET.get('page', 1)
