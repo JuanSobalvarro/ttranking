@@ -3,6 +3,7 @@
 
 {% block content %}
 <h1>Match List</h1>
+<a href="{% url 'admin_panel:match_add' %}" class="btn btn-success">Add New Match</a>
 
 <h2>Singles Matches</h2>
 <table class="table table-striped">
@@ -98,5 +99,4 @@
     </span>
 </div>
 
-<a href="{% url 'admin_panel:match_add' %}" class="btn btn-success">Add New Match</a>
 {% endblock %}

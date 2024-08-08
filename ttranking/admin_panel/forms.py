@@ -6,6 +6,8 @@ import imghdr
 from players.models import Player, COUNTRY_CHOICES
 from matches.models import SinglesMatch, DoublesMatch
 
+import datetime
+
 
 class PlayerForm(forms.ModelForm):
     class Meta:
@@ -41,19 +43,22 @@ class PlayerForm(forms.ModelForm):
 class SinglesMatchForm(forms.ModelForm):
     class Meta:
         model = SinglesMatch
-        fields = ['date', 'player1', 'player2', 'player1_score', 'player2_score']
+        fields = ['date', 'player1', 'player1_score', 'player2', 'player2_score']
+        labels = ['Fecha y Hora']
         widgets = {
             'date': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'player1': forms.Select(attrs={'class': 'form-control'}),
-            'player2': forms.Select(attrs={'class': 'form-control'}),
             'player1_score': forms.NumberInput(attrs={'class': 'form-control'}),
+            'player2': forms.Select(attrs={'class': 'form-control'}),
             'player2_score': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['player1'].queryset = Player.objects.all().order_by('ranking')
-        self.fields['player2'].queryset = Player.objects.all().order_by('ranking')
+        self.fields['date'].initial = datetime.datetime.now().replace(second=0, microsecond=0)
+        self.fields['player1'].queryset = Player.objects.all().order_by('first_name')
+        self.fields['player2'].queryset = Player.objects.all().order_by('first_name')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -69,24 +74,25 @@ class SinglesMatchForm(forms.ModelForm):
 class DoublesMatchForm(forms.ModelForm):
     class Meta:
         model = DoublesMatch
-        fields = ['date', 'team1_player1', 'team1_player2', 'team2_player1', 'team2_player2', 'team1_score', 'team2_score']
+        fields = ['date', 'team1_player1', 'team1_player2', 'team1_score', 'team2_player1', 'team2_player2', 'team2_score']
         widgets = {
             'date': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'team1_player1': forms.Select(attrs={'class': 'form-control'}),
             'team1_player2': forms.Select(attrs={'class': 'form-control'}),
+            'team1_score': forms.NumberInput(attrs={'class': 'form-control'}),
             'team2_player1': forms.Select(attrs={'class': 'form-control'}),
             'team2_player2': forms.Select(attrs={'class': 'form-control'}),
-            'team1_score': forms.NumberInput(attrs={'class': 'form-control'}),
             'team2_score': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['date'].initial = datetime.datetime.now().replace(second=0, microsecond=0)
         # Ensure team members are distinct
-        self.fields['team1_player1'].queryset = Player.objects.all().order_by('ranking')
-        self.fields['team1_player2'].queryset = Player.objects.all().order_by('ranking')
-        self.fields['team2_player1'].queryset = Player.objects.all().order_by('ranking')
-        self.fields['team2_player2'].queryset = Player.objects.all().order_by('ranking')
+        self.fields['team1_player1'].queryset = Player.objects.all().order_by('first_name')
+        self.fields['team1_player2'].queryset = Player.objects.all().order_by('first_name')
+        self.fields['team2_player1'].queryset = Player.objects.all().order_by('first_name')
+        self.fields['team2_player2'].queryset = Player.objects.all().order_by('first_name')
 
     def clean(self):
         cleaned_data = super().clean()

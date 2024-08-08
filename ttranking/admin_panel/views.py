@@ -131,8 +131,8 @@ def get_match_and_form(match_id, match_type):
 
 @login_required
 def match_list(request):
-    singles_match_list = SinglesMatch.objects.all()
-    doubles_match_list = DoublesMatch.objects.all()
+    singles_match_list = SinglesMatch.objects.all().order_by('-date')
+    doubles_match_list = DoublesMatch.objects.all().order_by('-date')
 
     singles_paginator = Paginator(singles_match_list, MATCHES_PER_PAGE)  # Show MATCHES_PER_PAGE singles matches per page.
     doubles_paginator = Paginator(doubles_match_list, MATCHES_PER_PAGE)  # Show MATCHES_PER_PAGE doubles matches per page.
