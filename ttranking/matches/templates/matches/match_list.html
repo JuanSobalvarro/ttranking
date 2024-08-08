@@ -1,17 +1,17 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<h1>Match List</h1>
+<h1>Lista de Partidos</h1>
 
-<h2>Singles Matches</h2>
+<h2>Partidos Individuales</h2>
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Date</th>
-            <th>Player 1</th>
-            <th>Player 2</th>
-            <th>Score</th>
-            <th>Winner</th>
+            <th>Fecha</th>
+            <th>Jugador 1</th>
+            <th>Jugador 2</th>
+            <th>Resultado</th>
+            <th>Ganador</th>
         </tr>
     </thead>
     <tbody>
@@ -30,30 +30,30 @@
 <div class="pagination">
     <span class="step-links">
         {% if singles_matches.has_previous %}
-            <a href="?singles_page=1">&laquo; first</a>
-            <a href="?singles_page={{ singles_matches.previous_page_number }}">previous</a>
+            <a href="?singles_page=1">&laquo; primero</a>
+            <a href="?singles_page={{ singles_matches.previous_page_number }}">anterior</a>
         {% endif %}
 
         <span class="current">
-            Page {{ singles_matches.number }} of {{ singles_matches.paginator.num_pages }}.
+            Página {{ singles_matches.number }} de {{ singles_matches.paginator.num_pages }}.
         </span>
 
         {% if singles_matches.has_next %}
-            <a href="?singles_page={{ singles_matches.next_page_number }}">next</a>
-            <a href="?singles_page={{ singles_matches.paginator.num_pages }}">last &raquo;</a>
+            <a href="?singles_page={{ singles_matches.next_page_number }}">siguiente</a>
+            <a href="?singles_page={{ singles_matches.paginator.num_pages }}">último &raquo;</a>
         {% endif %}
     </span>
 </div>
 
-<h2>Doubles Matches</h2>
+<h2>Partidos Dobles</h2>
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Date</th>
-            <th>Team 1</th>
-            <th>Team 2</th>
-            <th>Score</th>
-            <th>Winner</th>
+            <th>Fecha</th>
+            <th>Equipo 1</th>
+            <th>Equipo 2</th>
+            <th>Resultado</th>
+            <th>Ganador</th>
         </tr>
     </thead>
     <tbody>
@@ -72,17 +72,17 @@
 <div class="pagination">
     <span class="step-links">
         {% if doubles_matches.has_previous %}
-            <a href="?doubles_page=1">&laquo; first</a>
-            <a href="?doubles_page={{ doubles_matches.previous_page_number }}">previous</a>
+            <a href="?doubles_page=1">&laquo; primero</a>
+            <a href="?doubles_page={{ doubles_matches.previous_page_number }}">anterior</a>
         {% endif %}
 
         <span class="current">
-            Page {{ doubles_matches.number }} of {{ doubles_matches.paginator.num_pages }}.
+            Página {{ doubles_matches.number }} de {{ doubles_matches.paginator.num_pages }}.
         </span>
 
         {% if doubles_matches.has_next %}
-            <a href="?doubles_page={{ doubles_matches.next_page_number }}">next</a>
-            <a href="?doubles_page={{ doubles_matches.paginator.num_pages }}">last &raquo;</a>
+            <a href="?doubles_page={{ doubles_matches.next_page_number }}">siguiente</a>
+            <a href="?doubles_page={{ doubles_matches.paginator.num_pages }}">último &raquo;</a>
         {% endif %}
     </span>
 </div>

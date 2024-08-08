@@ -2,18 +2,18 @@
 {% load static %}
 
 {% block content %}
-<h1>Match List</h1>
+<h1>Lista de Partidos</h1>
 
-<h2>Singles Matches</h2>
+<h2>Partidos Individuales</h2>
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Date</th>
-            <th>Player 1</th>
-            <th>Player 2</th>
-            <th>Score</th>
-            <th>Winner</th>
-            <th>Actions</th>
+            <th>Fecha</th>
+            <th>Jugador 1</th>
+            <th>Jugador 2</th>
+            <th>Resultado</th>
+            <th>Ganador</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -25,25 +25,25 @@
             <td>{{ match.score }}</td>
             <td>{{ match.winner }}</td>
             <td>
-                <a href="{% url 'matches:match_detail' match_id=match.id %}?match_type=S" class="btn btn-info">View Details</a>
-                <a href="{% url 'matches:match_update' match_id=match.id %}?match_type=S" class="btn btn-primary">Edit</a>
-                <a href="{% url 'matches:match_delete' match_id=match.id %}?match_type=S" class="btn btn-danger">Delete</a>
+                <a href="{% url 'matches:match_detail' match_id=match.id %}?match_type=S" class="btn btn-info">Ver Detalles</a>
+                <a href="{% url 'matches:match_update' match_id=match.id %}?match_type=S" class="btn btn-primary">Editar</a>
+                <a href="{% url 'matches:match_delete' match_id=match.id %}?match_type=S" class="btn btn-danger">Eliminar</a>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 
-<h2>Doubles Matches</h2>
+<h2>Partidos Dobles</h2>
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Date</th>
-            <th>Team 1</th>
-            <th>Team 2</th>
-            <th>Score</th>
-            <th>Winner</th>
-            <th>Actions</th>
+            <th>Fecha</th>
+            <th>Equipo 1</th>
+            <th>Equipo 2</th>
+            <th>Resultado</th>
+            <th>Ganador</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -55,15 +55,14 @@
             <td>{{ match.score }}</td>
             <td>{{ match.winner_display }}</td>
             <td>
-                <a href="{% url 'matches:match_detail' match_id=match.id %}?match_type=D" class="btn btn-info">View Details</a>
-                <a href="{% url 'matches:match_update' match_id=match.id %}?match_type=D" class="btn btn-primary">Edit</a>
-                <a href="{% url 'matches:match_delete' match_id=match.id %}?match_type=D" class="btn btn-danger">Delete</a>
+                <a href="{% url 'matches:match_detail' match_id=match.id %}?match_type=D" class="btn btn-info">Ver Detalles</a>
+                <a href="{% url 'matches:match_update' match_id=match.id %}?match_type=D" class="btn btn-primary">Editar</a>
+                <a href="{% url 'matches:match_delete' match_id=match.id %}?match_type=D" class="btn btn-danger">Eliminar</a>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 
-<a href="{% url 'match_add' %}" class="btn btn-success">Add New Match</a>
+<a href="{% url 'match_add' %}" class="btn btn-success">Agregar Nuevo Partido</a>
 {% endblock %}
-
