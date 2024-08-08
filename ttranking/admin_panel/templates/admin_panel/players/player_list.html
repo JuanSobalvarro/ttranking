@@ -3,8 +3,8 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">Player List</h2>
-    <a class="btn btn-success mb-3" href="{% url 'admin_panel:player_add' %}">Add New Player</a>
+    <h2 class="mb-4">Lista de Jugadores</h2>
+    <a class="btn btn-success mb-3" href="{% url 'admin_panel:player_add' %}">Agregar Nuevo Jugador</a>
     <div class="row">
         {% for player in players %}
             <div class="col-md-4 mb-4">
@@ -12,14 +12,14 @@
                     {% if player.photo %}
                         <img src="{{ player.photo.url }}" class="card-img-top" alt="{{ player.first_name }} {{ player.last_name }}">
                     {% else %}
-                        <img src="{% static 'players/images/default/player.png' %}" class="card-img-top" alt="Default Player">
+                        <img src="{% static 'players/images/default/player.png' %}" class="card-img-top" alt="Jugador Predeterminado">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ player.first_name }} {{ player.last_name }}</h5>
                         <p class="text-muted">{% if player.alias %}{{ player.alias }}{% endif %}</p>
                         <p class="card-text">Ranking: {{ player.ranking }}</p>
-                        <a href="{% url 'admin_panel:player_edit' pk=player.id %}" class="btn btn-warning">Edit</a>
-                        <a href="{% url 'admin_panel:player_delete' pk=player.id %}" class="btn btn-danger">Delete</a>
+                        <a href="{% url 'admin_panel:player_edit' pk=player.id %}" class="btn btn-warning">Editar</a>
+                        <a href="{% url 'admin_panel:player_delete' pk=player.id %}" class="btn btn-danger">Eliminar</a>
                     </div>
                 </div>
             </div>
@@ -29,17 +29,17 @@
     <div class="pagination">
         <span class="step-links">
             {% if players.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ players.previous_page_number }}">previous</a>
+                <a href="?page=1">&laquo; primero</a>
+                <a href="?page={{ players.previous_page_number }}">anterior</a>
             {% endif %}
 
             <span class="current">
-                Page {{ players.number }} of {{ players.paginator.num_pages }}.
+                Página {{ players.number }} de {{ players.paginator.num_pages }}.
             </span>
 
             {% if players.has_next %}
-                <a href="?page={{ players.next_page_number }}">next</a>
-                <a href="?page={{ players.paginator.num_pages }}">last &raquo;</a>
+                <a href="?page={{ players.next_page_number }}">siguiente</a>
+                <a href="?page={{ players.paginator.num_pages }}">último &raquo;</a>
             {% endif %}
         </span>
     </div>

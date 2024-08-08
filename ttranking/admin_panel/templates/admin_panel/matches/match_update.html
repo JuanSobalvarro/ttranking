@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block content %}
-<h1>Update Match</h1>
+<h1>Actualizar Partido</h1>
 
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="submit" class="btn btn-primary">Actualizar</button>
 </form>
 {% endblock %}

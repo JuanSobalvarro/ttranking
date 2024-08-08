@@ -1,15 +1,15 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %}Home - Table Tennis Ranking{% endblock %}
+{% block title %}Inicio - Clasificación de Tenis de Mesa{% endblock %}
 
 {% block hero %}
     <div class="jumbotron text-center">
-        <h1 class="display-4 text-white">Welcome to the Table Tennis Ranking System</h1>
-        <p class="lead">Track player performances and see the latest rankings.</p>
+        <h1 class="display-4 text-white">Bienvenido al Sistema de Clasificación de Tenis de Mesa</h1>
+        <p class="lead">Sigue el rendimiento de los jugadores y consulta las últimas clasificaciones.</p>
         <p>
-            <a class="btn btn-primary btn-lg" href="{% url 'players:player_list' %}" role="button">View Players</a>
-            <a class="btn btn-primary btn-lg" href="{% url 'matches:match_list' %}" role="button">View Matches</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'players:player_list' %}" role="button">Ver Jugadores</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'matches:match_list' %}" role="button">Ver Partidos</a>
         </p>
     </div>
 {% endblock %}
@@ -17,12 +17,12 @@
 {% block content %}
     <div id="topPlayersCarousel" class="carousel slide" data-bs-ride="carousel" style="background-color: #333333">
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#topPlayersCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#topPlayersCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#topPlayersCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#topPlayersCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Diapositiva 1"></button>
+            <button type="button" data-bs-target="#topPlayersCarousel" data-bs-slide-to="1" aria-label="Diapositiva 2"></button>
+            <button type="button" data-bs-target="#topPlayersCarousel" data-bs-slide-to="2" aria-label="Diapositiva 3"></button>
         </div>
 
-        <!-- spotlight title -->
+        <!-- título del Spotlight -->
         <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
             <img src="{% static 'core/images/logo-white-48.png' %}"
                 alt="uwu"
@@ -35,11 +35,10 @@
                 <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %} text-white">
                     <div class="row m-0 featured-player-card common-shadow">
 
-
                         <div class="col-md-4 col-sm-12">
                             <img src="{% if player.photo %}{{ player.photo.url }}{% else %}{% static 'players/images/default/player.png' %}{% endif %}"
                                  class="player-headshot-img img-fluid"
-                                 alt="Player image"
+                                 alt="Imagen del Jugador"
                                 style="margin-left: 5%"
                             >
                         </div>
@@ -50,7 +49,7 @@
                                     <span class="text-white fs-6 fst-italic">{% if player.alias %}{{ player.alias }}{%endif%}</span>
                                 </div>
                                     <div class="col-md-6">
-                                        <span class="thinlabeler d-block">Ranking</span>
+                                        <span class="thinlabeler d-block">Clasificación</span>
                                         <span style="font-size: 5rem; font-weight: 300;">
                                             <span class="bigbolder">#{{ forloop.counter }}</span>
                                         </span>
@@ -59,15 +58,15 @@
                                         <span class="custom-span-details-card bold">
                                             {% if player.nationality %}
                                                 <img src="https://flagsapi.com/{{ player.nationality }}/flat/32.png"
-                                                     alt="{{ player.get_nationality_display }} flag"
+                                                     alt="Bandera de {{ player.get_nationality_display }}"
                                                      class="img-fluid">
                                                 {{ player.get_nationality_display }}
                                             {% else %}
-                                                <span class="text-muted">N/A</span>
+                                                <span class="text-muted">N/D</span>
                                             {% endif %}
                                         </span><br>
                                         {% if player.age%}
-                                            <span class="thinlabeler">Age</span>
+                                            <span class="thinlabeler">Edad</span>
                                             <span class="thickmedium">
                                             &nbsp;{{ player.age }}
                                             </span><br>
@@ -82,24 +81,24 @@
 
         <button class="carousel-control-prev" type="button" data-bs-target="#topPlayersCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+            <span class="visually-hidden">Anterior</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#topPlayersCarousel" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+            <span class="visually-hidden">Siguiente</span>
         </button>
     </div>
 
     <div class="container my-4">
-    <h2 class="text-center">Top 20 Players</h2>
+    <h2 class="text-center">Top 20 Jugadores</h2>
     <div class="table-responsive">
         <table class="table table-hover table-bordered align-middle" style="min-width: 600px;">
             <thead class="table-dark">
                 <tr>
-                    <th scope="col">Rank</th>
-                    <th scope="col">Player</th>
-                    <th scope="col">Nationality</th>
-                    <th scope="col">Points</th>
+                    <th scope="col">Posición</th>
+                    <th scope="col">Jugador</th>
+                    <th scope="col">Nacionalidad</th>
+                    <th scope="col">Puntos</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,8 +107,7 @@
                         <td class="rank text-center">{{ forloop.counter }}</td>
                         <td class="d-flex align-items-center">
                             <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
-                               href="{% url 'players:player_detail' player.id %}"
-                                style="">
+                               href="{% url 'players:player_detail' player.id %}">
                                 <img src="{% if player.photo %}{{ player.photo.url }}{% else %}{% static 'players/images/default/player.png' %}{% endif %}"
                                      alt="{{ player.first_name }} {{ player.last_name }}"
                                      class="rounded-circle img-fluid me-2"
@@ -123,11 +121,11 @@
                         <td class="text-center">
                             {% if player.nationality %}
                                 <img src="https://flagsapi.com/{{ player.nationality }}/flat/32.png"
-                                     alt="{{ player.get_nationality_display }} flag"
+                                     alt="Bandera de {{ player.get_nationality_display }}"
                                      class="img-fluid me-1">
                                 {{ player.get_nationality_display }}
                             {% else %}
-                                <span class="text-muted">N/A</span>
+                                <span class="text-muted">N/D</span>
                             {% endif %}
                         </td>
                         <td class="text-center">{{ player.ranking }}</td>
@@ -135,6 +133,27 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="container my-5">
+            <h2 class="text-center">Sobre el sistema de Clasificación</h2>
+            <p class="lead text-center">
+                Nuestro sistema de clasificación de tenis de mesa está diseñado para ofrecer una representación precisa
+                y dinámica del rendimiento de los jugadores a lo largo del tiempo. Cada jugador acumula puntos en
+                función de los resultados de sus victorias.
+            </p>
+            <p class="text-center">
+                Ya sean principiantes, avanzados o profesionales todos pueden participar de nuestro grupo y ser
+                registrado/a en nuestra clasificación.
+                La clasificación se actualiza diariamente, sean en los partidos de 12m a 1:00pm o en algún partido donde
+                hayan testigos partes del grupo.
+            </p>
+            <h3 class="text-center">
+                Temporada actual
+            </h3>
+            <p class="lead text-center">
+                La temporada actual empezó lunes 5 de agosto, se otorgan 2 puntos por cada victoria y las derrotas no
+                restan puntos a los participantes.
+            </p>
+        </div>
     </div>
 </div>
 

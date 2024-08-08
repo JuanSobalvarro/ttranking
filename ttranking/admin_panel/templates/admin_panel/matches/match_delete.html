@@ -2,13 +2,13 @@
 {% load static %}
 
 {% block content %}
-<h1>Confirm Deletion</h1>
-<p>Are you sure you want to delete this match?</p>
+<h1>Confirmar Eliminación</h1>
+<p>¿Está seguro de que desea eliminar este partido?</p>
 <p><strong>{% if match_type == 'S' %}{{ match }}{% else %}{{ match }}{% endif %}</strong></p>
 
 <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a href="{% url 'admin_panel:match_list' %}" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url 'admin_panel:match_list' %}" class="btn btn-secondary">Cancelar</a>
 </form>
 {% endblock %}

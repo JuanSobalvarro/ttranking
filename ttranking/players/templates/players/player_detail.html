@@ -9,19 +9,19 @@
             {% if player.photo %}
                 <img src="{{ player.photo.url }}" alt="{{ player.first_name }} {{ player.last_name }}" class="img-fluid img-thumbnail" style="max-width: 100%; height: auto;">
             {% else %}
-                <img src="{% static 'players/images/default/player.png' %}" alt="Default Player Photo" class="img-fluid img-thumbnail" style="max-width: 100%; height: auto;">
+                <img src="{% static 'players/images/default/player.png' %}" alt="Foto Predeterminada del Jugador" class="img-fluid img-thumbnail" style="max-width: 100%; height: auto;">
             {% endif %}
         </div>
         <div class="col-md-8">
             <dl class="row">
-                <dt class="col-sm-4">Date of Birth:</dt>
+                <dt class="col-sm-4">Fecha de Nacimiento:</dt>
                 <dd class="col-sm-8">{{ player.date_of_birth }}</dd>
-                <dt class="col-sm-4">Nationality:</dt>
+                <dt class="col-sm-4">Nacionalidad:</dt>
                 <dd class="col-sm-8">{{ player.nationality }}</dd>
                 <dt class="col-sm-4">Ranking:</dt>
                 <dd class="col-sm-8">{{ player.ranking }}</dd>
             </dl>
-            <a class="btn btn-secondary mt-3" href="{% url 'players:player_list' %}">Back to List</a>
+            <a class="btn btn-secondary mt-3" href="{% url 'players:player_list' %}">Volver a la Lista</a>
         </div>
     </div>
 </div>

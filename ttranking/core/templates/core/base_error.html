@@ -1,12 +1,12 @@
 <!-- ttranking/core/templates/core/error_base.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Error{% endblock %}</title>
-<!--    <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">-->
+    <!-- <link rel="stylesheet" href="{% static 'core/css/styles.css' %}"> -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -70,22 +70,22 @@
     <header>
         <nav>
             <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'match_list' %}">Matches</a></li>
-                <li><a href="{% url 'player_list' %}">Players</a></li>
-                <!-- Add more links as needed -->
+                <li><a href="{% url 'home' %}">Inicio</a></li>
+                <li><a href="{% url 'match_list' %}">Partidos</a></li>
+                <li><a href="{% url 'player_list' %}">Jugadores</a></li>
+                <!-- Agregar más enlaces según sea necesario -->
             </ul>
         </nav>
     </header>
 
     <main>
         <h1>{% block error_code %}Error{% endblock %}</h1>
-        <p>{% block error_message %}An unexpected error occurred.{% endblock %}</p>
-        <a href="{% url 'home' %}">Return to the homepage</a>
+        <p>{% block error_message %}Ocurrió un error inesperado.{% endblock %}</p>
+        <a href="{% url 'home' %}">Volver a la página principal</a>
     </main>
 
     <footer>
-        <p>&copy; 2024 Table Tennis Ranking. All rights reserved.</p>
+        <p>&copy; 2024 Sistema de Clasificación de Tenis de Mesa. Todos los derechos reservados.</p>
     </footer>
 </body>
 </html>

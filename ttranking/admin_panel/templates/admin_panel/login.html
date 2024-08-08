@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>Inicio de Sesión de Administrador</title>
     <link rel="stylesheet" href="{% static 'admin_panel/css/styles.css' %}">
 </head>
 <body>
     <div class="login-container">
-        <h2>Admin Login</h2>
+        <h2>Inicio de Sesión de Administrador</h2>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Login</button>
+            <button type="submit">Iniciar Sesión</button>
         </form>
-        <a href="{% url 'core:home' %}" class="btn btn-secondary">Return to Home</a>
+        <a href="{% url 'core:home' %}" class="btn btn-secondary">Volver al Inicio</a>
     </div>
 </body>
 </html>

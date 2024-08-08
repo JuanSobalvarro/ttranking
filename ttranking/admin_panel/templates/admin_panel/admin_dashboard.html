@@ -3,52 +3,51 @@
 
 {% block content %}
 <div class="container-fluid">
-    <!-- Dashboard Header -->
+    <!-- Encabezado del Panel de Control -->
     <div class="row mb-4">
         <div class="col-12">
-            <h1 class="h3">Admin Dashboard</h1>
+            <h1 class="h3">Panel de Control de Administración</h1>
         </div>
     </div>
 
-    <!-- Dashboard Cards -->
+    <!-- Tarjetas del Panel de Control -->
     <div class="row">
-        <!-- Players Card -->
+        <!-- Tarjeta de Jugadores -->
         <div class="col-md-4">
             <div class="card text-white bg-primary mb-4">
-                <div class="card-header">Players</div>
+                <div class="card-header">Jugadores</div>
                 <div class="card-body">
-                    <h5 class="card-title">Manage Players</h5>
-                    <p class="card-text">View, add, and edit player details.</p>
-                    <a href="{% url 'admin_panel:player_list' %}" class="btn btn-light">View Players</a>
+                    <h5 class="card-title">Gestionar Jugadores</h5>
+                    <p class="card-text">Ver, agregar y editar detalles de los jugadores.</p>
+                    <a href="{% url 'admin_panel:player_list' %}" class="btn btn-light">Ver Jugadores</a>
                 </div>
             </div>
         </div>
 
-        <!-- Matches Card -->
+        <!-- Tarjeta de Partidos -->
         <div class="col-md-4">
             <div class="card text-white bg-success mb-4">
-                <div class="card-header">Matches</div>
+                <div class="card-header">Partidos</div>
                 <div class="card-body">
-                    <h5 class="card-title">Manage Matches</h5>
-                    <p class="card-text">Schedule and track match details.</p>
-                    <a href="{% url 'admin_panel:match_list' %}" class="btn btn-light">View Matches</a>
+                    <h5 class="card-title">Gestionar Partidos</h5>
+                    <p class="card-text">Programar y rastrear detalles de los partidos.</p>
+                    <a href="{% url 'admin_panel:match_list' %}" class="btn btn-light">Ver Partidos</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Additional Sections -->
+    <!-- Secciones Adicionales -->
     <div class="row">
-        <!-- Example Section -->
+        <!-- Sección de Ejemplo -->
         <div class="col-12">
             <div class="card mb-4">
-                <div class="card-header">Welcome</div>
+                <div class="card-header">Bienvenido</div>
                 <div class="card-body">
-                    <p>Welcome to the Admin Dashboard for the Table Tennis Ranking System. This system allows you to
-                        manage player and match data efficiently. You can add, edit, and delete player profiles,
-                        as well as track matches. Use the navigation links to explore the available features.</p>
-                    <p>If you need assistance or have any questions, please refer to the documentation or contact
-                        support. Thank you for using our system!</p>
+                    <p>Bienvenido al Panel de Control de Administración del Sistema de Ranking de Tenis de Mesa. Este sistema te permite
+                        gestionar los datos de jugadores y partidos de manera eficiente. Puedes agregar, editar y eliminar perfiles de jugadores,
+                        así como rastrear partidos. Utiliza los enlaces de navegación para explorar las características disponibles.</p>
+                    <p>Si necesitas asistencia o tienes alguna pregunta, por favor consulta la documentación o contacta al soporte. ¡Gracias por usar nuestro sistema!</p>
                 </div>
             </div>
         </div>

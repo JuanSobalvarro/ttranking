@@ -3,16 +3,16 @@
 {% load static %}
 
 {% block content %}
-<h1>Add Match</h1>
+<h1>Agregar Partido</h1>
 
 <form method="get" action="{% url 'admin_panel:match_add' %}">
     {% csrf_token %}
     <div class="mb-3">
-        <label for="match_type" class="form-label">Match Type:</label>
+        <label for="match_type" class="form-label">Tipo de Partido:</label>
         <select name="match_type" id="match_type" class="form-select" onchange="this.form.submit()">
-            <option value="">Select match type</option>
-            <option value="S" {% if request.GET.match_type == 'S' %}selected{% endif %}>Singles</option>
-            <option value="D" {% if request.GET.match_type == 'D' %}selected{% endif %}>Doubles</option>
+            <option value="">Seleccione el tipo de partido</option>
+            <option value="S" {% if request.GET.match_type == 'S' %}selected{% endif %}>Individuales</option>
+            <option value="D" {% if request.GET.match_type == 'D' %}selected{% endif %}>Dobles</option>
         </select>
     </div>
 </form>
@@ -25,8 +25,8 @@
         {% elif request.GET.match_type == 'D' %}
             {{ form_doubles.as_p }}
         {% endif %}
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 {% endif %}
-<a class="btn btn-secondary mt-3" href="{% url 'admin_panel:match_list' %}">Back to List</a>
+<a class="btn btn-secondary mt-3" href="{% url 'admin_panel:match_list' %}">Volver a la lista</a>
 {% endblock %}

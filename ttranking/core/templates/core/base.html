@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="es" xmlns="http://www.w3.org/1999/html">
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Table Tennis Ranking{% endblock %}</title>
+    <title>{% block title %}Clasificación Tenis de Mesa{% endblock %}</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
     <!-- Google Fonts Roboto -->
@@ -18,15 +18,15 @@
     <header class="d-flex flex-wrap justify-content-center py-3" id="nav-header" style="padding-left: 10%; padding-right: 10%;">
         <a href="{% url 'core:home' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
             <img src="{% static 'core/images/logo-white-48.png' %}" alt="" height="48"/>
-            <span class="fs-4 text-white">Table Tennis Ranking System</span>
+            <span class="fs-4 text-white">Clasificación de Tenis de Mesa</span>
         </a>
         <ul class="nav">
-            <li class="nav-item"><a href="{% url 'core:home' %}" class="nav-link" aria-current="page">Home</a></li>
-            <li class="nav-item"><a href="{% url 'players:player_list' %}" class="nav-link">Players</a></li>
-            <li class="nav-item"><a href="{% url 'matches:match_list' %}" class="nav-link">Matches</a></li>
+            <li class="nav-item"><a href="{% url 'core:home' %}" class="nav-link" aria-current="page">Inicio</a></li>
+            <li class="nav-item"><a href="{% url 'players:player_list' %}" class="nav-link">Jugadores</a></li>
+            <li class="nav-item"><a href="{% url 'matches:match_list' %}" class="nav-link">Partidos</a></li>
             <!-- Login Button -->
             <li class="nav-item ms-3">
-                <a href="{% url 'admin_panel:login' %}" class="btn btn-outline-light">Login</a>
+                <a href="{% url 'admin_panel:login' %}" class="btn btn-outline-light">Iniciar Sesión</a>
             </li>
         </ul>
     </header>
@@ -44,14 +44,14 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="errorModalLabel">Message</h5>
+                    <h5 class="modal-title" id="errorModalLabel">Mensaje</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <!-- Error messages will be inserted here -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -73,20 +73,20 @@
                 <div class="row">
                     <!-- Grid column -->
                     <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                        <h6 class="text-uppercase mb-4 font-weight-bold">Developed by Juan Sobalvarro</h6>
-                        <p>Table Tennis Ranking System website</p>
+                        <h6 class="text-uppercase mb-4 font-weight-bold">Desarrollado por Juan Sobalvarro</h6>
+                        <p>Sitio web del Sistema de Clasificación de Tenis de Mesa</p>
                     </div>
                     <!-- Grid column -->
                     <hr class="w-100 clearfix d-md-none" />
                     <!-- Grid column -->
                     <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                        <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+                        <h6 class="text-uppercase mb-4 font-weight-bold">Contacto</h6>
                         <p><i class="fas fa-envelope mr-3"></i> sobalvarrog.juans@gmail.com</p>
                         <p><i class="fas fa-envelope mr-3"></i> juan.sobalvarro@est.ulsa.edu.ni</p>
                     </div>
                     <!-- Grid column -->
                     <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
-                        <h6 class="text-uppercase mb-4 font-weight-bold">Follow me</h6>
+                        <h6 class="text-uppercase mb-4 font-weight-bold">Sígueme</h6>
                         <!-- Twitter -->
                         <a class="btn btn-primary btn-floating m-1" style="background-color: #000000" href="https://x.com/JuanSobalvarroG" role="button"><i class="fa-brands fa-x-twitter"></i></a>
                         <!-- Github -->
@@ -101,7 +101,7 @@
 
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-            <a class="text-white" href="https://github.com/JuanSobalvarro/tt-ranking-system">© 2024 Table Tennis Ranking System</a>
+            <a class="text-white" href="https://github.com/JuanSobalvarro/tt-ranking-system">© 2024 Sistema de Clasificación de Tenis de Mesa</a>
         </div>
         <!-- Copyright -->
     </footer>
@@ -114,7 +114,7 @@
 
     <!-- Custom JavaScript -->
     <script>
-        // JavaScript to set the active class on the current page link
+        // JavaScript para establecer la clase activa en el enlace de la página actual
         document.addEventListener('DOMContentLoaded', function () {
             var currentPath = window.location.pathname;
             var navLinks = document.querySelectorAll('.nav-link');

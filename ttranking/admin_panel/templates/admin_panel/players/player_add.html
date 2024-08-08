@@ -5,16 +5,16 @@
 <div class="container mt-4">
     <h2 class="mb-4">
         {% if form.instance.pk %}
-            Edit Player
+            Editar Jugador
         {% else %}
-            Add New Player
+            Añadir Nuevo Jugador
         {% endif %}
     </h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
-    <a class="btn btn-secondary mt-3" href="{% url 'admin_panel:player_list' %}">Back to List</a>
+    <a class="btn btn-secondary mt-3" href="{% url 'admin_panel:player_list' %}">Volver a la Lista</a>
 </div>
 {% endblock %}

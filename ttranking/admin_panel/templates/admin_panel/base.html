@@ -1,34 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="es" xmlns="http://www.w3.org/1999/html">
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Admin Panel{% endblock %}</title>
+    <title>{% block title %}Panel de Administración{% endblock %}</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
     <!-- Google Fonts Roboto -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"/>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- Custom Styles -->
+    <!-- Estilos Personalizados -->
     <link rel="stylesheet" href="{% static 'admin_panel/css/styles.css' %}">
 </head>
 <body>
     <header class="d-flex flex-wrap justify-content-between py-3 bg-dark text-white" id="admin-nav-header" style="padding-left: 10%; padding-right: 10%;">
         <a href="{% url 'admin_panel:dashboard' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-light text-decoration-none">
             <img src="{% static 'core/images/logo-white-48.png' %}" alt="" height="48"/>
-            <span class="fs-4">Admin Panel</span>
+            <span class="fs-4">Panel de Administración</span>
         </a>
         <ul class="nav d-flex align-items-center">
-            <li class="nav-item"><a href="{% url 'admin_panel:dashboard' %}" class="nav-link text-white" aria-current="page">Dashboard</a></li>
-            <li class="nav-item"><a href="{% url 'admin_panel:player_list' %}" class="nav-link text-white">Players</a></li>
-            <li class="nav-item"><a href="{% url 'admin_panel:match_list' %}" class="nav-link text-white">Matches</a></li>
-            <!-- Logout Button -->
+            <li class="nav-item"><a href="{% url 'admin_panel:dashboard' %}" class="nav-link text-white" aria-current="page">Tablero</a></li>
+            <li class="nav-item"><a href="{% url 'admin_panel:player_list' %}" class="nav-link text-white">Jugadores</a></li>
+            <li class="nav-item"><a href="{% url 'admin_panel:match_list' %}" class="nav-link text-white">Partidos</a></li>
+            <!-- Botón de Cerrar Sesión -->
             <li class="nav-item">
                 <form action="{% url 'admin_panel:logout' %}" method="post" style="display: inline;">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-light">Logout</button>
+                    <button type="submit" class="btn btn-outline-light">Cerrar Sesión</button>
                 </form>
             </li>
         </ul>
@@ -36,62 +36,62 @@
 
     <main role="main" class="container mt-4">
         {% block content %}
-        <!-- Page-specific content -->
+        <!-- Contenido Específico de la Página -->
         {% endblock %}
     </main>
 
-    <!-- Footer -->
+    <!-- Pie de Página -->
     <footer class="footer text-center text-lg-start text-white bg-dark" style="margin-bottom: 0;">
-        <!-- Grid container -->
+        <!-- Contenedor Grid -->
         <div class="container p-4 pb-0">
-            <!-- Section: Links -->
+            <!-- Sección: Enlaces -->
             <section>
-                <!--Grid row-->
+                <!-- Fila de Grid -->
                 <div class="row">
-                    <!-- Grid column -->
+                    <!-- Columna de Grid -->
                     <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                        <h6 class="text-uppercase mb-4 font-weight-bold">Admin Panel</h6>
-                        <p>Management Interface for the Table Tennis Ranking System</p>
+                        <h6 class="text-uppercase mb-4 font-weight-bold">Panel de Administración</h6>
+                        <p>Interfaz de Gestión para el Sistema de Ranking de Tenis de Mesa</p>
                     </div>
-                    <!-- Grid column -->
+                    <!-- Columna de Grid -->
                     <hr class="w-100 clearfix d-md-none" />
-                    <!-- Grid column -->
+                    <!-- Columna de Grid -->
                     <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                        <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+                        <h6 class="text-uppercase mb-4 font-weight-bold">Contacto</h6>
                         <p><i class="fas fa-envelope mr-3"></i> sobalvarrog.juans@gmail.com</p>
                         <p><i class="fas fa-envelope mr-3"></i> juan.sobalvarro@est.ulsa.edu.ni</p>
                     </div>
-                    <!-- Grid column -->
+                    <!-- Columna de Grid -->
                     <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
-                        <h6 class="text-uppercase mb-4 font-weight-bold">Follow me</h6>
+                        <h6 class="text-uppercase mb-4 font-weight-bold">Sígueme</h6>
                         <!-- Twitter -->
                         <a class="btn btn-primary btn-floating m-1" style="background-color: #000000" href="https://x.com/JuanSobalvarroG" role="button"><i class="fa-brands fa-x-twitter"></i></a>
                         <!-- Github -->
                         <a class="btn btn-primary btn-floating m-1" style="background-color: #333333" href="https://github.com/JuanSobalvarro" role="button"><i class="fa-brands fa-github"></i></a>
                     </div>
                 </div>
-                <!--Grid row-->
+                <!-- Fila de Grid -->
             </section>
-            <!-- Section: Links -->
+            <!-- Sección: Enlaces -->
         </div>
-        <!-- Grid container -->
+        <!-- Contenedor Grid -->
 
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-            <a class="text-white" href="https://github.com/JuanSobalvarro/tt-ranking-system">© 2024 Table Tennis Ranking System</a>
+            <a class="text-white" href="https://github.com/JuanSobalvarro/tt-ranking-system">© 2024 Sistema de Ranking de Tenis de Mesa</a>
         </div>
         <!-- Copyright -->
     </footer>
-    <!-- Footer -->
+    <!-- Pie de Página -->
 
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom JavaScript -->
+    <!-- JavaScript Personalizado -->
     <script>
-        // JavaScript to set the active class on the current page link
+        // JavaScript para establecer la clase activa en el enlace de la página actual
         document.addEventListener('DOMContentLoaded', function () {
             var currentPath = window.location.pathname;
             var navLinks = document.querySelectorAll('.nav-link');
@@ -112,7 +112,7 @@
     </script>
 
     {% block scripts %}
-    <!-- Additional page-specific scripts -->
+    <!-- Scripts adicionales específicos de la página -->
     {% endblock %}
 </body>
 </html>
