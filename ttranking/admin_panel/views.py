@@ -7,12 +7,15 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.views import View
 
-from .forms import SinglesMatchForm, DoublesMatchForm, PlayerForm
+from matches.forms import SinglesMatchForm
+from matches.forms import DoublesMatchForm
 
 from matches.models import SinglesMatch
 from matches.models import DoublesMatch
 
+from players.forms import PlayerForm
 from players.models import Player
+
 
 PLAYERS_PER_PAGE = 10
 MATCHES_PER_PAGE = 10
