@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+
     'admin_panel',
     'core',
     'matches',
@@ -146,3 +148,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/admin-panel/login/'
+
+# Time (in seconds) before the session expires due to inactivity
+SESSION_COOKIE_AGE = 1800  # 30 minutes
+# Use the following setting to end the session when the browser is closed
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# Enforce the session to refresh with each request, resetting the expiration time
+SESSION_SAVE_EVERY_REQUEST = True
