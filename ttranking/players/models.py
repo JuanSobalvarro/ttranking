@@ -251,6 +251,15 @@ class Player(models.Model):
         self.save()
 
     def save(self, *args, **kwargs):
+        if self.pk:
+            # Get the previous photo from the database
+            old_player = Player.objects.get(pk=self.pk)
+            old_photo = old_player.photo
+
+            if old_photo and old_photo != self.photo:
+                if os.path.isfile(old_photo.path):
+                    os.remove(old_photo.path)
+
         if self.photo:
             # Open the image file
             image = Image.open(self.photo)
