@@ -62,6 +62,8 @@ class Command(BaseCommand):
                 player.ranking = calculated_ranking
                 player.save()
 
+        self.stdout.write('Ranking checked')
+
     def update_match_counts(self):
         self.stdout.write('Updating match counts for players...')
         for player in Player.objects.all():
@@ -90,3 +92,4 @@ class Command(BaseCommand):
 
                 player.matches_played = total_match_count
                 player.save()
+        self.stdout.write('Match counts checked')
