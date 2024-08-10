@@ -1,4 +1,8 @@
 from django import forms
+import datetime
+from .models import SinglesMatch, DoublesMatch
+
+from players.models import Player
 
 
 class SinglesMatchForm(forms.ModelForm):
@@ -13,7 +17,6 @@ class SinglesMatchForm(forms.ModelForm):
             'player2': forms.Select(attrs={'class': 'form-control'}),
             'player2_score': forms.NumberInput(attrs={'class': 'form-control'}),
         }
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

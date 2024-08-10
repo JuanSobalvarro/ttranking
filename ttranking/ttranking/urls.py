@@ -10,6 +10,10 @@ urlpatterns = [
     path('players/', include('players.urls')),
     path('admin-panel/', include('admin_panel.urls')),  # Include the admin panel URLs
     path('', include('core.urls')),  # Include core app urls
+
+    # api path
+    path('api/', include('players.api_urls')),
+    path('api/', include('matches.api_urls')),
 ]
 
 # Custom error handlers

@@ -1,16 +1,19 @@
 from django import forms
-from .models import Player, COUNTRY_CHOICES
+from django.core.exceptions import ValidationError
+
+from .models import Player, COUNTRY_CHOICES, GENDER_CHOICES
 import imghdr
 
 
 class PlayerForm(forms.ModelForm):
     class Meta:
         model = Player
-        fields = ['first_name', 'last_name', 'alias', 'date_of_birth', 'nationality', 'ranking', 'photo']
+        fields = ['first_name', 'last_name', 'alias', 'gender', 'date_of_birth', 'nationality', 'ranking', 'photo']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
             'alias': forms.TextInput(attrs={'class': 'form-control'}),
+            'gender': forms.Select(attrs={'class': 'form-control'}, choices=GENDER_CHOICES),
             'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'nationality': forms.Select(attrs={'class': 'form-control'}, choices=COUNTRY_CHOICES),
             'ranking': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Initial Ranking Points'}),

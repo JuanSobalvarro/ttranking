@@ -10,6 +10,7 @@ def home(request):
     top = ranking[:3]
     return render(request, 'core/home.html', {'top': top, 'ranking': ranking})
 
+
 def bad_request(request, exception):
     return render(request, 'core/400.html', status=400)
 
@@ -22,4 +23,3 @@ def page_not_found(request, exception):
 def server_error(request):
     content = loader.render_to_string('core/500.html', {}, request)
     return HttpResponseServerError(content)
-
