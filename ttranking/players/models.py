@@ -250,7 +250,7 @@ class Player(models.Model):
         Returns the number of victories this player has based on his ranking.
         :return:
         """
-        return self.ranking / 2
+        return int(self.ranking / 2)
 
     @property
     def winrate(self) -> float:
