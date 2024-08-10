@@ -1,7 +1,7 @@
 import os
 
 # Backup configuration
-BACKUP_DIR = '~/backups/'  # Replace with your backup directory
+BACKUP_DIR = os.path.expanduser('~/backups/')  # Replace with your backup directory
 DB_NAME = 'ttranking'   # Replace with your database name
 
 

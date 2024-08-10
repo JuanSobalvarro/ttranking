@@ -9,7 +9,7 @@ DB_PASSWORD = 'uwunyanichan'  # Replace with your database password
 DB_NAME = 'ttranking'  # Replace with your database name
 
 # Backup configuration
-BACKUP_DIR = '~/backups/'  # Replace with your backup directory
+BACKUP_DIR = os.path.expanduser('~/backups/')
 TIMESTAMP = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 BACKUP_FILE = os.path.join(BACKUP_DIR, f'{DB_NAME}_{TIMESTAMP}.sql')
 
