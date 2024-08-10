@@ -12,8 +12,7 @@ urlpatterns = [
     path('', include('core.urls')),  # Include core app urls
 
     # api path
-    path('api/', include('players.api_urls')),
-    path('api/', include('matches.api_urls')),
+    path('api/', include('api.urls')),
 ]
 
 # Custom error handlers

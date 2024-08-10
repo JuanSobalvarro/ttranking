@@ -1,6 +1,6 @@
 # ttranking/matches/serializers.py
 from rest_framework import serializers
-from .models import SinglesMatch, DoublesMatch, MatchStats
+from .models import SinglesMatch, DoublesMatch
 
 
 class SinglesMatchSerializer(serializers.ModelSerializer):
@@ -14,8 +14,3 @@ class DoublesMatchSerializer(serializers.ModelSerializer):
         model = DoublesMatch
         fields = '__all__'
 
-
-class MatchStatsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MatchStats
-        fields = '__all__'
