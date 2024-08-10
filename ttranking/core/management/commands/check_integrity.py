@@ -44,6 +44,7 @@ class Command(BaseCommand):
                     continue
                 if player != match.winner:
                     calculated_ranking -= LOSING_POINTS
+                    continue
                 calculated_ranking += WINNING_POINTS
 
             doubles_matches = DoublesMatch.objects.all()
@@ -52,6 +53,7 @@ class Command(BaseCommand):
                     continue
                 if player not in match.list_winners:
                     calculated_ranking -= LOSING_POINTS
+                    continue
                 calculated_ranking += WINNING_POINTS
 
             if calculated_ranking != player.ranking:
@@ -81,6 +83,10 @@ class Command(BaseCommand):
 
             total_match_count = singles_match_count + doubles_match_count
 
-            player.matches_played = total_match_count
-            player.save()
-            self.stdout.write(f"Updated match count for {player}: {total_match_count}")
+            if total_match_count != player.matches_played:
+                self.stdout.write(
+                    f"Discrepancy found for {player}: expected {total_match_count}, found {player.matches_played}"
+                )
+
+                player.matches_played = total_match_count
+                player.save()
