@@ -7,6 +7,7 @@ from PIL import Image
 import io
 import os
 from uuid import uuid4
+import math
 
 
 # Define a tuple of tuples with country code and country name
@@ -230,6 +231,7 @@ class Player(models.Model):
     date_of_birth = models.DateField(null=True, blank=True)
     nationality = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
     ranking = models.IntegerField(default=0, blank=True)
+    matches_played = models.IntegerField(default=0, blank=True)
     photo = models.ImageField(upload_to=get_image_upload_path, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -241,6 +243,24 @@ class Player(models.Model):
             return None
         today = date.today()
         return today.year - self.date_of_birth.year - ((today.month, today.day) < (today.year, today.year))
+
+    @property
+    def victories(self):
+        """
+        Returns the number of victories this player has based on his ranking.
+        :return:
+        """
+        return self.ranking / 2
+
+    @property
+    def winrate(self) -> float:
+        """
+        Returns the winrate of the player based on his ranking.
+        :return:
+        """
+        if self.matches_played == 0:
+            return 0
+        return math.trunc(self.ranking / self.matches_played * 50)
 
     def add_points(self, points):
         self.ranking += points

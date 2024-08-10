@@ -55,6 +55,28 @@ def dashboard(request):
     return render(request, 'admin_panel/admin_dashboard.html')
 
 
+# @login_required
+# def check_ranking_integrity(request):
+#     if request.method == 'POST':
+#         try:
+#             call_command('check_integrity', '--ranking')  # Call your management command
+#             messages.success(request, 'Ranking integrity check completed successfully.')
+#         except Exception as e:
+#             messages.error(request, f'Error occurred: {e}')
+#         return redirect('admin_panel:dashboard')
+#
+#
+# @login_required
+# def check_matchcount_integrity(request):
+#     if request.method == 'POST':
+#         try:
+#             call_command('check_integrity', '--matchcount')  # Call your management command
+#             messages.success(request, 'Match count integrity check completed successfully.')
+#         except Exception as e:
+#             messages.error(request, f'Error occurred: {e}')
+#         return redirect('admin_panel:dashboard')
+
+
 """
 PLAYERS VIEWS
 """

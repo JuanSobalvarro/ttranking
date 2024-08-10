@@ -59,6 +59,13 @@ class SinglesMatch(models.Model):
             if self.winner:
                 self.winner.add_points(WINNING_POINTS)
 
+    def update_matches_played(self):
+        # Increment matches played for both players
+        self.player1.matches_played += 1
+        self.player2.matches_played += 1
+        self.player1.save()
+        self.player2.save()
+
     @property
     def score(self) -> str:
         return f"{self.player1_score} - {self.player2_score}"
@@ -69,6 +76,7 @@ class SinglesMatch(models.Model):
 
     def save(self, *args, **kwargs):
         self.update_player_points()
+        self.update_matches_played()
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -171,6 +179,17 @@ class DoublesMatch(models.Model):
                 self.team2_player1.add_points(WINNING_POINTS)
                 self.team2_player2.add_points(WINNING_POINTS)
 
+    def update_matches_played(self):
+        # Increment matches played for all players
+        self.team1_player1.matches_played += 1
+        self.team1_player2.matches_played += 1
+        self.team2_player1.matches_played += 1
+        self.team2_player2.matches_played += 1
+        self.team1_player1.save()
+        self.team1_player2.save()
+        self.team2_player1.save()
+        self.team2_player2.save()
+
     def clean(self):
         if self.team1_player1 == self.team1_player2:
             raise ValidationError("Team 1 players cannot be the same.")
@@ -183,6 +202,7 @@ class DoublesMatch(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
         self.update_team_points()
+        self.update_matches_played()
         super().save(*args, **kwargs)
 
     def __str__(self):

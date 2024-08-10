@@ -99,6 +99,9 @@
                     <th scope="col">Jugador</th>
                     <th scope="col">Nacionalidad</th>
                     <th scope="col">Puntos</th>
+                    <th scope="col">Partidos</th>
+                    <th scope="col">Victorias</th>
+                    <th scope="col">%Victorias</th>
                 </tr>
             </thead>
             <tbody>
@@ -129,6 +132,9 @@
                             {% endif %}
                         </td>
                         <td class="text-center">{{ player.ranking }}</td>
+                        <td class="text-center">{{ player.matches_played }}</td>
+                        <td class="text-center">{{ player.victories }}</td>
+                        <td class="text-center">{{ player.winrate }}%</td>
                     </tr>
                 {% endfor %}
             </tbody>
