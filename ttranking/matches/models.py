@@ -155,14 +155,3 @@ class DoublesMatch(models.Model):
     def __str__(self):
         return f"Team 1: {self.team1_player1} & {self.team1_player2} vs Team 2: {self.team2_player1} & {self.team2_player2} - {self.date}"
 
-
-class MatchStats(models.Model):
-    match = models.OneToOneField(SinglesMatch, on_delete=models.CASCADE, null=True, blank=True)
-    doubles_match = models.OneToOneField(DoublesMatch, on_delete=models.CASCADE, null=True, blank=True)
-
-    def __str__(self):
-        if self.match:
-            return f"Stats for singles match {self.match}"
-        elif self.doubles_match:
-            return f"Stats for doubles match {self.doubles_match}"
-        return "No match stats"
