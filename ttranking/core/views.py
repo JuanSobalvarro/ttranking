@@ -4,6 +4,28 @@ from django.shortcuts import render
 from django.template import loader
 from players.models import Player
 
+from django.urls import reverse
+from django.shortcuts import get_object_or_404
+
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+
+class APIRootView(APIView):
+    """
+    API root view
+    """
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get(self, request):
+        return Response({
+            'players': reverse('api:player_list'),
+            'singles_matches': reverse('api:single_match_list'),
+            'doubles_matches': reverse('api:double_match_list'),
+        })
+
 
 def home(request):
     ranking = Player.objects.all().order_by('-ranking')[:20]

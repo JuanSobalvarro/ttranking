@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from players.models import Player
 
 WINNING_POINTS = 2
-LOSING_POINTS = 1
+LOSING_POINTS = 0
 
 
 class SinglesMatch(models.Model):
@@ -15,6 +15,10 @@ class SinglesMatch(models.Model):
     player2_score = models.IntegerField(default=0)
     winner = models.ForeignKey(Player, related_name='singles_matches_won', on_delete=models.CASCADE, null=True,
                                blank=True)
+
+    @property
+    def players(self):
+        return [self.player1, self.player2]
 
     def update_winner(self):
         if (self.player1_score >= 11 and self.player1_score >= self.player2_score + 2):
@@ -80,6 +84,35 @@ class DoublesMatch(models.Model):
     team1_score = models.IntegerField(default=0)
     team2_score = models.IntegerField(default=0)
     winner_team = models.CharField(max_length=10, blank=True, null=True)
+
+    @property
+    def players(self):
+        """
+        Gives you a list of the players who played this match
+        :return:
+        """
+        return [self.team1_player1, self.team1_player2, self.team2_player1, self.team2_player2]
+
+    @property
+    def list_winners(self):
+        if self.winner_team == 'Team 1':
+            return [self.team1_player1, self.team1_player2]
+        elif self.winner_team == 'Team 2':
+            return [self.team2_player1, self.team2_player2]
+        return []
+
+    @property
+    def winners(self):
+        """
+        Returns the winners of the two teams.
+        :return:
+        """
+        if self.winner_team == 'Team 1':
+            return [self.team1_player1, self.team1_player2]
+        elif self.winner_team == 'Team 2':
+            return [self.team2_player1, self.team2_player2]
+
+        return []
 
     @property
     def score(self) -> str:
