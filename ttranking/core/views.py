@@ -28,7 +28,7 @@ class APIRootView(APIView):
 
 
 def home(request):
-    ranking = Player.objects.all().order_by('-ranking')[:20]
+    ranking = Player.objects.all().order_by('-ranking', '-matches_played')[:20]
     top = ranking[:3]
 
     # calculate top by winrate
