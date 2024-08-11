@@ -8,7 +8,7 @@
             {% if player.photo %}
                 <img src="{{ player.photo.url }}" alt="{{ player.first_name }} {{ player.last_name }}"
                      class="img-fluid rounded-circle"
-                     style="max-width: 80%; height: auto; border: solid 2px">
+                     style="max-width: 80%; height: auto; border: solid 2px #CCCCCC;">
             {% else %}
                 <img src="{% static 'players/images/default/player.png' %}" alt="Foto Predeterminada del Jugador" class="img-fluid rounded-circle" style="max-width: 80%; height: auto;">
             {% endif %}
