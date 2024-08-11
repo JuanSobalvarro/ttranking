@@ -103,9 +103,11 @@
                              alt="{{ player.first_name }} {{ player.last_name }}"
                              style="object-fit: cover; height: auto; width: 100%;">
                         <div class="card-body p-3">
-                            <h3 class="card-title mb-2">{{ player.first_name }} {{ player.last_name }}</h3>
-                            <p class="card-text small mb-2">
+                            <h3 class="card-title" style="margin: 0;">{{ player.first_name }} {{ player.last_name }}</h3>
+                            <p class="card-text small mb-2 lead fs-6">
                                 {%if player.alias %}{{ player.alias }}{%endif%}<br>
+                            </p>
+                            <p>
                                 <strong>Partidos Jugados:</strong> {{ player.matches_played }}<br>
                             </p>
                             <p class="text-center text-white fs-1">
