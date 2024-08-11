@@ -98,7 +98,7 @@
             {% for player in top_by_winrate %}
                 <div class="col-md-4 col-sm-6 mb-4" style="width: 20%; min-width: 300px;">
                     <a href="{% url 'players:player_detail' player.id %}" class="text-decoration-none">
-                        <div class="card bg-dark text-white shadow-sm"  style="height: 100%">
+                        <div class="card bg-dark text-white shadow-sm"  style="height: 100%; border: none;">
                             <img src="{% if player.photo %}{{ player.photo.url }}{% else %}{% static 'players/images/default/player.png' %}{% endif %}"
                                  class="card-img-top"
                                  alt="{{ player.first_name }} {{ player.last_name }}"
