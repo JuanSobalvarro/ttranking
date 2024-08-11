@@ -32,7 +32,7 @@ def home(request):
     top = ranking[:3]
 
     # calculate top by winrate
-    top_winrate = sorted(Player.objects.all().order_by('-matches_played'), key=lambda player: player.winrate, reverse=True)[:5]
+    top_winrate = sorted(Player.objects.all().order_by('-matches_played'), key=lambda player: player.winrate, reverse=True)[:6]
     return render(request, 'core/home.html', {'top': top, 'ranking': ranking, 'top_by_winrate': top_winrate})
 
 
