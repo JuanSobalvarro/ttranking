@@ -25,7 +25,8 @@ class PlayerForm(forms.ModelForm):
         # Set initial value for date_of_birth
         if self.instance and self.instance.pk:
             self.fields['photo'].initial = self.instance.photo
-            # self.fields['date_of_birth'].initial = self.instance.date_of_birth
+            self.fields['gender'].initial = self.instance.gender
+            self.fields['date_of_birth'].initial = self.instance.date_of_birth
 
     def clean_photo(self):
         photo = self.cleaned_data.get('photo')
