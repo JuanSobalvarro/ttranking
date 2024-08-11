@@ -297,7 +297,7 @@ class Player(models.Model):
 
     def resize_and_crop(self, image, size):
         # Resize the image without preserving the aspect ratio
-        image = image.convert('RGB')
+        image = image.convert('RGBA')
         image = image.resize(size)
         return image
 
