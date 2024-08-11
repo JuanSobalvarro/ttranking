@@ -1,8 +1,10 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils.dateformat import format
 
 from .models import Player, COUNTRY_CHOICES, GENDER_CHOICES
 import imghdr
+import datetime
 
 
 class PlayerForm(forms.ModelForm):
@@ -14,7 +16,7 @@ class PlayerForm(forms.ModelForm):
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
             'alias': forms.TextInput(attrs={'class': 'form-control'}),
             'gender': forms.Select(attrs={'class': 'form-control'}, choices=GENDER_CHOICES),
-            'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
             'nationality': forms.Select(attrs={'class': 'form-control'}, choices=COUNTRY_CHOICES),
             'ranking': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Initial Ranking Points'}),
             'photo': forms.FileInput(attrs={'class': 'form-control'}),
@@ -22,11 +24,10 @@ class PlayerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Set initial value for date_of_birth
         if self.instance and self.instance.pk:
-            self.fields['photo'].initial = self.instance.photo
+            if self.instance.date_of_birth:
+                self.fields['date_of_birth'].initial = self.instance.date_of_birth.strftime('%Y-%m-%d')
             self.fields['gender'].initial = self.instance.gender
-            self.fields['date_of_birth'].initial = self.instance.date_of_birth
 
     def clean_photo(self):
         photo = self.cleaned_data.get('photo')
