@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block content %}
-    <div id="topPlayersCarousel" class="carousel slide" data-bs-ride="carousel" style="background-color: #333333">
+    <div id="topPlayersCarousel" class="carousel slide rounded" data-bs-ride="carousel" style="background-color: #333333">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#topPlayersCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Diapositiva 1"></button>
             <button type="button" data-bs-target="#topPlayersCarousel" data-bs-slide-to="1" aria-label="Diapositiva 2"></button>
@@ -89,6 +89,35 @@
         </button>
     </div>
 
+    <!-- Spotlight winrate -->
+    <div class="container my-4 text-center rounded" style="background-color: #007f3d">
+        <h2 class="text-white mb-4">Jugadores Play2Win</h2>
+        <p class="lead text-white">Estos jugadores se destacan por su winrate, ganándose el título de "Play2Win", jugar para ganar</p>
+        <div class="row justify-content-center">
+            {% for player in top_by_winrate %}
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card bg-dark text-white h-100 shadow-sm">
+                        <img src="{% if player.photo %}{{ player.photo.url }}{% else %}{% static 'players/images/default/player.png' %}{% endif %}"
+                             class="card-img-top"
+                             alt="{{ player.first_name }} {{ player.last_name }}"
+                             style="object-fit: cover; height: 200px;">
+                        <div class="card-body p-3">
+                            <h3 class="card-title mb-2">{{ player.first_name }} {{ player.last_name }}</h3>
+                            <p class="card-text small mb-2">
+                                {%if player.alias %}{{ player.alias }}<br>{%endif%}
+                                <strong>Partidos Jugados:</strong> {{ player.matches_played }}<br>
+                                <strong>Winrate:</strong> {{ player.winrate }}%
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+    <!-- Tabla de jugadores   -->
     <div class="container my-4">
     <h2 class="text-center">Top 20 Jugadores</h2>
     <div class="table-responsive">
