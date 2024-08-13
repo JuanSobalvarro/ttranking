@@ -1,3 +1,4 @@
+# ttranking/players/api_views.py
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 
@@ -24,14 +25,6 @@ class PlayerListCreateAPIView(APIView):
         serializer = PlayerSerializer(players, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
-        serializer = PlayerSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class PlayerDetailAPIView(APIView):
     """
@@ -46,6 +39,14 @@ class PlayerDetailAPIView(APIView):
         player = get_object_or_404(Player, pk=pk)
         serializer = PlayerSerializer(player)
         return Response(serializer.data)
+
+    def post(self, request, pk):
+        player = get_object_or_404(Player, pk=pk)
+        serializer = PlayerSerializer(player, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk):
         player = get_object_or_404(Player, pk=pk)

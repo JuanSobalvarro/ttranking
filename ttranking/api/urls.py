@@ -1,4 +1,4 @@
-# players/api_urls.py
+# ttranking/api/urls.py
 from django.urls import path, include
 from rest_framework import status
 from core.views import APIRootView
