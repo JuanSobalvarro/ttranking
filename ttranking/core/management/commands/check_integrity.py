@@ -1,3 +1,4 @@
+# ttranking/core/management/commands/check_integrity.py
 from django.core.management import BaseCommand
 from players.models import Player
 from matches.models import SinglesMatch, DoublesMatch, WINNING_POINTS, LOSING_POINTS

@@ -11,20 +11,24 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import environ
 import os
+
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+environ.Env.read_env('.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xfbsaylhh*wxxlzs8x!kclhcdvp+jqo!fudbs(ni266o%iq*_k'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env('DEBUG', default=False)
 
 ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '0.0.0.0', '[::1]', 'ttranking.juansobalvarro.site']
 
@@ -87,8 +91,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ttranking',
-        'USER': 'ubuntu',
-        'PASSWORD': 'uwunyanichan',
+        'USER': 'root',
+        'PASSWORD': 'root',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }

@@ -1,22 +1,31 @@
+# ttranking/setupdb.py
 import mysql.connector
+import os
+from dotenv import load_dotenv
 from mysql.connector import errorcode
+
+load_dotenv(dotenv_path='ttranking/.env')
+
 
 # Database configuration
 config = {
-    'user': 'ubuntu',  # MySQL root user
-    'password': 'uwunyanichan',  # MySQL root password
+    'user': os.getenv('DB_USER'),  # MySQL root user
+    'password': os.getenv('DB_PASS'),  # MySQL root password
     'host': 'localhost',  # MySQL server host
     'port': 3306,
 }
 
 # Database and user details
-db_name = 'ttranking'
-db_user = 'ubuntu'
-db_password = 'uwunyanichan'
+db_name = os.getenv('DB_NAME')
+db_user = os.getenv('DB_USER')
+db_password = os.getenv('DB_PASS')
+
+print('Using:', f'db_name={db_name}, db_user={db_user}, db_password={db_password}')
+
 
 def main():
     cursor = None
-    cnv = None
+    cnx = None
     # Connect to MySQL server
     try:
         cnx = mysql.connector.connect(**config)
@@ -59,6 +68,7 @@ def main():
         if 'cnx' in locals():
             cnx.close()
         print("Connection closed.")
+
 
 if __name__ == '__main__':
     main()
