@@ -1,6 +1,6 @@
 # Table Tennis Ranking Management System (TTRanking)
 
-This project is part of the greater Sports Game Database (SGD) system. It is designed to manage table tennis rankings, match tracking, player management, and data integrity for tournaments and competitions.
+This project is part of the greater Sistema de Gestión Deportiva (SGD) ULSA. It is designed to manage table tennis rankings, match tracking, player management, and data integrity for tournaments and competitions.
 
 ## Features
 
