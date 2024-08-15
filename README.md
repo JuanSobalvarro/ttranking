@@ -114,7 +114,7 @@ This project is part of the greater Sports Game Database (SGD) system. It is des
 
 ## Deployment
 
-The system is deployed on an Oracle Linux VM. Ensure all necessary dependencies are installed and that the MySQL database is properly configured.
+The system is deployed on an Ubuntu Linux VM. Ensure all necessary dependencies are installed and that the MySQL database is properly configured.
 
 ## Future Enhancements
 
