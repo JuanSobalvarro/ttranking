@@ -90,9 +90,9 @@ WSGI_APPLICATION = 'ttranking.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ttranking',
-        'USER': 'root',
-        'PASSWORD': 'root',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASS'),
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
