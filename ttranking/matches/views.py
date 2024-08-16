@@ -32,10 +32,14 @@ def match_list(request):
     except EmptyPage:
         doubles_matches = doubles_paginator.page(doubles_paginator.num_pages)
 
-    return render(request, 'matches/match_list.html', {
+    context = {
         'singles_matches': singles_matches,
+        'singles_count': singles_matches.count(),
         'doubles_matches': doubles_matches,
-    })
+        'doubles_count': doubles_matches.count(),
+    }
+
+    return render(request, 'matches/match_list.html', context)
 
 
 def match_detail(request, pk):
