@@ -34,9 +34,9 @@ def match_list(request):
 
     context = {
         'singles_matches': singles_matches,
-        'singles_count': singles_matches.count(),
+        'singles_count': singles_match_list.count(),
         'doubles_matches': doubles_matches,
-        'doubles_count': doubles_matches.count(),
+        'doubles_count': doubles_match_list.count(),
     }
 
     return render(request, 'matches/match_list.html', context)
