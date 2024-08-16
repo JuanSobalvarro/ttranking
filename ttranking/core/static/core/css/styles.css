@@ -39,6 +39,40 @@ header {
     color: var(--accent-color);
 }
 
+/* ANNOUNCEMENT BAR */
+.announcement-bar {
+    width: 100%;
+    background-color: #333333;
+    color: white;
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+    padding: 10px 0;
+    font-size: 1.2rem;
+    position: relative;
+}
+
+.announcement-text-wrapper {
+    display: inline-flex; /* Use inline-flex to keep texts in a row */
+    white-space: nowrap;
+    animation: scroll-left 8s linear infinite;
+}
+
+.announcement-text {
+    display: inline-block;
+    /*padding-right: 100px; !* Gap between repeated texts *!*/
+}
+
+/* Keyframes for the scrolling effect */
+@keyframes scroll-left {
+    from {
+        transform: translateX(-450%);
+    }
+    to {
+        transform: translateX(450%);
+    }
+}
+
 .footer {
     background-color: var(--primary-color);
     color: var(--accent-color);
@@ -152,38 +186,4 @@ a:hover {
 
 .spotlight {
     background: #FFFFFF;
-}
-
-/* ANNOUNCEMENT BAR */
-.announcement-bar {
-    width: 100%;
-    background-color: #333333;
-    color: white;
-    overflow: hidden;
-    white-space: nowrap;
-    box-sizing: border-box;
-    padding: 10px 0;
-    font-size: 1.2rem;
-    position: relative;
-}
-
-.announcement-text-wrapper {
-    display: inline-flex; /* Use inline-flex to keep texts in a row */
-    white-space: nowrap;
-    animation: scroll-left 8s linear infinite;
-}
-
-.announcement-text {
-    display: inline-block;
-    /*padding-right: 100px; !* Gap between repeated texts *!*/
-}
-
-/* Keyframes for the scrolling effect */
-@keyframes scroll-left {
-    from {
-        transform: translateX(-450%);
-    }
-    to {
-        transform: translateX(450%);
-    }
 }
