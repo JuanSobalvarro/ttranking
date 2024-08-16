@@ -7,6 +7,32 @@
     --border-color: #e0e0e0; /* Light Gray for Borders */
 }
 
+/* Style for WebKit browsers (Chrome, Safari) */
+body::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background of the scrollbar track */
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #888; /* Color of the scrollbar thumb */
+    border-radius: 6px; /* Roundness of the scrollbar thumb */
+    border: 3px solid #f1f1f1; /* Space around the scrollbar thumb */
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Color of the scrollbar thumb when hovered */
+}
+
+/* Style for Firefox */
+body {
+    scrollbar-width: thin; /* Width of the scrollbar */
+    scrollbar-color: #888 #f1f1f1; /* Thumb color and track color */
+}
+
+
 /* Apply primary and secondary colors to the header and footer */
 header {
     background-color: var(--primary-color);
@@ -127,3 +153,39 @@ a:hover {
 .spotlight {
     background: #FFFFFF;
 }
+
+/* ANNOUNCEMENT BAR */
+.announcement-bar {
+    width: 100%;
+    background-color: #333333;
+    color: white;
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+    padding: 10px 0;
+    font-size: 1.2rem;
+    position: relative;
+}
+
+.announcement-text-wrapper {
+    display: inline-flex; /* Use inline-flex to keep texts in a row */
+    white-space: nowrap;
+    animation: scroll-left 8s linear infinite;
+}
+
+.announcement-text {
+    display: inline-block;
+    /*padding-right: 100px; !* Gap between repeated texts *!*/
+}
+
+/* Keyframes for the scrolling effect */
+@keyframes scroll-left {
+    from {
+        transform: translateX(-450%);
+    }
+    to {
+        transform: translateX(450%);
+    }
+}
+
+

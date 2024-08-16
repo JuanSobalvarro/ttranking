@@ -242,7 +242,10 @@ class Player(models.Model):
         if self.date_of_birth is None:
             return None
         today = date.today()
-        return today.year - self.date_of_birth.year - ((today.month, today.day) < (today.year, today.year))
+        age = today.year - self.date_of_birth.year
+        if (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day):
+            age -= 1
+        return age
 
     @property
     def victories(self):

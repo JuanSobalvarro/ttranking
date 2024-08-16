@@ -1,4 +1,6 @@
 # ttranking/core/management/commands/check_integrity.py
+import os
+from django.conf import settings
 from django.core.management import BaseCommand
 from players.models import Player
 from matches.models import SinglesMatch, DoublesMatch, WINNING_POINTS, LOSING_POINTS
@@ -18,21 +20,31 @@ class Command(BaseCommand):
             action='store_true',
             help='Update match counts for each player'
         )
-        # Add more arguments here as needed
+        parser.add_argument(
+            '--cleanphotos',
+            action='store_true',
+            help='Delete all players photos not being used in media folder'
+        )
 
     def handle(self, *args, **options):
-        if options['ranking'] or options['matchcount']:
-            self.stdout.write('You are about to make changes to the database.')
-            self.stdout.write('Type Y to proceed, or any other key to cancel:')
-            confirm = input().strip().upper()
-            if confirm != 'Y':
-                self.stdout.write('Operation canceled.')
-                return
+        message: str = 'You are about to make changes to the db.'
+
+        if options['cleanphotos']:
+            message = 'You are about to delete all photos not being used in media folder.'
+
+        self.stdout.write(message)
+        self.stdout.write('Type Y to proceed, or any other key to cancel:')
+        confirm = input().strip().upper()
+        if confirm != 'Y':
+            self.stdout.write('Operation canceled.')
+            return
 
         if options['ranking']:
             self.check_ranking()
         if options['matchcount']:
             self.update_match_counts()
+        if options['cleanphotos']:
+            self.clean_photos()
         # Add more options handling as needed
 
     def check_ranking(self):
@@ -94,3 +106,28 @@ class Command(BaseCommand):
                 player.matches_played = total_match_count
                 player.save()
         self.stdout.write('Match counts checked')
+
+    def clean_photos(self):
+        self.stdout.write('Cleaning photos...')
+
+        # Collect all used photos
+        used_photos = set(Player.objects.values_list('photo', flat=True))
+        used_photos = {os.path.basename(photo) for photo in used_photos if photo}  # Extract only the filenames
+
+        # Path to the directory where photos are stored
+        media_folder = os.path.join(settings.MEDIA_ROOT, 'player_photos')
+
+        # List all files in the media folder
+        all_photos = set(os.listdir(media_folder))
+
+        # Calculate the difference
+        unused_photos = all_photos - used_photos
+
+        # Delete unused photos
+        for photo in unused_photos:
+            photo_path = os.path.join(media_folder, photo)
+            if os.path.exists(photo_path):
+                os.remove(photo_path)
+                self.stdout.write(f'Removed unused photo: {photo}')
+
+        self.stdout.write('Unused photos cleaned')

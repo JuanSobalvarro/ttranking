@@ -1,5 +1,6 @@
 from django import forms
 import datetime
+from django.utils.translation import gettext_lazy as _
 from .models import SinglesMatch, DoublesMatch
 
 from players.models import Player
@@ -9,7 +10,13 @@ class SinglesMatchForm(forms.ModelForm):
     class Meta:
         model = SinglesMatch
         fields = ['date', 'player1', 'player1_score', 'player2', 'player2_score']
-        labels = ['Fecha y Hora']
+        labels = {
+            'date': _('Fecha y hora'),
+            'player1': _('Jugador 1'),
+            'player1_score': _('Puntos de Jugador 1'),
+            'player2': _('Jugador 2'),
+            'player2_score': _('Puntos de Jugador 2'),
+        }
         widgets = {
             'date': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'player1': forms.Select(attrs={'class': 'form-control'}),
@@ -17,6 +24,10 @@ class SinglesMatchForm(forms.ModelForm):
             'player2': forms.Select(attrs={'class': 'form-control'}),
             'player2_score': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+
+    def set_labels(self):
+        for field, label in zip(self.fields, self.labels):
+            field.label = label
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -39,6 +50,15 @@ class DoublesMatchForm(forms.ModelForm):
     class Meta:
         model = DoublesMatch
         fields = ['date', 'team1_player1', 'team1_player2', 'team1_score', 'team2_player1', 'team2_player2', 'team2_score']
+        labels = {
+            'date': _('Fecha y hora'),
+            'team1_player1': _('Equipo 1, jugador 1'),
+            'team1_player2': _('Equipo 1, jugador 2'),
+            'team1_score': _('Puntos del Equipo 1'),
+            'team2_player1': _('Equipo 2, jugador 1'),
+            'team2_player2': _('Equipo 2, jugador 2'),
+            'team2_score': _('Puntos del Equipo 2'),
+        }
         widgets = {
             'date': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'team1_player1': forms.Select(attrs={'class': 'form-control'}),

@@ -3,6 +3,7 @@ from django.http import HttpResponseServerError, HttpResponseNotFound, Http404
 from django.shortcuts import render
 from django.template import loader
 from players.models import Player
+from matches.models import SinglesMatch, DoublesMatch
 
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
@@ -33,7 +34,11 @@ def home(request):
 
     # calculate top by winrate
     top_winrate = sorted(Player.objects.all().order_by('-matches_played'), key=lambda player: player.winrate, reverse=True)[:6]
-    return render(request, 'core/home.html', {'top': top, 'ranking': ranking, 'top_by_winrate': top_winrate})
+
+    matches_played = SinglesMatch.objects.all().count() + DoublesMatch.objects.all().count()
+
+    return render(request, 'core/home.html', {'top': top, 'ranking': ranking,
+                                              'top_by_winrate': top_winrate, 'matches_played': matches_played})
 
 
 def bad_request(request, exception):

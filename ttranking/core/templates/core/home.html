@@ -12,6 +12,12 @@
             <a class="btn btn-primary btn-lg" href="{% url 'matches:match_list' %}" role="button">Ver Partidos</a>
         </p>
     </div>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <div class="announcement-text-wrapper">
+            <div class="announcement-text">Total Partidos Jugados: {{ matches_played }}</div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block content %}
@@ -66,10 +72,10 @@
                                             {% endif %}
                                         </span><br>
                                         {% if player.age%}
-                                            <span class="thinlabeler">Edad</span>
                                             <span class="thickmedium">
                                             &nbsp;{{ player.age }}
-                                            </span><br>
+                                            </span>
+                                            <span class="thinlabeler">años</span><br>
                                         {% endif %}
                                     </div>
                             </div>
