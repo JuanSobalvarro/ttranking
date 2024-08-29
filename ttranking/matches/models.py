@@ -43,8 +43,8 @@ class SinglesMatch(models.Model):
 
         if self.pk:  # Check if it's an update
             # Fetch the previous match instance
-            previous_match = SinglesMatch.objects.get(pk=self.pk)
-            previous_winner = previous_match.winner
+            previous_match: SinglesMatch = SinglesMatch.objects.get(pk=self.pk)
+            previous_winner: Player = previous_match.winner
 
             if previous_winner != self.winner:
                 # Remove points from the previous winner if they are no longer the winner
@@ -54,13 +54,40 @@ class SinglesMatch(models.Model):
                 # Add points to the new winner
                 if self.winner:
                     self.winner.add_points(WINNING_POINTS)
+
+                # print("Previous winner", previous_winner)
+                # print("Winner", self.winner)
+                # print("Rankings updates: ", previous_winner.ranking, self.winner.ranking)
+
         else:
             # New match: assign points to the winner
             if self.winner:
                 self.winner.add_points(WINNING_POINTS)
 
     def update_matches_played(self):
-        # Increment matches played for both players
+        # Handles changes in matches played by the players
+
+        # If we are doing an update we should remove points from the previous players
+        if self.pk:
+            # Get instance
+            instance: SinglesMatch = SinglesMatch.objects.get(pk=self.pk)
+
+            if instance.player1 != self.player1:
+                instance.player1.matches_played -= 1
+                self.player1.matches_played += 1
+
+            if instance.player2 != self.player2:
+                instance.player2.matches_played -= 1
+                self.player2.matches_played += 1
+
+            instance.player1.save()
+            instance.player2.save()
+            self.player1.save()
+            self.player2.save()
+
+            return
+
+        # Add the match to the new players
         self.player1.matches_played += 1
         self.player2.matches_played += 1
         self.player1.save()
@@ -75,9 +102,28 @@ class SinglesMatch(models.Model):
             raise ValidationError("Player 1 and Player 2 cannot be the same.")
 
     def save(self, *args, **kwargs):
-        self.update_player_points()
+        self.clean()
+        # UPDATE IN THIS ORDER, FIRST MATCHES, THEN PLAYER POINTS. WHY? IDFK
+        # Well it looks like it is that when we update the matches played we save the players models
+        # so fix this Juan ;p
         self.update_matches_played()
+        self.update_player_points()
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # revert the winner points
+        if self.winner:
+            self.winner.remove_points(WINNING_POINTS)
+
+        # Now remove 1 match from the match count of the players
+        self.player1.matches_played -= 1;
+        self.player2.matches_played -= 1;
+
+        # save players
+        self.player1.save()
+        self.player2.save()
+
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return f"{self.player1} vs {self.player2} - {self.date}"
@@ -152,43 +198,44 @@ class DoublesMatch(models.Model):
         if self.pk:  # Check if it's an update
             # Fetch the previous match instance
             previous_match = DoublesMatch.objects.get(pk=self.pk)
-            previous_winner_team = previous_match.winner_team
+            previous_winners = previous_match.winners
 
-            if previous_winner_team != self.winner_team:
-                # Remove points from the previous winning team if they are no longer the winner
-                if previous_winner_team == "Team 1":
-                    self.team1_player1.remove_points(WINNING_POINTS)
-                    self.team1_player2.remove_points(WINNING_POINTS)
-                elif previous_winner_team == "Team 2":
-                    self.team2_player1.remove_points(WINNING_POINTS)
-                    self.team2_player2.remove_points(WINNING_POINTS)
+            for winner in previous_winners:
+                winner.remove_points(WINNING_POINTS)
 
-                # Add points to the new winning team
-                if self.winner_team == "Team 1":
-                    self.team1_player1.add_points(WINNING_POINTS)
-                    self.team1_player2.add_points(WINNING_POINTS)
-                elif self.winner_team == "Team 2":
-                    self.team2_player1.add_points(WINNING_POINTS)
-                    self.team2_player2.add_points(WINNING_POINTS)
+            for winner in self.winners:
+                winner.add_points(WINNING_POINTS)
+
         else:
             # New match: assign points to the winning team
-            if self.winner_team == "Team 1":
-                self.team1_player1.add_points(WINNING_POINTS)
-                self.team1_player2.add_points(WINNING_POINTS)
-            elif self.winner_team == "Team 2":
-                self.team2_player1.add_points(WINNING_POINTS)
-                self.team2_player2.add_points(WINNING_POINTS)
+            self.winners[0].add_points(WINNING_POINTS)
+            self.winners[1].add_points(WINNING_POINTS)
+
 
     def update_matches_played(self):
-        # Increment matches played for all players
-        self.team1_player1.matches_played += 1
-        self.team1_player2.matches_played += 1
-        self.team2_player1.matches_played += 1
-        self.team2_player2.matches_played += 1
-        self.team1_player1.save()
-        self.team1_player2.save()
-        self.team2_player1.save()
-        self.team2_player2.save()
+        # Handles changes in matches played by the players
+        new_players: list[Player] = [self.team1_player1, self.team1_player2,
+                                     self.team2_player1, self.team2_player2]
+
+        # If we are doing an update we should remove points from the previous players
+        if self.pk:
+            # Get instance
+            instance: DoublesMatch = DoublesMatch.objects.get(pk=self.pk)
+            instance_players: list[Player] = [instance.team1_player1, instance.team1_player2,
+                                instance.team2_player1, instance.team2_player2]
+
+            for instance_player, new_player in zip(instance_players, new_players):
+                if instance_player != new_player:
+                    instance_player.matches_played -= 1
+                    new_player.matches_played += 1
+                    instance_player.save()
+                    new_player.save()
+
+            return
+
+        for player in new_players:
+            player.matches_played += 1
+            player.save()
 
     def clean(self):
         if self.team1_player1 == self.team1_player2:
@@ -201,9 +248,29 @@ class DoublesMatch(models.Model):
 
     def save(self, *args, **kwargs):
         self.clean()
-        self.update_team_points()
         self.update_matches_played()
+        self.update_team_points()
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # revert the winner points
+        if self.winners:
+            self.winners[0].remove_points(WINNING_POINTS)
+            self.winners[1].remove_points(WINNING_POINTS)
+
+        # Now remove 1 match from the match count of the players
+        self.team1_player1.matches_played -= 1
+        self.team1_player2.matches_played -= 1
+        self.team2_player1.matches_played -= 1
+        self.team2_player2.matches_played -= 1
+
+        # save players
+        self.team1_player1.save();
+        self.team1_player2.save();
+        self.team2_player1.save();
+        self.team2_player2.save();
+
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return f"Team 1: {self.team1_player1} & {self.team1_player2} vs Team 2: {self.team2_player1} & {self.team2_player2} - {self.date}"
