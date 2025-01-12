@@ -5,9 +5,24 @@
     --accent-color: #ffffff; /* White */
     --text-color: #333333; /* Dark Gray for Text */
     --border-color: #e0e0e0; /* Light Gray for Borders */
+    --info-color: #17a2b8; /* Info Blue */
+    --warning-color: #ffc107; /* Warning Yellow */
+    --danger-color: #dc3545; /* Danger Red */
+    --success-color: #28a745; /* Success Green */
+    --font-size-base: 1rem; /* Base font size */
+    --line-height-base: 1.5;
 }
 
-/* Style for WebKit browsers (Chrome, Safari) */
+/* Global Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: var(--line-height-base);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Custom WebKit styles */
 body::-webkit-scrollbar {
     width: 12px; /* Width of the scrollbar */
 }
@@ -32,24 +47,21 @@ body {
     scrollbar-color: #888 #f1f1f1; /* Thumb color and track color */
 }
 
-
-/* Apply primary and secondary colors to the header and footer */
-header {
-    background-color: var(--primary-color);
-    color: var(--accent-color);
-}
-
-/* ANNOUNCEMENT BAR */
+/* Announcement Bar */
 .announcement-bar {
     width: 100%;
-    background-color: #333333;
-    color: white;
-    overflow: hidden;
-    white-space: nowrap;
-    box-sizing: border-box;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
     padding: 10px 0;
     font-size: 1.2rem;
     position: relative;
+}
+
+@media (max-width: 768px) {
+    .announcement-bar {
+        font-size: 1rem;
+        padding: 5px 0;
+    }
 }
 
 .announcement-text-wrapper {
@@ -60,7 +72,6 @@ header {
 
 .announcement-text {
     display: inline-block;
-    /*padding-right: 100px; !* Gap between repeated texts *!*/
 }
 
 /* Keyframes for the scrolling effect */
@@ -73,117 +84,112 @@ header {
     }
 }
 
-.footer {
-    background-color: var(--primary-color);
-    color: var(--accent-color);
-    text-align: center;
-    bottom: 0;
-    width: 100%;
-    margin-bottom: 0;
-}
-
-/* Navbar custom styles */
-.navbar {
-    background-color: var(--primary-color); /* Set background color */
-}
-
-.nav-link {
-    color: var(--accent-color); /* Set text color */
-}
-
-.nav-link.active {
-    border-bottom: 2px solid;
-    color: var(--accent-color);
-    border-radius: 2px;
-}
-
-.nav-link:hover {
-    color: var(--primary-color); /* Change text color on hover */
-    background-color: rgba(255, 255, 255, 0.1); /* Slight background color on hover */
-}
-
-/* Hero Section */
-.hero-section {
-    background: var(--primary-color); /* Background color for hero section */
-    color: var(--accent-color);
-    padding: 2rem 0;
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-/* Main Content Area */
-main {
-    padding: 2rem;
-    margin-bottom: 4rem; /* Ensure space for the footer */
-}
-
-/* Container */
-.container {
-    margin: auto;
-    padding: 2rem;
-}
-
-/* Headings */
-h1, h2, h3, h4, h5, h6 {
-    color: var(--text-color);
-    margin-top: 0;
-}
-
-h1 {
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 0.5rem;
-}
-
-/* Buttons */
-.btn-primary {
-    background-color: var(--primary-color);
-    border: none;
+/* Ensure text on green background is white */
+.bg-green-500 {
     color: var(--accent-color);
 }
 
-.btn-primary:hover {
-    background-color: var(--secondary-color);
-}
-
-/* Additional Styling for Links and Cards */
-a {
+/* Define the primary color class */
+.primary-color {
     color: var(--primary-color);
-    font-weight: bold;
 }
 
-a:hover {
+/* Define the primary background color class */
+.bg-primary-color {
+    background-color: var(--primary-color);
+}
+
+/* Define the secondary color class */
+.secondary-color {
     color: var(--secondary-color);
-    text-decoration: none;
 }
 
-.card {
-    border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
-}
-
-.card-header {
-    background: var(--primary-color);
-    color: var(--accent-color);
-    padding: 1rem;
-    font-size: 1.25rem;
-}
-
-.card-body {
-    padding: 1rem;
-}
-
-/* SPECIFIC STYLES */
-
-#nav-header {
+/* Define the secondary background color class */
+.bg-secondary-color {
     background-color: var(--secondary-color);
 }
 
-.text-white {
-    color: #FFFFFF;
+/* Define the accent color class */
+.accent-color {
+    color: var(--accent-color);
 }
 
-.spotlight {
-    background: #FFFFFF;
+/* Define the accent background color class */
+.bg-accent-color {
+    background-color: var(--accent-color);
+}
+
+/* Define the text color class */
+.text-color {
+    color: var(--text-color);
+}
+
+/* Define the border color class */
+.border-color {
+    border-color: var(--border-color);
+}
+
+/* Define the info color class */
+.info-color {
+    color: var(--info-color);
+}
+
+/* Define the info background color class */
+.bg-info-color {
+    background-color: var(--info-color);
+}
+
+/* Define the warning color class */
+.warning-color {
+    color: var(--warning-color);
+}
+
+/* Define the warning background color class */
+.bg-warning-color {
+    background-color: var(--warning-color);
+}
+
+/* Define the danger color class */
+.danger-color {
+    color: var(--danger-color);
+}
+
+/* Define the danger background color class */
+.bg-danger-color {
+    background-color: var(--danger-color);
+}
+
+/* Define the success color class */
+.success-color {
+    color: var(--success-color);
+}
+
+/* Define the success background color class */
+.bg-success-color {
+    background-color: var(--success-color);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    /* Adjust text sizes for mobile */
+    .announcement-bar {
+        font-size: 1rem;
+        padding: 5px 0;
+    }
+
+    .navbar {
+        padding: 10px 5px;
+    }
+
+    .navbar a {
+        font-size: 0.9rem;
+    }
+
+    .hero-section {
+        font-size: 1rem;
+    }
+
+    .footer {
+        font-size: 0.9rem;
+    }
 }

@@ -46,11 +46,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
 
+    'django_browser_reload',
+
     'admin_panel',
     'core',
     'matches',
     'players',
     'api',
+    'seasons',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'ttranking.urls'
@@ -89,12 +93,12 @@ WSGI_APPLICATION = 'ttranking.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': env('DB_NAME'),
         'USER': env('DB_USER'),
         'PASSWORD': env('DB_PASS'),
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
 
@@ -142,6 +146,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'core/static'),
     os.path.join(BASE_DIR, 'players/static'),
     os.path.join(BASE_DIR, 'matches/static'),
+    os.path.join(BASE_DIR, 'seasons/static'),
 ]
 
 # URL to use when referring to media files

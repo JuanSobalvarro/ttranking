@@ -1,136 +1,133 @@
 <!DOCTYPE html>
-<html lang="es" xmlns="http://www.w3.org/1999/html">
+<html lang="es">
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Clasificación Tenis de Mesa{% endblock %}</title>
     <link rel="icon" type="image/x-icon" href="{% static 'core/images/favicon.ico' %}">
+    <!-- Tailwind CSS (Via CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
-    <!-- Google Fonts Roboto -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"/>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
 </head>
-<body>
-    <header class="d-flex flex-wrap justify-content-center py-3" id="nav-header" style="padding-left: 10%; padding-right: 10%;">
-        <a href="{% url 'core:home' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-            <img src="{% static 'core/images/logo-white-48.png' %}" alt="" height="48"/>
-            <span class="fs-4 text-white">Clasificación de Tenis de Mesa</span>
-        </a>
-        <ul class="nav">
-            <li class="nav-item"><a href="{% url 'core:home' %}" class="nav-link" aria-current="page">Inicio</a></li>
-            <li class="nav-item"><a href="{% url 'players:player_list' %}" class="nav-link">Jugadores</a></li>
-            <li class="nav-item"><a href="{% url 'matches:match_list' %}" class="nav-link">Partidos</a></li>
-            <!-- Login Button -->
-            <li class="nav-item ms-3">
-                <a href="{% url 'admin_panel:login' %}" class="btn btn-outline-light">Iniciar Sesión</a>
-            </li>
-        </ul>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50 w-full bg-primary-color py-3 px-4 sm:px-10">
+        <div class="flex justify-between items-center">
+            <a href="{% url 'core:home' %}" class="flex items-center text-white no-underline">
+                <img src="{% static 'core/images/logo-white-48.png' %}" alt="Logo" class="h-12"/>
+                <span class="text-2xl ml-2">Clasificación de Tenis de Mesa</span>
+            </a>
+            <!-- Mobile Hamburger Icon -->
+            <button class="sm:hidden text-white" id="navbar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <!-- Navbar Links (Hidden on mobile) -->
+            <ul class="hidden sm:flex space-x-4 sm:space-x-8 text-sm sm:text-base" id="navbar-links">
+                <li><a href="{% url 'core:home' %}" class="nav-link text-neutral-50 {% if request.resolver_match.url_name == 'home' %}font-bold text-white{% endif %}">Inicio</a></li>
+                <li><a href="{% url 'players:player_list' %}" class="nav-link text-neutral-50 {% if request.resolver_match.url_name == 'players:player_list' %}font-bold text-white{% endif %}">Jugadores</a></li>
+                <li><a href="{% url 'matches:match_list' %}" class="nav-link text-neutral-50 {% if request.resolver_match.url_name == 'matches:match_list' %}font-bold text-white{% endif %}">Partidos</a></li>
+                <li>
+                    <a href="{% url 'seasons:season_list' %}" class="nav-link text-neutral-50 {% if request.resolver_match.url_name == 'core:seasons' %}font-bold text-white{% endif %}">Temporadas</a>
+                </li>
+
+                <li>
+                    <a href="{% url 'admin_panel:login' %}" class="text-white bg-transparent border-2 border-white rounded py-2 px-4 hover:bg-white hover:text-primary-color transition-colors">Iniciar Sesión</a>
+                </li>
+            </ul>
+        </div>
     </header>
 
-    <header class="hero-section" style="padding-bottom: 0;">
+    <!-- Hero Section -->
+    <section class="hero-section bg-primary-color text-white text-center">
         {% block hero %}
         <!-- Hero section content -->
         {% endblock %}
-    </header>
+    </section>
 
-    <!-- Message Modal -->
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="errorModalLabel">Mensaje</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Error messages will be inserted here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <main role="main" class="container">
+    <!-- Main Content Area -->
+    <main class="container mx-auto mt-4 px-4 sm:px-8">
         {% block content %}
         <!-- Page-specific content -->
         {% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="footer text-center text-lg-start text-white">
-        <!-- Grid container -->
-        <div class="container p-4 pb-0">
-            <!-- Section: Links -->
-            <section>
-                <!--Grid row-->
-                <div class="row">
-                    <!-- Grid column -->
-                    <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                        <h6 class="text-uppercase mb-4 font-weight-bold">Desarrollado por Juan Sobalvarro</h6>
-                        <p>Sitio web del Sistema de Clasificación de Tenis de Mesa</p>
-                    </div>
-                    <!-- Grid column -->
-                    <hr class="w-100 clearfix d-md-none" />
-                    <!-- Grid column -->
-                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                        <h6 class="text-uppercase mb-4 font-weight-bold">Contacto</h6>
-                        <p><i class="fas fa-envelope mr-3"></i> sobalvarrog.juans@gmail.com</p>
-                        <p><i class="fas fa-envelope mr-3"></i> juan.sobalvarro@est.ulsa.edu.ni</p>
-                    </div>
-                    <!-- Grid column -->
-                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
-                        <h6 class="text-uppercase mb-4 font-weight-bold">Sígueme</h6>
-                        <!-- Twitter -->
-                        <a class="btn btn-primary btn-floating m-1" style="background-color: #000000" href="https://x.com/JuanSobalvarroG" role="button"><i class="fa-brands fa-x-twitter"></i></a>
-                        <!-- Github -->
-                        <a class="btn btn-primary btn-floating m-1" style="background-color: #333333" href="https://github.com/JuanSobalvarro" role="button"><i class="fa-brands fa-github"></i></a>
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4 sm:px-8">
+            <!-- Footer Content Section -->
+            <div class="flex flex-wrap justify-between sm:justify-evenly text-sm mb-6">
+                <!-- Developed By Section -->
+                <div class="w-full sm:w-auto text-center sm:text-left mb-4 sm:mb-0">
+                    <h6 class="font-bold uppercase mb-2">Desarrollado por Juan Sobalvarro</h6>
+                    <p>Sistema de Clasificación de Tenis de Mesa</p>
+                </div>
+
+                <!-- Contact Section -->
+                <div class="w-full sm:w-auto text-center sm:text-left mb-4 sm:mb-0">
+                    <h6 class="font-bold uppercase mb-2">Contacto</h6>
+                    <p>Email: <a href="mailto:sobalvarrog.juans@gmail.com" class="underline">sobalvarrog.juans@gmail.com</a></p>
+                    <p>Email: <a href="mailto:juan.sobalvarro@est.ulsa.edu.ni" class="underline">juan.sobalvarro@est.ulsa.edu.ni</a></p>
+                </div>
+
+                <!-- Social Media Section -->
+                <div class="w-full sm:w-auto text-center sm:text-left">
+                    <h6 class="font-bold uppercase mb-2">Sígueme</h6>
+                    <div class="flex justify-center sm:justify-start">
+                        <a href="https://github.com/JuanSobalvarro" target="_blank" class="mr-4 text-xl">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://x.com/JuanSobalvarroG" target="_blank" class="text-xl">
+                            <i class="fab fa-twitter"></i>
+                        </a>
                     </div>
                 </div>
-                <!--Grid row-->
-            </section>
-            <!-- Section: Links -->
-        </div>
-        <!-- Grid container -->
+            </div>
 
-        <!-- Copyright -->
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-            <a class="text-white" href="https://github.com/JuanSobalvarro/tt-ranking-system">© 2024 Sistema de Clasificación de Tenis de Mesa</a>
+            <!-- Footer Bottom Section -->
+            <div class="text-center py-2 border-t border-gray-700 mt-6">
+                <a href="https://github.com/JuanSobalvarro/tt-ranking-system" class="text-white text-sm">
+                    © 2024 Sistema de Clasificación de Tenis de Mesa
+                </a>
+            </div>
         </div>
-        <!-- Copyright -->
     </footer>
-    <!-- Footer -->
+
 
     <!-- JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom JavaScript -->
     <script>
-        // JavaScript para establecer la clase activa en el enlace de la página actual
         document.addEventListener('DOMContentLoaded', function () {
             var currentPath = window.location.pathname;
             var navLinks = document.querySelectorAll('.nav-link');
 
             navLinks.forEach(function(link) {
                 if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
+                    link.classList.add('font-bold', 'text-white');
                 }
             });
         });
 
-        $(document).ready(function() {
-            {% if messages %}
-                $('#errorModal').modal('show');
-                $('.modal-body').html(`{% for message in messages %}<p>{{ message }}</p>{% endfor %}`);
-            {% endif %}
+        // Mobile Navbar Toggle Script
+        document.getElementById('navbar-toggle').addEventListener('click', function () {
+            const navbarLinks = document.getElementById('navbar-links');
+            navbarLinks.classList.toggle('hidden');
         });
+
+        // Tailwind-Compatible Modal (Using Alpine.js or your custom JS if needed)
+        {% if messages %}
+            document.addEventListener('DOMContentLoaded', function() {
+                const modalContent = `
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                `;
+                alert(modalContent); // Example using a simple alert for now, you could integrate Alpine.js for better modal behavior
+            });
+        {% endif %}
     </script>
 
     {% block scripts %}

@@ -16,6 +16,9 @@ from matches.models import DoublesMatch
 from players.forms import PlayerForm
 from players.models import Player
 
+from seasons.forms import SeasonForm
+from seasons.models import Season
+
 
 PLAYERS_PER_PAGE = 10
 MATCHES_PER_PAGE = 10
@@ -241,3 +244,43 @@ def match_delete(request, pk):
         return redirect('admin_panel:match_list')
 
     return render(request, 'admin_panel/matches/match_delete.html', {'match': match, 'match_type': match_type})
+
+
+"""
+SEASONS VIEWS
+"""
+def season_list(request):
+    seasons = Season.objects.all()
+    return render(request, 'admin_panel/seasons/season_list.html', context={'seasons': seasons})
+
+def season_detail(request, pk):
+    season = get_object_or_404(Season, id=pk)
+    return render(request, 'admin_panel/seasons/season_detail.html', {'season': season})
+
+def season_add(request):
+    if request.method == 'POST':
+        form = SeasonForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_panel:season_list')
+    else:
+        form = SeasonForm()
+    return render(request, 'admin_panel/seasons/season_add.html', {'form': form})
+
+def season_edit(request, pk):
+    season = get_object_or_404(Season, id=pk)
+    if request.method == 'POST':
+        form = SeasonForm(request.POST, instance=season)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_panel:season_list')
+    else:
+        form = SeasonForm(instance=season)
+    return render(request, 'admin_panel/seasons/season_edit.html', {'form': form, 'season': season})
+
+def season_delete(request, pk):
+    season = get_object_or_404(Season, id=pk)
+    if request.method == 'POST':
+        season.delete()
+        return redirect('admin_panel:season_list')
+    return render(request, 'admin_panel/seasons/season_delete.html', {'season': season})

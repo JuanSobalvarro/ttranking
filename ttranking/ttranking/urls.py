@@ -6,8 +6,10 @@ from django.contrib import admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("__reload__/", include("django_browser_reload.urls")),
     path('matches/', include('matches.urls')),
     path('players/', include('players.urls')),
+    path('seasons/', include('seasons.urls')),
     path('admin-panel/', include('admin_panel.urls')),  # Include the admin panel URLs
     path('', include('core.urls')),  # Include core app urls
 

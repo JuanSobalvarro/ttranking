@@ -4,25 +4,25 @@
 {% block title %}Inicio - Clasificación de Tenis de Mesa{% endblock %}
 
 {% block hero %}
-    <div class="jumbotron text-center">
-        <h1 class="display-4 text-white">Bienvenido al Sistema de Clasificación de Tenis de Mesa</h1>
-        <p class="lead">Sigue el rendimiento de los jugadores y consulta las últimas clasificaciones.</p>
-        <p>
-            <a class="btn btn-primary btn-lg" href="{% url 'players:player_list' %}" role="button">Ver Jugadores</a>
-            <a class="btn btn-primary btn-lg" href="{% url 'matches:match_list' %}" role="button">Ver Partidos</a>
-        </p>
+    <div class="text-center bg-gray-700 py-16">
+        <h1 class="text-4xl font-bold text-white">Bienvenido al Sistema de Clasificación de Tenis de Mesa</h1>
+        <p class="text-xl text-white mt-6">Sigue el rendimiento de los jugadores y consulta las últimas clasificaciones.</p>
+        <div class="mt-8">
+            <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full mr-4" href="{% url 'players:player_list' %}">Ver Jugadores</a>
+            <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full" href="{% url 'matches:match_list' %}">Ver Partidos</a>
+        </div>
     </div>
     <!-- Announcement Bar -->
-    <div class="announcement-bar">
-        <div class="announcement-text-wrapper">
-            <div class="announcement-text">Total Partidos Jugados: {{ matches_played }}</div>
+    <div class="bg-green-500 text-white py-3">
+        <div class="text-center">
+            <div class="text-lg font-semibold">Total Partidos Jugados: {{ matches_played }}</div>
         </div>
     </div>
 {% endblock %}
 
 {% block content %}
     <!-- SPOTLIGHT TOP -->
-    <div id="topPlayersCarousel" class="carousel slide rounded" data-bs-ride="carousel" style="background-color: #333333">
+    <div id="topPlayersCarousel" class="carousel slide rounded-lg bg-gray-800 mt-8" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#topPlayersCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Diapositiva 1"></button>
             <button type="button" data-bs-target="#topPlayersCarousel" data-bs-slide-to="1" aria-label="Diapositiva 2"></button>
@@ -30,54 +30,44 @@
         </div>
 
         <!-- título del Spotlight -->
-        <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none" style="overflow: hidden">
-            <img src="{% static 'core/images/logo-white-48.png' %}"
-                alt="uwu"
-                style="width: 100px; height: 60px; object-fit: contain;">
-            <div class="col-12 title text-white" style="margin-top: -10px; font-size: 2.5rem;">Spotlight</div>
+        <div class="flex items-center mb-4 text-white overflow-hidden">
+            <img src="{% static 'core/images/logo-white-48.png' %}" alt="uwu" class="w-24 h-16 object-contain">
+            <div class="text-4xl ml-4 font-bold">Spotlight</div>
         </div>
 
-        <div class="carousel-inner" style="padding-bottom: 4%; padding-left: 10%; padding-right: 10%; padding-top: 3%;">
+        <div class="carousel-inner p-8">
             {% for player in top %}
                 <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %} text-white">
-                    <div class="row m-0 featured-player-card common-shadow">
-
-                        <div class="col-md-4 col-sm-12">
+                    <div class="flex flex-wrap bg-gray-900 p-6 rounded-lg shadow-lg">
+                        <div class="w-full md:w-1/3">
                             <img src="{% if player.photo %}{{ player.photo.url }}{% else %}{% static 'players/images/default/player.png' %}{% endif %}"
-                                 class="player-headshot-img img-fluid"
-                                 alt="Imagen del Jugador"
-                                style="margin-left: 5%"
-                            >
+                                 class="w-full h-auto object-cover rounded-lg"
+                                 alt="Imagen del Jugador">
                         </div>
-                        <div class="col-md-8 col-sm-12 custom-margin">
-                            <div class="row" style="padding-bottom: 10%">
-                                <div class="col-12 mb-3">
-                                    <span class="bigbolder" style="font-size: 3rem">{{ player.first_name }} {{player.last_name}}</span><br>
-                                    <span class="text-white fs-6 fst-italic">{% if player.alias %}{{ player.alias }}{%endif%}</span>
+                        <div class="w-full md:w-2/3 mt-4 md:mt-0 md:pl-8">
+                            <div class="mb-4">
+                                <span class="text-3xl font-bold">{{ player.first_name }} {{player.last_name}}</span><br>
+                                <span class="text-lg italic">{% if player.alias %}{{ player.alias }}{%endif%}</span>
+                            </div>
+                            <div class="flex">
+                                <div class="w-1/2 text-5xl font-light">
+                                    <span class="font-bold">#{{ forloop.counter }}</span>
                                 </div>
-                                    <div class="col-md-6">
-                                        <span style="font-size: 5rem; font-weight: 300;">
-                                            <span class="bigbolder">#{{ forloop.counter }}</span>
-                                        </span>
-                                    </div>
-                                    <div class="col-md-6" style="border-left: 1px solid #fff;">
-                                        <span class="custom-span-details-card bold">
-                                            {% if player.nationality %}
-                                                <img src="https://flagsapi.com/{{ player.nationality }}/flat/32.png"
-                                                     alt="Bandera de {{ player.get_nationality_display }}"
-                                                     class="img-fluid">
-                                                {{ player.get_nationality_display }}
-                                            {% else %}
-                                                <span class="text-muted">N/D</span>
-                                            {% endif %}
-                                        </span><br>
-                                        {% if player.age%}
-                                            <span class="thickmedium">
-                                            &nbsp;{{ player.age }}
-                                            </span>
-                                            <span class="thinlabeler">años</span><br>
+                                <div class="w-1/2 border-l border-white pl-4">
+                                    <span class="block text-lg font-bold">
+                                        {% if player.nationality %}
+                                            <img src="https://flagsapi.com/{{ player.nationality }}/flat/32.png"
+                                                 alt="Bandera de {{ player.get_nationality_display }}"
+                                                 class="inline-block">
+                                            {{ player.get_nationality_display }}
+                                        {% else %}
                                         {% endif %}
-                                    </div>
+                                            <span class="text-muted">N/D</span>
+                                    </span><br>
+                                    <span class="block text-lg font-bold">
+                                        &nbsp;{{ player.age }} <span class="text-sm font-normal">años</span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -87,39 +77,30 @@
 
         <button class="carousel-control-prev" type="button" data-bs-target="#topPlayersCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Anterior</span>
+            <span class="sr-only">Anterior</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#topPlayersCarousel" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Siguiente</span>
+            <span class="sr-only">Siguiente</span>
         </button>
     </div>
 
     <!-- Spotlight winrate -->
-    <div class="container my-4 text-center rounded" style="background-color: #007f3d;">
-        <h2 class="text-white mb-4">Jugadores Play2Win</h2>
-        <p class="lead text-white">Estos jugadores se destacan por su winrate, ganándose el título de "Play2Win", jugar para ganar</p>
-        <div class="row justify-content-center">
+    <div class="container mx-auto my-12 text-center bg-green-700 text-white p-12 rounded-lg">
+        <h2 class="text-4xl font-bold mb-6">Jugadores Play2Win</h2>
+        <p class="text-xl mb-8">Estos jugadores se destacan por su winrate, ganándose el título de "Play2Win", jugar para ganar</p>
+        <div class="flex flex-wrap justify-center">
             {% for player in top_by_winrate %}
-                <div class="col-md-4 col-sm-6 mb-4" style="width: 20%; min-width: 300px;">
-                    <a href="{% url 'players:player_detail' player.id %}" class="text-decoration-none">
-                        <div class="card bg-dark text-white shadow-sm"  style="height: 100%; border: none;">
-                            <img src="{% if player.photo %}{{ player.photo.url }}{% else %}{% static 'players/images/default/player.png' %}{% endif %}"
-                                 class="card-img-top"
-                                 alt="{{ player.first_name }} {{ player.last_name }}"
-                                 style="object-fit: cover; height: auto; width: 100%;">
-                            <div class="card-body p-3">
-                                <h3 class="card-title" style="margin: 0;">{{ player.first_name }} {{ player.last_name }}</h3>
-                                <p class="card-text small mb-2 lead fs-6">
-                                    {%if player.alias %}{{ player.alias }}{%endif%}<br>
-                                </p>
-                                <p>
-                                    <strong>Partidos Jugados:</strong> {{ player.matches_played }}<br>
-                                </p>
-                                <p class="text-center text-white fs-1">
-                                    {{ player.winrate }}%
-                                </p>
-                            </div>
+                <div class="w-full md:w-1/4 p-4">
+                    <a href="{% url 'players:player_detail' player.id %}" class="block bg-gray-900 text-white p-6 rounded-lg shadow-lg">
+                        <img src="{% if player.photo %}{{ player.photo.url }}{% else %}{% static 'players/images/default/player.png' %}{% endif %}"
+                             class="w-full h-auto object-cover rounded-lg"
+                             alt="{{ player.first_name }} {{ player.last_name }}">
+                        <div class="mt-4">
+                            <h3 class="text-2xl font-bold">{{ player.first_name }} {{ player.last_name }}</h3>
+                            <p class="text-lg italic">{%if player.alias %}{{ player.alias }}{%endif%}</p>
+                            <p class="mt-2"><strong>Partidos Jugados:</strong> {{ player.matches_played }}</p>
+                            <p class="text-4xl mt-4">{{ player.winrate }}%</p>
                         </div>
                     </a>
                 </div>
@@ -127,86 +108,77 @@
         </div>
     </div>
 
-
-
-
-
-    <!-- Tabla de jugadores   -->
-    <div class="container my-4">
-    <h2 class="text-center">Top 20 Jugadores</h2>
-    <div class="table-responsive">
-        <table class="table table-hover table-bordered align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">Posición</th>
-                    <th scope="col">Jugador</th>
-                    <th scope="col">Nacionalidad</th>
-                    <th scope="col">Puntos</th>
-                    <th scope="col">Partidos</th>
-                    <th scope="col">Victorias</th>
-                    <th scope="col">%Victorias</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for player in ranking %}
+    <!-- Tabla de jugadores -->
+    <div class="container mx-auto my-12">
+        <h2 class="text-center text-3xl font-bold mb-6">Top 20 Jugadores</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow-lg">
+                <thead class="bg-gray-800 text-white">
                     <tr>
-                        <td class="rank text-center">{{ forloop.counter }}</td>
-                        <td class="d-flex align-items-center" style="min-width: 200px">
-                            <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
-                               href="{% url 'players:player_detail' player.id %}">
-                                <img src="{% if player.photo %}{{ player.photo.url }}{% else %}{% static 'players/images/default/player.png' %}{% endif %}"
-                                     alt="{{ player.first_name }} {{ player.last_name }}"
-                                     class="rounded-circle img-fluid me-2"
-                                     style="width: 50px; height: 50px; object-fit: cover;">
-                                <div class="overflow-hidden">
-                                    <strong class="d-block fs-6 fs-md-4 fs-lg-5">{{ player.first_name }} {{ player.last_name }}</strong>
-                                    <div class="text-muted fs-6">{% if player.alias %}{{ player.alias }}{%endif%}</div>
-                                </div>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            {% if player.nationality %}
-                                <img src="https://flagsapi.com/{{ player.nationality }}/flat/32.png"
-                                     alt="Bandera de {{ player.get_nationality_display }}"
-                                     class="img-fluid me-1">
-                                {{ player.get_nationality_display }}
-                            {% else %}
-                                <span class="text-muted">N/D</span>
-                            {% endif %}
-                        </td>
-                        <td class="text-center">{{ player.ranking }}</td>
-                        <td class="text-center">{{ player.matches_played }}</td>
-                        <td class="text-center">{{ player.victories }}</td>
-                        <td class="text-center">{{ player.winrate }}%</td>
+                        <th class="py-3 px-6">Posición</th>
+                        <th class="py-3 px-6">Jugador</th>
+                        <th class="py-3 px-6">Nacionalidad</th>
+                        <th class="py-3 px-6">Puntos</th>
+                        <th class="py-3 px-6">Partidos</th>
+                        <th class="py-3 px-6">Victorias</th>
+                        <th class="py-3 px-6">%Victorias</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
+                </thead>
+                <tbody>
+                    {% for player in ranking %}
+                        <tr class="border-b">
+                            <td class="py-3 px-6 text-center">{{ forloop.counter }}</td>
+                            <td class="py-3 px-6 flex items-center">
+                                <a href="{% url 'players:player_detail' player.id %}" class="flex items-center no-underline text-black">
+                                    <img src="{% if player.photo %}{{ player.photo.url }}{% else %}{% static 'players/images/default/player.png' %}{% endif %}"
+                                         alt="{{ player.first_name }} {{ player.last_name }}"
+                                         class="w-12 h-12 rounded-full mr-4 object-cover">
+                                    <div>
+                                        <strong class="block">{{ player.first_name }} {{ player.last_name }}</strong>
+                                        <span class="text-sm text-gray-600">{% if player.alias %}{{ player.alias }}{%endif%}</span>
+                                    </div>
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                {% if player.nationality %}
+                                    <img src="https://flagsapi.com/{{ player.nationality }}/flat/32.png"
+                                         alt="Bandera de {{ player.get_nationality_display }}"
+                                         class="inline-block">
+                                    {{ player.get_nationality_display }}
+                                {% else %}
+                                {% endif %}
+                                    <span class="text-gray-600">N/D</span>
+                            </td>
+                            <td class="py-3 px-6 text-center">{{ player.ranking }}</td>
+                            <td class="py-3 px-6 text-center">{{ player.matches_played }}</td>
+                            <td class="py-3 px-6 text-center">{{ player.victories }}</td>
+                            <td class="py-3 px-6 text-center">{{ player.winrate }}%</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Description -->
-    <div class="container my-5">
-            <h2 class="text-center">Sobre el sistema de Clasificación</h2>
-            <p class="lead text-center">
-                Nuestro sistema de clasificación de tenis de mesa está diseñado para ofrecer una representación precisa
-                y dinámica del rendimiento de los jugadores a lo largo del tiempo. Cada jugador acumula puntos en
-                función de los resultados de sus victorias.
-            </p>
-            <p class="text-center">
-                Ya sean principiantes, avanzados o profesionales todos pueden participar de nuestro grupo y ser
-                registrado/a en nuestra clasificación.
-                La clasificación se actualiza diariamente, sean en los partidos de 12m a 1:00pm o en algún partido donde
-                hayan testigos partes del grupo.
-            </p>
-            <h3 class="text-center">
-                Temporada actual
-            </h3>
-            <p class="lead text-center">
-                La temporada actual empezó lunes 5 de agosto, se otorgan 2 puntos por cada victoria y las derrotas no
-                restan puntos a los participantes.
-            </p>
-        </div>
+    <div class="container mx-auto my-12 text-center">
+        <h2 class="text-3xl font-bold mb-6">Sobre el sistema de Clasificación</h2>
+        <p class="text-xl mb-6">
+            Nuestro sistema de clasificación de tenis de mesa está diseñado para ofrecer una representación precisa
+            y dinámica del rendimiento de los jugadores a lo largo del tiempo. Cada jugador acumula puntos en
+            función de los resultados de sus victorias.
+        </p>
+        <p class="text-xl mb-6">
+            Ya sean principiantes, avanzados o profesionales todos pueden participar de nuestro grupo y ser
+            registrado/a en nuestra clasificación.
+            La clasificación se actualiza diariamente, sean en los partidos de 12m a 1:00pm o en algún partido donde
+            hayan testigos partes del grupo.
+        </p>
+        <h3 class="text-2xl font-bold mb-6">Temporada actual</h3>
+        <p class="text-xl">
+            La temporada actual empezó lunes 5 de agosto, se otorgan 2 puntos por cada victoria y las derrotas no
+            restan puntos a los participantes.
+        </p>
     </div>
 {% endblock %}
 

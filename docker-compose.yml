@@ -1,0 +1,26 @@
+name: ttranking
+
+services:
+  backend:
+    build: ./ttranking
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ttranking:/app
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ttranking
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: uwunyanichan
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+    postgres_data:

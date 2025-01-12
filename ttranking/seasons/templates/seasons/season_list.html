@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-semibold mb-6">Temporadas Anteriores</h2>
+
+        <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+            <thead>
+                <tr class="bg-gray-800 text-white">
+                    <th class="px-4 py-2">Temporada</th>
+                    <th class="px-4 py-2">Fecha de Inicio</th>
+                    <th class="px-4 py-2">Fecha de Fin</th>
+                    <th class="px-4 py-2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for season in seasons %}
+                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                        <td class="px-4 py-2">{{ season.name }}</td>
+                        <td class="px-4 py-2">{{ season.start_date }}</td>
+                        <td class="px-4 py-2">{{ season.end_date }}</td>
+                        <td class="px-4 py-2">
+                            <a href="{% url 'core:season_detail' season.id %}" class="text-blue-600 hover:underline">Ver Detalles</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}

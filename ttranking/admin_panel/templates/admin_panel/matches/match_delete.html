@@ -2,13 +2,17 @@
 {% load static %}
 
 {% block content %}
-<h1>Confirmar Eliminación</h1>
-<p>¿Está seguro de que desea eliminar este partido?</p>
-<p><strong>{% if match_type == 'S' %}{{ match }}{% else %}{{ match }}{% endif %}</strong></p>
-
-<form method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Eliminar</button>
-    <a href="{% url 'admin_panel:match_list' %}" class="btn btn-secondary">Cancelar</a>
-</form>
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-3xl font-bold mb-6">Confirmar Eliminación</h2>
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+        <p class="font-bold">Advertencia</p>
+        <p>¿Está seguro de que desea eliminar este partido?</p>
+        <p><strong>{% if match_type == 'S' %}{{ match }}{% else %}{{ match }}{% endif %}</strong></p>
+    </div>
+    <form method="post" class="flex justify-end">
+        {% csrf_token %}
+        <button type="submit" class="bg-red-500 text-white px-6 py-3 rounded hover:bg-red-600">Eliminar</button>
+        <a href="{% url 'admin_panel:match_list' %}" class="bg-gray-300 text-black px-6 py-3 rounded hover:bg-gray-400 ml-4">Cancelar</a>
+    </form>
+</div>
 {% endblock %}

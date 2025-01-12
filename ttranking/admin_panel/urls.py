@@ -21,4 +21,9 @@ urlpatterns = [
     path('matches/add/', views.match_add, name='match_add'),
     path('matches/<int:pk>/update/', views.match_update, name='match_update'),
     path('matches/<int:pk>/delete/', views.match_delete, name='match_delete'),
+
+    path('seasons/', views.season_list, name='season_list'),
+    path('seasons/add/', views.season_add, name='season_add'),
+    path('seasons/<int:pk>/edit/', views.season_edit, name='season_edit'),
+    path('seasons/<int:pk>/delete/', views.season_delete, name='season_delete'),
 ]

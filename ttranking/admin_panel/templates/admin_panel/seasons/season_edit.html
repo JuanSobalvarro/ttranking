@@ -1,0 +1,32 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block content %}
+    <div class="px-20">
+        <h1 class="text-3xl font-bold mb-6">Editar Temporada</h1>
+
+        <div class="bg-white p-8 rounded-lg shadow-md mb-6">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-6">
+                    <label for="id_name" class="block text-lg font-semibold mb-2">Nombre de la Temporada</label>
+                    <input type="text" name="name" id="id_name" value="{{ season.name }}" class="w-full p-4 border border-gray-300 rounded-md">
+                </div>
+
+                <div class="mb-6">
+                    <label for="id_start_date" class="block text-lg font-semibold mb-2">Fecha de Inicio</label>
+                    <input type="date" name="start_date" id="id_start_date" value="{{ season.start_date|date:'Y-m-d' }}" class="w-full p-4 border border-gray-300 rounded-md">
+                </div>
+
+                <div class="mb-6">
+                    <label for="id_end_date" class="block text-lg font-semibold mb-2">Fecha de Fin</label>
+                    <input type="date" name="end_date" id="id_end_date" value="{{ season.end_date|date:'Y-m-d' }}" class="w-full p-4 border border-gray-300 rounded-md">
+                </div>
+
+                <div class="mt-8 flex justify-end">
+                    <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600">Guardar Cambios</button>
+                    <a href="{% url 'admin_panel:season_list' %}" class="bg-gray-300 text-black px-6 py-3 rounded hover:bg-gray-400 ml-4">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

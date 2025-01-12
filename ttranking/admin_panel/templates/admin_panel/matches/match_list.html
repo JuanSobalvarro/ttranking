@@ -2,101 +2,102 @@
 {% load static %}
 
 {% block content %}
-<h1>Lista de Partidos</h1>
-<a href="{% url 'admin_panel:match_add' %}" class="btn btn-success">Añadir Nuevo Partido</a>
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-3xl font-bold mb-6">Lista de Partidos</h2>
+    <a href="{% url 'admin_panel:match_add' %}" class="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600 mb-6 inline-block">Añadir Nuevo Partido</a>
 
-<h2>Partidos Individuales</h2>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Fecha</th>
-            <th>Jugador 1</th>
-            <th>Jugador 2</th>
-            <th>Puntuación</th>
-            <th>Ganador</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for match in singles_matches %}
-        <tr>
-            <td>{{ match.date }}</td>
-            <td>{{ match.player1 }}</td>
-            <td>{{ match.player2 }}</td>
-            <td>{{ match.score }}</td>
-            <td>{{ match.winner_display }}</td>
-            <td>
-                <a href="{% url 'admin_panel:match_update' pk=match.id %}?match_type=S" class="btn btn-primary">Actualizar</a>
-                <a href="{% url 'admin_panel:match_delete' pk=match.id %}?match_type=S" class="btn btn-danger">Eliminar</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <h3 class="text-2xl font-semibold mb-4">Partidos Individuales</h3>
+    <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md mb-6">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="py-3 px-6 text-left border-b">Fecha</th>
+                <th class="py-3 px-6 text-left border-b">Jugador 1</th>
+                <th class="py-3 px-6 text-left border-b">Jugador 2</th>
+                <th class="py-3 px-6 text-left border-b">Puntuación</th>
+                <th class="py-3 px-6 text-left border-b">Ganador</th>
+                <th class="py-3 px-6 text-left border-b">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for match in singles_matches %}
+            <tr class="hover:bg-gray-50">
+                <td class="py-3 px-6 border-b">{{ match.date }}</td>
+                <td class="py-3 px-6 border-b">{{ match.player1 }}</td>
+                <td class="py-3 px-6 border-b">{{ match.player2 }}</td>
+                <td class="py-3 px-6 border-b">{{ match.score }}</td>
+                <td class="py-3 px-6 border-b">{{ match.winner_display }}</td>
+                <td class="py-3 px-6 border-b">
+                    <a href="{% url 'admin_panel:match_update' pk=match.id %}?match_type=S" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Actualizar</a>
+                    <a href="{% url 'admin_panel:match_delete' pk=match.id %}?match_type=S" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ml-2">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-<div class="pagination">
-    <span class="step-links">
-        {% if singles_matches.has_previous %}
-            <a href="?singles_page=1">&laquo; primero</a>
-            <a href="?singles_page={{ singles_matches.previous_page_number }}">anterior</a>
-        {% endif %}
+    <div class="pagination mb-6">
+        <span class="step-links">
+            {% if singles_matches.has_previous %}
+                <a href="?singles_page=1" class="text-blue-500 hover:underline">&laquo; primero</a>
+                <a href="?singles_page={{ singles_matches.previous_page_number }}" class="text-blue-500 hover:underline">anterior</a>
+            {% endif %}
 
-        <span class="current">
-            Página {{ singles_matches.number }} de {{ singles_matches.paginator.num_pages }}.
+            <span class="current text-gray-700">
+                Página {{ singles_matches.number }} de {{ singles_matches.paginator.num_pages }}.
+            </span>
+
+            {% if singles_matches.has_next %}
+                <a href="?singles_page={{ singles_matches.next_page_number }}" class="text-blue-500 hover:underline">siguiente</a>
+                <a href="?singles_page={{ singles_matches.paginator.num_pages }}" class="text-blue-500 hover:underline">último &raquo;</a>
+            {% endif %}
         </span>
+    </div>
 
-        {% if singles_matches.has_next %}
-            <a href="?singles_page={{ singles_matches.next_page_number }}">siguiente</a>
-            <a href="?singles_page={{ singles_matches.paginator.num_pages }}">último &raquo;</a>
-        {% endif %}
-    </span>
-</div>
+    <h3 class="text-2xl font-semibold mb-4">Partidos Dobles</h3>
+    <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="py-3 px-6 text-left border-b">Fecha</th>
+                <th class="py-3 px-6 text-left border-b">Equipo 1</th>
+                <th class="py-3 px-6 text-left border-b">Equipo 2</th>
+                <th class="py-3 px-6 text-left border-b">Puntuación</th>
+                <th class="py-3 px-6 text-left border-b">Ganador</th>
+                <th class="py-3 px-6 text-left border-b">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for match in doubles_matches %}
+            <tr class="hover:bg-gray-50">
+                <td class="py-3 px-6 border-b">{{ match.date }}</td>
+                <td class="py-3 px-6 border-b">{{ match.team1_player1 }} & {{ match.team1_player2 }}</td>
+                <td class="py-3 px-6 border-b">{{ match.team2_player1 }} & {{ match.team2_player2 }}</td>
+                <td class="py-3 px-6 border-b">{{ match.score }}</td>
+                <td class="py-3 px-6 border-b">{{ match.winner_display }}</td>
+                <td class="py-3 px-6 border-b">
+                    <a href="{% url 'admin_panel:match_update' pk=match.id %}?match_type=D" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Actualizar</a>
+                    <a href="{% url 'admin_panel:match_delete' pk=match.id %}?match_type=D" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ml-2">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-<h2>Partidos Dobles</h2>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Fecha</th>
-            <th>Equipo 1</th>
-            <th>Equipo 2</th>
-            <th>Puntuación</th>
-            <th>Ganador</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for match in doubles_matches %}
-        <tr>
-            <td>{{ match.date }}</td>
-            <td>{{ match.team1_player1 }} & {{ match.team1_player2 }}</td>
-            <td>{{ match.team2_player1 }} & {{ match.team2_player2 }}</td>
-            <td>{{ match.score }}</td>
-            <td>{{ match.winner_display }}</td>
-            <td>
-                <a href="{% url 'admin_panel:match_update' pk=match.id %}?match_type=D" class="btn btn-primary">Actualizar</a>
-                <a href="{% url 'admin_panel:match_delete' pk=match.id %}?match_type=D" class="btn btn-danger">Eliminar</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <div class="pagination mt-6">
+        <span class="step-links">
+            {% if doubles_matches.has_previous %}
+                <a href="?doubles_page=1" class="text-blue-500 hover:underline">&laquo; primero</a>
+                <a href="?doubles_page={{ doubles_matches.previous_page_number }}" class="text-blue-500 hover:underline">anterior</a>
+            {% endif %}
 
-<div class="pagination">
-    <span class="step-links">
-        {% if doubles_matches.has_previous %}
-            <a href="?doubles_page=1">&laquo; primero</a>
-            <a href="?doubles_page={{ doubles_matches.previous_page_number }}">anterior</a>
-        {% endif %}
+            <span class="current text-gray-700">
+                Página {{ doubles_matches.number }} de {{ doubles_matches.paginator.num_pages }}.
+            </span>
 
-        <span class="current">
-            Página {{ doubles_matches.number }} de {{ doubles_matches.paginator.num_pages }}.
+            {% if doubles_matches.has_next %}
+                <a href="?doubles_page={{ doubles_matches.next_page_number }}" class="text-blue-500 hover:underline">siguiente</a>
+                <a href="?doubles_page={{ doubles_matches.paginator.num_pages }}" class="text-blue-500 hover:underline">último &raquo;</a>
+            {% endif %}
         </span>
-
-        {% if doubles_matches.has_next %}
-            <a href="?doubles_page={{ doubles_matches.next_page_number }}">siguiente</a>
-            <a href="?doubles_page={{ doubles_matches.paginator.num_pages }}">último &raquo;</a>
-        {% endif %}
-    </span>
+    </div>
 </div>
-
 {% endblock %}

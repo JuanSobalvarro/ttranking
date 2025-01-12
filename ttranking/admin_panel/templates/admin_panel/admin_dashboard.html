@@ -2,54 +2,42 @@
 {% load static %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container mx-auto px-4 py-8">
     <!-- Encabezado del Panel de Control -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="h3">Panel de Control de Administración</h1>
-        </div>
+    <div class="mb-6">
+        <h1 class="text-3xl font-semibold text-gray-800">Panel de Control de Administración</h1>
     </div>
 
     <!-- Tarjetas del Panel de Control -->
-    <div class="row">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Tarjeta de Jugadores -->
-        <div class="col-md-4">
-            <div class="card text-white bg-primary mb-4">
-                <div class="card-header">Jugadores</div>
-                <div class="card-body">
-                    <h5 class="card-title">Gestionar Jugadores</h5>
-                    <p class="card-text">Ver, agregar y editar detalles de los jugadores.</p>
-                    <a href="{% url 'admin_panel:player_list' %}" class="btn btn-light">Ver Jugadores</a>
-                </div>
-            </div>
+        <div class="bg-blue-500 text-white rounded-lg shadow-lg p-6">
+            <div class="font-semibold text-lg mb-2">Jugadores</div>
+            <p class="text-sm mb-4">Ver, agregar y editar detalles de los jugadores.</p>
+            <a href="{% url 'admin_panel:player_list' %}" class="inline-block px-4 py-2 bg-white text-blue-500 rounded hover:bg-blue-100 transition">Ver Jugadores</a>
         </div>
 
         <!-- Tarjeta de Partidos -->
-        <div class="col-md-4">
-            <div class="card text-white bg-success mb-4">
-                <div class="card-header">Partidos</div>
-                <div class="card-body">
-                    <h5 class="card-title">Gestionar Partidos</h5>
-                    <p class="card-text">Programar y rastrear detalles de los partidos.</p>
-                    <a href="{% url 'admin_panel:match_list' %}" class="btn btn-light">Ver Partidos</a>
-                </div>
-            </div>
+        <div class="bg-green-500 text-white rounded-lg shadow-lg p-6">
+            <div class="font-semibold text-lg mb-2">Partidos</div>
+            <p class="text-sm mb-4">Programar y rastrear detalles de los partidos.</p>
+            <a href="{% url 'admin_panel:match_list' %}" class="inline-block px-4 py-2 bg-white text-green-500 rounded hover:bg-green-100 transition">Ver Partidos</a>
+        </div>
+
+        <!-- Tarjeta de Temporadas -->
+        <div class="bg-yellow-500 text-white rounded-lg shadow-lg p-6">
+            <div class="font-semibold text-lg mb-2">Temporadas</div>
+            <p class="text-sm mb-4">Gestionar las temporadas del sistema.</p>
+            <a href="{% url 'admin_panel:season_list' %}" class="inline-block px-4 py-2 bg-white text-yellow-500 rounded hover:bg-yellow-100 transition">Ver Temporadas</a>
         </div>
     </div>
 
     <!-- Secciones Adicionales -->
-    <div class="row">
-        <!-- Sección de Ejemplo -->
-        <div class="col-12">
-            <div class="card mb-4">
-                <div class="card-header">Bienvenido</div>
-                <div class="card-body">
-                    <p>Bienvenido al Panel de Control de Administración del Sistema de Ranking de Tenis de Mesa. Este sistema te permite
-                        gestionar los datos de jugadores y partidos de manera eficiente. Puedes agregar, editar y eliminar perfiles de jugadores,
-                        así como rastrear partidos. Utiliza los enlaces de navegación para explorar las características disponibles.</p>
-                    <p>Si necesitas asistencia o tienes alguna pregunta, por favor consulta la documentación o contacta al soporte. ¡Gracias por usar nuestro sistema!</p>
-                </div>
-            </div>
+    <div class="mt-8">
+        <div class="bg-white shadow-lg rounded-lg p-6">
+            <div class="font-semibold text-lg mb-4">Bienvenido</div>
+            <p class="text-sm mb-4">Bienvenido al Panel de Control de Administración del Sistema de Ranking de Tenis de Mesa. Este sistema te permite gestionar los datos de jugadores y partidos de manera eficiente. Puedes agregar, editar y eliminar perfiles de jugadores, así como rastrear partidos. Utiliza los enlaces de navegación para explorar las características disponibles.</p>
+            <p class="text-sm">Si necesitas asistencia o tienes alguna pregunta, por favor consulta la documentación o contacta al soporte. ¡Gracias por usar nuestro sistema!</p>
         </div>
     </div>
 </div>

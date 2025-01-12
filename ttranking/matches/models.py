@@ -2,6 +2,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from players.models import Player
+from seasons.models import Season
 
 WINNING_POINTS = 2
 LOSING_POINTS = 0
@@ -9,6 +10,7 @@ LOSING_POINTS = 0
 
 class SinglesMatch(models.Model):
     date = models.DateTimeField()
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='singles_matches')
     player1 = models.ForeignKey(Player, related_name='singles_matches_as_player1', on_delete=models.CASCADE)
     player2 = models.ForeignKey(Player, related_name='singles_matches_as_player2', on_delete=models.CASCADE)
     player1_score = models.IntegerField(default=0)
@@ -20,10 +22,15 @@ class SinglesMatch(models.Model):
     def players(self):
         return [self.player1, self.player2]
 
+    @property
+    def get_season(self) -> Season:
+        # Dynamically calculate the season based on the date
+        return Season.get_season_for_date(self.date.date())
+
     def update_winner(self):
-        if (self.player1_score >= 11 and self.player1_score >= self.player2_score + 2):
+        if self.player1_score >= 11 and self.player1_score >= self.player2_score + 2:
             self.winner = self.player1
-        elif (self.player2_score >= 11 and self.player2_score >= self.player1_score + 2):
+        elif self.player2_score >= 11 and self.player2_score >= self.player1_score + 2:
             self.winner = self.player2
         else:
             self.winner = None
@@ -106,8 +113,12 @@ class SinglesMatch(models.Model):
         # UPDATE IN THIS ORDER, FIRST MATCHES, THEN PLAYER POINTS. WHY? IDFK
         # Well it looks like it is that when we update the matches played we save the players models
         # so fix this Juan ;p
+
+        self.season = self.get_season
+
         self.update_matches_played()
         self.update_player_points()
+
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -131,6 +142,7 @@ class SinglesMatch(models.Model):
 
 class DoublesMatch(models.Model):
     date = models.DateTimeField()
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='doubles_matches')
     team1_player1 = models.ForeignKey(Player, related_name='doubles_matches_team1_player1', on_delete=models.CASCADE)
     team1_player2 = models.ForeignKey(Player, related_name='doubles_matches_team1_player2', on_delete=models.CASCADE)
     team2_player1 = models.ForeignKey(Player, related_name='doubles_matches_team2_player1', on_delete=models.CASCADE)
@@ -146,6 +158,11 @@ class DoublesMatch(models.Model):
         :return:
         """
         return [self.team1_player1, self.team1_player2, self.team2_player1, self.team2_player2]
+
+    @property
+    def get_season(self):
+        # Dynamically calculate the season based on the date
+        return Season.get_season_for_date(self.date.date())
 
     @property
     def list_winners(self):
@@ -248,6 +265,9 @@ class DoublesMatch(models.Model):
 
     def save(self, *args, **kwargs):
         self.clean()
+
+        self.season = self.get_season
+
         self.update_matches_played()
         self.update_team_points()
         super().save(*args, **kwargs)
@@ -265,10 +285,10 @@ class DoublesMatch(models.Model):
         self.team2_player2.matches_played -= 1
 
         # save players
-        self.team1_player1.save();
-        self.team1_player2.save();
-        self.team2_player1.save();
-        self.team2_player2.save();
+        self.team1_player1.save()
+        self.team1_player2.save()
+        self.team2_player1.save()
+        self.team2_player2.save()
 
         super().delete(*args, **kwargs)
 

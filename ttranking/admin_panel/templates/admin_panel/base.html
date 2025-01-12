@@ -1,118 +1,126 @@
 <!DOCTYPE html>
-<html lang="es" xmlns="http://www.w3.org/1999/html">
+<html lang="es">
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Panel de Administración{% endblock %}</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
-    <!-- Google Fonts Roboto -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"/>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- Estilos Personalizados -->
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="{% static 'admin_panel/css/styles.css' %}">
 </head>
-<body>
-    <header class="d-flex flex-wrap justify-content-between py-3 bg-dark text-white" id="admin-nav-header" style="padding-left: 10%; padding-right: 10%;">
-        <a href="{% url 'admin_panel:dashboard' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-light text-decoration-none">
-            <img src="{% static 'core/images/logo-white-48.png' %}" alt="" height="48"/>
-            <span class="fs-4">Panel de Administración</span>
-        </a>
-        <ul class="nav d-flex align-items-center">
-            <li class="nav-item"><a href="{% url 'admin_panel:dashboard' %}" class="nav-link text-white" aria-current="page">Tablero</a></li>
-            <li class="nav-item"><a href="{% url 'admin_panel:player_list' %}" class="nav-link text-white">Jugadores</a></li>
-            <li class="nav-item"><a href="{% url 'admin_panel:match_list' %}" class="nav-link text-white">Partidos</a></li>
-            <!-- Botón de Cerrar Sesión -->
-            <li class="nav-item">
-                <form action="{% url 'admin_panel:logout' %}" method="post" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-light">Cerrar Sesión</button>
-                </form>
-            </li>
-        </ul>
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <header class="bg-gray-800 text-white py-4 px-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'admin_panel:dashboard' %}" class="flex items-center text-2xl font-bold">
+                <img src="{% static 'core/images/logo-white-48.png' %}" alt="Logo" class="h-12"/>
+                <span class="ml-2">Panel de Administración</span>
+            </a>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="{% url 'admin_panel:dashboard' %}" class="hover:text-gray-400">Tablero</a></li>
+                    <li><a href="{% url 'admin_panel:player_list' %}" class="hover:text-gray-400">Jugadores</a></li>
+                    <li><a href="{% url 'admin_panel:match_list' %}" class="hover:text-gray-400">Partidos</a></li>
+                    <!-- Seasons Link -->
+                    <li><a href="{% url 'admin_panel:season_list' %}" class="hover:text-gray-400">Temporadas</a></li>
+                    <li>
+                        <form action="{% url 'admin_panel:logout' %}" method="post" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Cerrar Sesión</button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <main role="main" class="container mt-4">
+    <!-- Main Content -->
+    <main class="container mx-auto mt-8 px-20">
         {% block content %}
         <!-- Contenido Específico de la Página -->
         {% endblock %}
     </main>
 
-    <!-- Pie de Página -->
-    <footer class="footer text-center text-lg-start text-white bg-dark" style="margin-bottom: 0;">
-        <!-- Contenedor Grid -->
-        <div class="container p-4 pb-0">
-            <!-- Sección: Enlaces -->
-            <section>
-                <!-- Fila de Grid -->
-                <div class="row">
-                    <!-- Columna de Grid -->
-                    <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                        <h6 class="text-uppercase mb-4 font-weight-bold">Panel de Administración</h6>
-                        <p>Interfaz de Gestión para el Sistema de Ranking de Tenis de Mesa</p>
-                    </div>
-                    <!-- Columna de Grid -->
-                    <hr class="w-100 clearfix d-md-none" />
-                    <!-- Columna de Grid -->
-                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                        <h6 class="text-uppercase mb-4 font-weight-bold">Contacto</h6>
-                        <p><i class="fas fa-envelope mr-3"></i> sobalvarrog.juans@gmail.com</p>
-                        <p><i class="fas fa-envelope mr-3"></i> juan.sobalvarro@est.ulsa.edu.ni</p>
-                    </div>
-                    <!-- Columna de Grid -->
-                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
-                        <h6 class="text-uppercase mb-4 font-weight-bold">Sígueme</h6>
-                        <!-- Twitter -->
-                        <a class="btn btn-primary btn-floating m-1" style="background-color: #000000" href="https://x.com/JuanSobalvarroG" role="button"><i class="fa-brands fa-x-twitter"></i></a>
-                        <!-- Github -->
-                        <a class="btn btn-primary btn-floating m-1" style="background-color: #333333" href="https://github.com/JuanSobalvarro" role="button"><i class="fa-brands fa-github"></i></a>
-                    </div>
-                </div>
-                <!-- Fila de Grid -->
-            </section>
-            <!-- Sección: Enlaces -->
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto flex flex-wrap justify-between">
+            <div class="w-full md:w-1/3">
+                <h6 class="uppercase font-semibold mb-2">Panel de Administración</h6>
+                <p>Interfaz de Gestión para el Sistema de Ranking de Tenis de Mesa</p>
+            </div>
+            <div class="w-full md:w-1/3">
+                <h6 class="uppercase font-semibold mb-2">Contacto</h6>
+                <p><i class="fas fa-envelope mr-2"></i> sobalvarrog.juans@gmail.com</p>
+                <p><i class="fas fa-envelope mr-2"></i> juan.sobalvarro@est.ulsa.edu.ni</p>
+            </div>
+            <div class="w-full md:w-1/3">
+                <h6 class="uppercase font-semibold mb-2">Sígueme</h6>
+                <a href="https://x.com/JuanSobalvarroG" class="text-xl mr-4" style="color:#1da1f2;" target="_blank">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+                <a href="https://github.com/JuanSobalvarro" class="text-xl" style="color:#333;" target="_blank">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+            </div>
         </div>
-        <!-- Contenedor Grid -->
-
-        <!-- Copyright -->
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-            <a class="text-white" href="https://github.com/JuanSobalvarro/tt-ranking-system">© 2024 Sistema de Ranking de Tenis de Mesa</a>
+        <div class="text-center p-3 bg-gray-900">
+            <a href="https://github.com/JuanSobalvarro/tt-ranking-system" class="text-white">
+                © 2024 Sistema de Ranking de Tenis de Mesa
+            </a>
         </div>
-        <!-- Copyright -->
     </footer>
-    <!-- Pie de Página -->
+
+    <!-- Modal for Messages -->
+    <div id="messageModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden" role="dialog" aria-labelledby="modalTitle" aria-live="assertive">
+        <div class="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
+            <h3 id="modalTitle" class="text-xl font-semibold mb-4">Mensaje</h3>
+            <div id="modalMessages"></div>
+            <div class="mt-4 text-right">
+                <button onclick="closeModal()" class="bg-gray-800 text-white px-6 py-2 rounded hover:bg-gray-700">Cerrar</button>
+            </div>
+        </div>
+    </div>
 
     <!-- JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- JavaScript Personalizado -->
     <script>
-        // JavaScript para establecer la clase activa en el enlace de la página actual
-        document.addEventListener('DOMContentLoaded', function () {
-            var currentPath = window.location.pathname;
-            var navLinks = document.querySelectorAll('.nav-link');
+        // Function to display modal with messages
+        function openModal(messages) {
+            const modal = document.getElementById('messageModal');
+            const modalMessages = document.getElementById('modalMessages');
+            modalMessages.innerHTML = messages.join('<br>');
+            modal.classList.remove('hidden');
+        }
 
+        // Function to close modal
+        function closeModal() {
+            const modal = document.getElementById('messageModal');
+            modal.classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var currentPath = window.location.pathname;
+            var navLinks = document.querySelectorAll('nav a');
+
+            // Set active link in navigation
             navLinks.forEach(function(link) {
                 if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
+                    link.classList.add('font-bold', 'text-gray-300');
                 }
             });
-        });
 
-        $(document).ready(function() {
+            // Display message modal if there are messages
             {% if messages %}
-                $('#errorModal').modal('show');
-                $('.modal-body').html(`{% for message in messages %}<p>{{ message }}</p>{% endfor %}`);
+                openModal([{% for message in messages %}"{{ message }}"{% endfor %}]);
             {% endif %}
         });
     </script>
 
     {% block scripts %}
-    <!-- Scripts adicionales específicos de la página -->
+    <!-- Custom Scripts for each page -->
     {% endblock %}
+
 </body>
 </html>

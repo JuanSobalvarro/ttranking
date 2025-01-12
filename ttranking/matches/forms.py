@@ -2,9 +2,7 @@ from django import forms
 import datetime
 from django.utils.translation import gettext_lazy as _
 from .models import SinglesMatch, DoublesMatch
-
 from players.models import Player
-
 
 class SinglesMatchForm(forms.ModelForm):
     class Meta:
@@ -18,11 +16,11 @@ class SinglesMatchForm(forms.ModelForm):
             'player2_score': _('Puntos de Jugador 2'),
         }
         widgets = {
-            'date': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-            'player1': forms.Select(attrs={'class': 'form-control'}),
-            'player1_score': forms.NumberInput(attrs={'class': 'form-control'}),
-            'player2': forms.Select(attrs={'class': 'form-control'}),
-            'player2_score': forms.NumberInput(attrs={'class': 'form-control'}),
+            'date': forms.DateTimeInput(attrs={'class': 'form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm', 'type': 'datetime-local'}),
+            'player1': forms.Select(attrs={'class': 'form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'}),
+            'player1_score': forms.NumberInput(attrs={'class': 'form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'}),
+            'player2': forms.Select(attrs={'class': 'form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'}),
+            'player2_score': forms.NumberInput(attrs={'class': 'form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'}),
         }
 
     def set_labels(self):
@@ -45,7 +43,6 @@ class SinglesMatchForm(forms.ModelForm):
 
         return cleaned_data
 
-
 class DoublesMatchForm(forms.ModelForm):
     class Meta:
         model = DoublesMatch
@@ -60,19 +57,18 @@ class DoublesMatchForm(forms.ModelForm):
             'team2_score': _('Puntos del Equipo 2'),
         }
         widgets = {
-            'date': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-            'team1_player1': forms.Select(attrs={'class': 'form-control'}),
-            'team1_player2': forms.Select(attrs={'class': 'form-control'}),
-            'team1_score': forms.NumberInput(attrs={'class': 'form-control'}),
-            'team2_player1': forms.Select(attrs={'class': 'form-control'}),
-            'team2_player2': forms.Select(attrs={'class': 'form-control'}),
-            'team2_score': forms.NumberInput(attrs={'class': 'form-control'}),
+            'date': forms.DateTimeInput(attrs={'class': 'form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm', 'type': 'datetime-local'}),
+            'team1_player1': forms.Select(attrs={'class': 'form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'}),
+            'team1_player2': forms.Select(attrs={'class': 'form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'}),
+            'team1_score': forms.NumberInput(attrs={'class': 'form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'}),
+            'team2_player1': forms.Select(attrs={'class': 'form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'}),
+            'team2_player2': forms.Select(attrs={'class': 'form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'}),
+            'team2_score': forms.NumberInput(attrs={'class': 'form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['date'].initial = datetime.datetime.now().replace(second=0, microsecond=0)
-        # Ensure team members are distinct
         self.fields['team1_player1'].queryset = Player.objects.all().order_by('first_name')
         self.fields['team1_player2'].queryset = Player.objects.all().order_by('first_name')
         self.fields['team2_player1'].queryset = Player.objects.all().order_by('first_name')

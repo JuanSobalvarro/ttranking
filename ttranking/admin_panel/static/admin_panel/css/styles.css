@@ -1,111 +1,39 @@
-/* Basic reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
+/* Styles for Login Container */
 .login-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 100px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    @apply max-w-sm mx-auto p-6 bg-white rounded-lg shadow-lg;
 }
 
 .login-container h2 {
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-}
-
-.login-container form {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
+    @apply text-2xl font-semibold text-gray-800 mb-4;
 }
 
 .login-container form input {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    @apply mb-4 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
 }
 
 .login-container form button {
-    padding: 10px;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.login-container form button:hover {
-    background-color: #0056b3;
+    @apply px-4 py-2 bg-blue-600 text-white rounded-md transition-all duration-200 ease-in-out hover:bg-blue-500 focus:outline-none;
 }
 
 .login-container .btn-secondary {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #6c757d;
-    border: none;
-    border-radius: 4px;
-    text-align: center;
-    text-decoration: none;
-}
-
-.login-container .btn-secondary:hover {
-    background-color: #5a6268;
+    @apply inline-block px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-500;
 }
 
 /* Dashboard */
 .dashboard-container {
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin: 20px;
+    @apply p-6 bg-white rounded-lg shadow-md mt-6;
 }
 
 .dashboard-container h1 {
-    margin-bottom: 20px;
-    color: #333;
+    @apply text-3xl font-bold text-gray-900 mb-6;
 }
 
-.dashboard-container .section {
-    margin-bottom: 20px;
-}
-
-.dashboard-container .section h2 {
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.dashboard-container .section table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.dashboard-container .section table th,
-.dashboard-container .section table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
+.dashboard-container .section table th, .dashboard-container .section table td {
+    @apply px-6 py-4 text-sm text-left border-b border-gray-300;
 }
 
 .dashboard-container .section table th {
-    background-color: #f4f4f4;
+    @apply bg-gray-50 text-gray-700;
 }
+
+/* Add utility classes for table, button, and form responsiveness */
