@@ -1,0 +1,143 @@
+/* frontend/src/pages/Home.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* General styles */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #242424;
+  color: rgba(255, 255, 255, 0.87);
+  margin: 0;
+  padding: 0;
+}
+
+/* Header styles */
+header {
+  background-color: #1a1a1a;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+}
+
+header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+header ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+header ul li a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+header ul li a:hover {
+  border-color: white;
+}
+
+/* Hero section styles */
+.hero-section {
+  background-color: #1a1a1a;
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero-section p {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.hero-section a {
+  background-color: #646cff;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.hero-section a:hover {
+  background-color: #535bf2;
+}
+
+/* Main content styles */
+main {
+  padding: 2rem;
+}
+
+.carousel {
+  background-color: #333;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.carousel img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+}
+
+.carousel .carousel-item {
+  display: flex;
+  gap: 2rem;
+}
+
+.carousel .carousel-item img {
+  flex: 1;
+}
+
+.carousel .carousel-item div {
+  flex: 2;
+}
+
+.carousel .carousel-item h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.carousel .carousel-item p {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Footer styles */
+footer {
+  background-color: #1a1a1a;
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+  margin: 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}

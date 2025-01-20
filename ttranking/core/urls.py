@@ -1,11 +1,13 @@
 # ttranking/core/urls.py
 from django.urls import path
-from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
 
 app_name = 'core'
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    path('', views.APIRootView.as_view(), name='api_root'),
+    path('token/', TokenObtainPairView.as_view(), name='api_token'),
+    path('token-refresh/', TokenRefreshView.as_view(), name='api_token_refresh'),
+    path('home/', views.HomeView.as_view(), name='home'),
 ]

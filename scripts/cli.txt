@@ -1,0 +1,5 @@
+scp -i ttranking.pem ubuntu@3.208.17.51:/home/ubuntu/backups/ttranking_20250116180837.sql D:\backups
+
+pgloader --debug mysql://pgloader_my:uwunyanichan@3.208.17.51:3306/ttranking postgresql://root:uwunyanichan@127.0.0.1:5432/ttranking
+
+scp -i D:/sshkeys/ttranking.pem ubuntu@3.208.17.51:/home/ubuntu/tt-ranking-system/ttranking/media/player_photos/* D:\backups\images\

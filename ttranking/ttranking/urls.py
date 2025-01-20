@@ -5,16 +5,13 @@ from django.urls import path, include
 from django.contrib import admin
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
-    path('matches/', include('matches.urls')),
-    path('players/', include('players.urls')),
-    path('seasons/', include('seasons.urls')),
-    path('admin-panel/', include('admin_panel.urls')),  # Include the admin panel URLs
-    path('', include('core.urls')),  # Include core app urls
-
-    # api path
-    path('api/', include('api.urls')),
+    path('api/', include('core.urls')),
+    path('api/players/', include('players.urls')),
+    path('api/matches/', include('matches.urls')),
+    path('api/seasons/', include('seasons.urls')),
+    path('api/admin/', include('admin_panel.urls'))
 ]
 
 # Custom error handlers

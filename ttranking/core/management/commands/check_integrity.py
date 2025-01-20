@@ -41,39 +41,67 @@ class Command(BaseCommand):
 
         if options['ranking']:
             self.check_ranking()
-        if options['matchcount']:
+        elif options['matchcount']:
             self.update_match_counts()
-        if options['cleanphotos']:
+        elif options['cleanphotos']:
             self.clean_photos()
-        # Add more options handling as needed
+        else:
+            self.stdout.write('No action specified. Usage: python manage.py check_integrity [options]')
+            self.stdout.write('Options:')
+            self.stdout.write('--ranking: Check and update player rankings')
+            self.stdout.write('--matchcount: Update match counts for each player')
+            self.stdout.write('--cleanphotos: Delete all players photos not being used in media folder')
 
     def check_ranking(self):
+        """
+        For efficiency iterate over all matches and keep adding points to the player's ranking, setting all to zero first
+        :return:
+        """
         self.stdout.write('Checking player rankings...')
+        # All players to zero
         for player in Player.objects.all():
-            calculated_ranking = 0
-            singles_matches = SinglesMatch.objects.all()
-            for match in singles_matches:
-                if player not in match.players:
-                    continue
-                if player != match.winner:
-                    calculated_ranking -= LOSING_POINTS
-                    continue
-                calculated_ranking += WINNING_POINTS
+            player.ranking = 0
+            player.save()
 
-            doubles_matches = DoublesMatch.objects.all()
-            for match in doubles_matches:
-                if player not in match.players:
-                    continue
-                if player not in match.list_winners:
-                    calculated_ranking -= LOSING_POINTS
-                    continue
-                calculated_ranking += WINNING_POINTS
+        for single_match in SinglesMatch.objects.all():
+            winner = single_match.winner
+            if winner:
+                winner.add_points(WINNING_POINTS)
 
-            if calculated_ranking != player.ranking:
-                self.stdout.write(
-                    f"Discrepancy found for {player}: expected {calculated_ranking}, found {player.ranking}")
-                player.ranking = calculated_ranking
-                player.save()
+        for doubles_match in DoublesMatch.objects.all():
+            winners = doubles_match.winners
+            if winners:
+                for winner in winners:
+                    winner.add_points(WINNING_POINTS)
+
+
+
+
+        # for player in Player.objects.all():
+        #     calculated_ranking = 0
+        #     singles_matches = SinglesMatch.objects.all()
+        #     for match in singles_matches:
+        #         if player not in match.players:
+        #             continue
+        #         if player != match.winner:
+        #             calculated_ranking -= LOSING_POINTS
+        #             continue
+        #         calculated_ranking += WINNING_POINTS
+        #
+        #     doubles_matches = DoublesMatch.objects.all()
+        #     for match in doubles_matches:
+        #         if player not in match.players:
+        #             continue
+        #         if player not in match.winners:
+        #             calculated_ranking -= LOSING_POINTS
+        #             continue
+        #         calculated_ranking += WINNING_POINTS
+        #
+        #     if calculated_ranking != player.ranking:
+        #         self.stdout.write(
+        #             f"Discrepancy found for {player}: expected {calculated_ranking}, found {player.ranking}")
+        #         player.ranking = calculated_ranking
+        #         player.save()
 
         self.stdout.write('Ranking checked')
 

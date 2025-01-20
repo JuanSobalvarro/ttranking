@@ -1,0 +1,4 @@
+LOAD DATABASE
+     FROM      mysql://pgloader_my:uwunyanichan@localhost:3306/ttranking
+     INTO     pgsql://root:uwunyanichan@localhost:5432/ttranking?sslmode=disable
+;

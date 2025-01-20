@@ -1,9 +1,12 @@
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import SeasonViewSet
 
 app_name = 'seasons'
 
+router = DefaultRouter()
+router.register(r'', SeasonViewSet)
+
 urlpatterns = [
-    path('', views.season_list, name='season_list'),
-    path('<int:season_id>/', views.season_detail, name='season_detail'),
+    path('', include(router.urls)),
 ]

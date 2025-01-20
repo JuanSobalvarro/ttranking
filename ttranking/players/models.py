@@ -1,5 +1,4 @@
 # ttranking/players/models.py
-from django.contrib.auth.models import User
 from django.db import models
 from django.core.files.base import ContentFile
 from datetime import date
@@ -8,7 +7,6 @@ import io
 import os
 from uuid import uuid4
 import math
-
 
 # Define a tuple of tuples with country code and country name
 COUNTRY_CHOICES = [
@@ -207,7 +205,6 @@ COUNTRY_CHOICES = [
     ('ZW', 'Zimbabue'),
 ]
 
-
 GENDER_CHOICES = [
     ('M', 'Masculino'),
     ('F', 'Femenino')
@@ -215,13 +212,11 @@ GENDER_CHOICES = [
 
 DESIRED_SIZE = (600, 600)
 
-
 def get_image_upload_path(instance, filename):
-    # Generate a unique filename
-    ext = filename.split('.')[-1]
-    new_filename = f'{uuid4().hex}.{ext}'
+    # Generate a new filename using the player's ID or a UUID
+    ext = instance.photo.name.split('.')[-1]
+    new_filename = f'{instance.id or uuid4().hex}.{ext}'
     return os.path.join('player_photos/', new_filename)
-
 
 class Player(models.Model):
     first_name = models.CharField(max_length=100)
@@ -234,8 +229,7 @@ class Player(models.Model):
     matches_played = models.IntegerField(default=0, blank=True)
     photo = models.ImageField(upload_to=get_image_upload_path, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    # updated_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     @property
     def age(self) -> int:
@@ -249,21 +243,15 @@ class Player(models.Model):
 
     @property
     def victories(self):
-        """
-        Returns the number of victories this player has based on his ranking.
-        :return:
-        """
         return int(self.ranking / 2)
 
     @property
     def winrate(self) -> float:
-        """
-        Returns the winrate of the player based on his ranking.
-        :return:
-        """
         if self.matches_played == 0:
             return 0
         return math.trunc(self.ranking / self.matches_played * 50)
+
+
 
     def add_points(self, points):
         self.ranking += points
@@ -274,29 +262,37 @@ class Player(models.Model):
         self.save()
 
     def save(self, *args, **kwargs):
+        # Step 1: Check if this is an update and get the old instance
         if self.pk:
-            # Get the previous photo from the database
-            old_player = Player.objects.get(pk=self.pk)
-            old_photo = old_player.photo
+            old_instance = Player.objects.filter(pk=self.pk).first()
+            old_photo = old_instance.photo if old_instance else None
+        else:
+            old_photo = None
 
-            if old_photo and old_photo != self.photo:
-                if os.path.isfile(old_photo.path):
-                    os.remove(old_photo.path)
+        # Step 2: Process the new photo only if it's updated
+        if self.photo and (not old_photo or old_photo != self.photo):
+            # Delete the old photo if a new one is being uploaded
+            if old_photo and os.path.isfile(old_photo.path):
+                os.remove(old_photo.path)
 
-        if self.photo:
-            # Open the image file
+            # Generate a new unique path for the photo
+            ext = self.photo.name.split('.')[-1]
+            file_path = os.path.join('player_photos/', f'{uuid4().hex}.{ext}')
+
+            # Open and process the image
             image = Image.open(self.photo)
-
-            # Resize and crop the image
             image = self.resize_and_crop(image, DESIRED_SIZE)
 
-            # Save the image to a BytesIO object
+            # Save the processed image to a BytesIO object
             buffer = io.BytesIO()
             image.save(buffer, format='PNG')
             buffer.seek(0)
-            self.photo.save(self.photo.name, ContentFile(buffer.read()), save=False)
 
-        super().save(*args, **kwargs)
+            # Save the resized image to the photo field
+            self.photo.save(file_path, ContentFile(buffer.read()), save=False)
+
+        # Step 3: Call the original save method to save the rest of the fields
+        super(Player, self).save(*args, **kwargs)
 
     def resize_and_crop(self, image, size):
         # Resize the image without preserving the aspect ratio

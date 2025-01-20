@@ -1,10 +1,15 @@
 # ttranking/players/urls.py
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
 
 app_name = 'players'
 
+# Default routes for api consistency
+router = DefaultRouter()
+router.register(r'', views.PlayerViewSet)
+
 urlpatterns = [
-    path('', views.player_list, name='player_list'),
-    path('<int:player_id>/', views.player_detail, name='player_detail'),
+    path('country-choices/', views.country_choices, name='country-choices'),
+    path('', include(router.urls)),
 ]
