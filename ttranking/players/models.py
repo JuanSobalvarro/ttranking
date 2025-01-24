@@ -224,11 +224,11 @@ class Player(models.Model):
     alias = models.CharField(max_length=100, null=True, blank=True)
     gender = models.CharField(max_length=100, null=False, blank=True, choices=GENDER_CHOICES)
     date_of_birth = models.DateField(null=True, blank=True)
-    nationality = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
+    nationality = models.CharField(max_length=2, choices=COUNTRY_CHOICES, blank=True, null=True)
     ranking = models.IntegerField(default=0, blank=True)
     matches_played = models.IntegerField(default=0, blank=True)
     photo = models.ImageField(upload_to=get_image_upload_path, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     @property
@@ -242,6 +242,10 @@ class Player(models.Model):
         return age
 
     @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+    @property
     def victories(self):
         return int(self.ranking / 2)
 
@@ -251,7 +255,13 @@ class Player(models.Model):
             return 0
         return math.trunc(self.ranking / self.matches_played * 50)
 
+    def add_match(self):
+        self.matches_played += 1
+        self.save()
 
+    def remove_match(self):
+        self.matches_played -= 1
+        self.save()
 
     def add_points(self, points):
         self.ranking += points

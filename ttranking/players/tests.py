@@ -86,6 +86,7 @@ class PlayerAPITests(APITestCase):
         }
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.token_admin)
         response = self.client.post(url, data, format='json')
+        print(response.content)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_retrieve_unauthenticated(self):

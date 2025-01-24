@@ -68,7 +68,7 @@ function Home() {
 
 
       {/* Description Section */}
-      <div className="container mx-auto my-12 text-center">
+      <div className="container mx-auto my-12 text-center text-white">
         <h2 className="text-3xl font-bold mb-6">Sobre el sistema de Clasificación</h2>
         <p className="text-xl mb-6">
           Nuestro sistema de clasificación de tenis de mesa está diseñado para ofrecer una representación precisa

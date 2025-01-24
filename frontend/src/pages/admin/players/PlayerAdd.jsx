@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AdminHeader from '../../../components/admin/AdminHeader';
-import AdminFooter from '../../../components/admin/AdminFooter';
-import { addPlayer, getCountryChoices } from '../../../services/api.js';
-import '../../../styles/tailwind.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import AdminHeader from "components/admin/AdminHeader";
+import AdminFooter from "components/admin/AdminFooter";
+import { addPlayer, getCountryChoices } from "services/api.js";
+import { Button, Label, Select, TextInput, FileInput, Card } from "flowbite-react";
+import "styles/tailwind.css";
 
 function PlayerAdd() {
   const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    alias: '',
-    gender: '',
-    date_of_birth: '',
-    nationality: '',
-    ranking: '',
-    photo: '',
+    first_name: "",
+    last_name: "",
+    alias: "",
+    gender: "",
+    date_of_birth: "",
+    nationality: "",
+    photo: null,
   });
   const [countryChoices, setCountryChoices] = useState([]);
+  const [photoPreview, setPhotoPreview] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,19 +26,21 @@ function PlayerAdd() {
         const choices = await getCountryChoices();
         setCountryChoices(choices);
       } catch (error) {
-        console.error('Error fetching country choices:', error);
+        console.error("Error fetching country choices:", error);
       }
     };
-
     fetchCountryChoices();
   }, []);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value,
-    });
+    if (name === "photo") {
+      const file = files[0];
+      setFormData({ ...formData, photo: file });
+      setPhotoPreview(URL.createObjectURL(file));
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -48,9 +51,9 @@ function PlayerAdd() {
     }
     try {
       await addPlayer(data);
-      navigate('/admin/players');
+      navigate("/admin/players");
     } catch (error) {
-      console.error('Error adding player:', error);
+      console.error("Error adding player:", error);
     }
   };
 
@@ -58,109 +61,128 @@ function PlayerAdd() {
     <div>
       <AdminHeader />
       <main className="container mx-auto px-4 py-8">
-        <h2 className="text-3xl font-bold mb-6">Añadir Nuevo Jugador</h2>
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md" encType="multipart/form-data">
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="first_name">Nombre</label>
-            <input
-              type="text"
-              name="first_name"
-              id="first_name"
-              value={formData.first_name}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="last_name">Apellido</label>
-            <input
-              type="text"
-              name="last_name"
-              id="last_name"
-              value={formData.last_name}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="alias">Alias</label>
-            <input
-              type="text"
-              name="alias"
-              id="alias"
-              value={formData.alias}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="gender">Género</label>
-            <select
-              name="gender"
-              id="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            >
-              <option value="">Seleccione</option>
-              <option value="M">Masculino</option>
-              <option value="F">Femenino</option>
-            </select>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date_of_birth">Fecha de nacimiento</label>
-            <input
-              type="date"
-              name="date_of_birth"
-              id="date_of_birth"
-              value={formData.date_of_birth}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nationality">Nacionalidad</label>
-            <select
-              name="nationality"
-              id="nationality"
-              value={formData.nationality}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            >
-              <option value="">Seleccione</option>
-              {countryChoices.map((country) => (
-                <option key={country[0]} value={country[0]}>{country[1]}</option>
-              ))}
-            </select>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ranking">Ranking</label>
-            <input
-              type="number"
-              name="ranking"
-              id="ranking"
-              value={formData.ranking}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="photo">Foto</label>
-            <input
-              type="file"
-              name="photo"
-              id="photo"
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <button type="submit" className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600">Guardar</button>
-          <button type="button" onClick={() => navigate('/admin/players')} className="bg-gray-300 text-black px-6 py-3 rounded hover:bg-gray-400 ml-4">Volver a la Lista</button>
-        </form>
+        <h2 className="text-3xl font-bold text-gray-900 mb-6">Añadir Nuevo Jugador</h2>
+        <Card>
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-4"
+            encType="multipart/form-data"
+          >
+            {/* First Name */}
+            <div>
+              <Label htmlFor="first_name" value="Nombre" />
+              <TextInput
+                id="first_name"
+                name="first_name"
+                value={formData.first_name}
+                onChange={handleChange}
+                placeholder="Nombre del jugador"
+                required
+              />
+            </div>
+
+            {/* Last Name */}
+            <div>
+              <Label htmlFor="last_name" value="Apellido" />
+              <TextInput
+                id="last_name"
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleChange}
+                placeholder="Apellido del jugador"
+                required
+              />
+            </div>
+
+            {/* Alias */}
+            <div>
+              <Label htmlFor="alias" value="Alias (Opcional)" />
+              <TextInput
+                id="alias"
+                name="alias"
+                value={formData.alias}
+                onChange={handleChange}
+                placeholder="Alias del jugador (opcional)"
+              />
+            </div>
+
+            {/* Gender */}
+            <div>
+              <Label htmlFor="gender" value="Género" />
+              <Select
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Seleccione</option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+              </Select>
+            </div>
+
+            {/* Date of Birth */}
+            <div>
+              <Label htmlFor="date_of_birth" value="Fecha de nacimiento" />
+              <TextInput
+                id="date_of_birth"
+                name="date_of_birth"
+                type="date"
+                value={formData.date_of_birth}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Nationality */}
+            <div>
+              <Label htmlFor="nationality" value="Nacionalidad" />
+              <Select
+                id="nationality"
+                name="nationality"
+                value={formData.nationality}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Seleccione</option>
+                {countryChoices.map(([code, name]) => (
+                  <option key={code} value={code}>
+                    {name}
+                  </option>
+                ))}
+              </Select>
+            </div>
+
+            {/* Photo Upload */}
+            <div>
+              <Label htmlFor="photo" value="Foto" />
+              <FileInput
+                id="photo"
+                name="photo"
+                accept="image/*"
+                onChange={handleChange}
+              />
+              {photoPreview && (
+                <img
+                  src={photoPreview}
+                  alt="Vista previa de la foto"
+                  className="mt-4 w-32 h-32 object-cover rounded-lg shadow"
+                />
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="flex justify-between mt-6">
+              <Button type="submit" color="success">
+                Guardar
+              </Button>
+              <Button color="gray" onClick={() => navigate("/admin/players")}>
+                Volver a la Lista
+              </Button>
+            </div>
+          </form>
+        </Card>
       </main>
       <AdminFooter />
     </div>

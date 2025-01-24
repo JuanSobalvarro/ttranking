@@ -11,14 +11,7 @@ urlpatterns = [
     path('api/players/', include('players.urls')),
     path('api/matches/', include('matches.urls')),
     path('api/seasons/', include('seasons.urls')),
-    path('api/admin/', include('admin_panel.urls'))
 ]
 
-# Custom error handlers
-handler400 = 'core.views.bad_request'
-handler404 = 'core.views.page_not_found'
-handler500 = 'core.views.server_error'
-
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

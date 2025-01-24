@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_browser_reload',
 
-    'admin_panel',
     'core',
     'matches',
     'players',
@@ -138,13 +137,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'admin_panel/static'),
-    os.path.join(BASE_DIR, 'core/static'),
-    os.path.join(BASE_DIR, 'players/static'),
-    os.path.join(BASE_DIR, 'matches/static'),
-    os.path.join(BASE_DIR, 'seasons/static'),
-]
 
 # URL to use when referring to media files
 MEDIA_URL = 'media/'

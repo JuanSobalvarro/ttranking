@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import AdminHeader from '../../../components/admin/AdminHeader';
-import AdminFooter from '../../../components/admin/AdminFooter';
-import { getPlayers } from '../../../services/api.js';
-import '../../../styles/tailwind.css';
+import AdminHeader from 'components/admin/AdminHeader';
+import AdminFooter from 'components/admin/AdminFooter';
+import { getPlayers } from 'services/api.js';
+import 'styles/tailwind.css';
 
 function AdminPlayerList() {
   const [players, setPlayers] = useState([]);

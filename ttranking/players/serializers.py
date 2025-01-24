@@ -4,7 +4,7 @@ import math
 
 
 class PlayerSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
+    # id = serializers.IntegerField()
     winrate = serializers.SerializerMethodField()
     victories = serializers.SerializerMethodField()
 

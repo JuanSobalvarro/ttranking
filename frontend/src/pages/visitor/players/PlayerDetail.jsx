@@ -94,9 +94,9 @@ function PlayerDetail() {
           />
         ))}
 
-        <div className="flex flex-col md:flex-row items-center bg-gray-800 bg-opacity-90 rounded-lg shadow-2xl p-8 md:p-16 w-full max-w-6xl z-10">
+        <div className="flex flex-col my-20 md:flex-row items-center bg-gray-800 bg-opacity-90 rounded-lg shadow-2xl p-8 md:p-16 max-w-3xl max-h-80 z-10">
           {/* Player Photo */}
-          <div className="w-48 h-48 md:w-72 md:h-72 bg-gray-700 rounded-full overflow-hidden shadow-lg mb-6 md:mb-0">
+          <div className="w-20 h-20 md:w-72 md:h-72 bg-gray-700 rounded-full overflow-hidden shadow-lg mb-6 md:mb-0">
             <img
               ref={imgRef}
               src={player.photo ? player.photo : '/src/assets/images/defaultPlayer.png'}

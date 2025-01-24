@@ -3,12 +3,22 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from 'pages/visitor/Home.jsx';
 import PlayerList from "pages/visitor/players/PlayerList.jsx";
 import PlayerDetail from "pages/visitor/players/PlayerDetail.jsx";
+import MatchList from "pages/visitor/matches/MatchList.jsx";
+import SingleMatchDetail from "pages/visitor/matches/SingleMatchDetail.jsx";
+import DoubleMatchDetail from "pages/visitor/matches/DoubleMatchDetail.jsx";
+import SeasonList from "pages/visitor/seasons/SeasonList.jsx";
+import SeasonDetail from "pages/visitor/seasons/SeasonDetail.jsx";
 
 import ProtectedRoute from 'components/ProtectedRoute.jsx';
 import AdminHome from 'pages/admin/Home.jsx';
 import AdminLogin from 'pages/admin/AdminLogin.jsx';
 import AdminPlayerList from 'pages/admin/players/PlayerList.jsx';
 import AdminPlayerAdd from 'pages/admin/players/PlayerAdd.jsx';
+import AdminMatchesList from 'pages/admin/matches/MatchList.jsx';
+import SingleMatchAdd from "pages/admin/matches/SingleMatchAdd.jsx";
+import AdminSeasonList from "pages/admin/seasons/SeasonList.jsx";
+import SeasonAdd from "pages/admin/seasons/SeasonAdd.jsx";
+import DoubleMatchAdd from "pages/admin/matches/DoubleMatchAdd.jsx";
 
 function App() {
   return (
@@ -19,6 +29,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/players" element={<PlayerList />} />
           <Route path="/players/:id" element={<PlayerDetail />} />
+          <Route path="/matches" element={<MatchList />} />
+          <Route path="/matches/singles/:id" element={<SingleMatchDetail />} />
+          <Route path="/matches/doubles/:id" element={<DoubleMatchDetail />} />
+          <Route path="/seasons" element={<SeasonList />} />
+          <Route path="/seasons/:id" element={<SeasonDetail />} />
           <Route path="/login" element={<AdminLogin />} />
           {/* Admin Views */}
           <Route path="/admin"
@@ -45,18 +60,38 @@ function App() {
           <Route path="/admin/matches"
             element={
               <ProtectedRoute>
-                <AdminHome />
+                <AdminMatchesList />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/admin/matches/singles/add"
+            element={
+              <ProtectedRoute>
+                <SingleMatchAdd />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/admin/matches/doubles/add"
+            element={
+              <ProtectedRoute>
+                <DoubleMatchAdd />
               </ProtectedRoute>
             }
           />
           <Route path="/admin/seasons"
             element={
               <ProtectedRoute>
-                <AdminHome />
+                <AdminSeasonList />
               </ProtectedRoute>
             }
           />
-
+          <Route path="/admin/seasons/add"
+            element={
+              <ProtectedRoute>
+                <SeasonAdd />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </div>

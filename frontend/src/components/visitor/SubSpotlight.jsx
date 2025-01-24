@@ -1,71 +1,87 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getPlayerImage } from "src/services/helpers.js";
+import { getPlayerImage } from "services/helpers.js";
 import 'styles/tailwind.css';
 
 const SubSpotlight = ({ topByWinrate }) => {
   return (
-    <div className="mx-auto my-12 text-center bg-green-700 text-white p-12 rounded-lg max-w-screen-lg">
-      <h2 className="text-4xl font-bold mb-6">Jugadores Play2Win</h2>
-      <p className="text-xl mb-8">Estos jugadores se destacan por su winrate, ganándose el título de "Play2Win", jugar para ganar</p>
-      <div className="flex flex-wrap justify-center">
+    <section className="mx-10 my-12 p-8 bg-gradient-to-r from-green-600 to-green-800 text-white rounded-lg max-w-screen-xl shadow-lg">
+      <h2 className="text-4xl font-extrabold mb-6 text-center">Jugadores Play2Win</h2>
+      <p className="text-xl mb-8 text-center">
+        Estos jugadores se destacan por su winrate, ganándose el título de "Play2Win", jugar para ganar.
+      </p>
+      <div className="flex flex-wrap justify-center gap-6">
         {topByWinrate.map((player, index) => {
           let winrateGradient;
           let nameGradient;
 
-          // Apply gradient based on winrate ranking (for top 5 players)
-          switch(index) {
+          // Gradients for Winrate and Name
+          switch (index) {
             case 0:
-              winrateGradient = "bg-gradient-to-r from-yellow-400 to-yellow-500"; // Gold
-              nameGradient = "bg-gradient-to-r from-yellow-400 to-yellow-500"; // Gold
+              winrateGradient = "bg-gradient-to-r from-yellow-400 to-yellow-500";
+              nameGradient = "bg-gradient-to-r from-yellow-400 to-yellow-500";
               break;
             case 1:
-              winrateGradient = "bg-gradient-to-r from-gray-300 to-gray-500"; // Silver
-              nameGradient = "bg-gradient-to-r from-gray-300 to-gray-500"; // Silver
+              winrateGradient = "bg-gradient-to-r from-gray-300 to-gray-500";
+              nameGradient = "bg-gradient-to-r from-gray-300 to-gray-500";
               break;
             case 2:
-              winrateGradient = "bg-gradient-to-r from-orange-400 to-orange-600"; // Bronze
-              nameGradient = "bg-gradient-to-r from-orange-400 to-orange-600"; // Bronze
+              winrateGradient = "bg-gradient-to-r from-orange-400 to-orange-600";
+              nameGradient = "bg-gradient-to-r from-orange-400 to-orange-600";
               break;
             case 3:
-              winrateGradient = "bg-gradient-to-r from-pink-400 to-pink-600"; // Copper
-              nameGradient = "bg-gradient-to-r from-pink-400 to-pink-600"; // Copper
+              winrateGradient = "bg-gradient-to-r from-pink-400 to-pink-600";
+              nameGradient = "bg-gradient-to-r from-pink-400 to-pink-600";
               break;
             case 4:
-              winrateGradient = "bg-gradient-to-r from-blue-400 to-blue-600"; // Steel
-              nameGradient = "bg-gradient-to-r from-blue-400 to-blue-600"; // Steel
+              winrateGradient = "bg-gradient-to-r from-blue-400 to-blue-600";
+              nameGradient = "bg-gradient-to-r from-blue-400 to-blue-600";
               break;
             default:
-              winrateGradient = "bg-gradient-to-r from-gray-600 to-gray-800"; // Default gray for others
-              nameGradient = "bg-gradient-to-r from-gray-600 to-gray-800"; // Default gray for others
+              winrateGradient = "bg-gradient-to-r from-gray-600 to-gray-800";
+              nameGradient = "bg-gradient-to-r from-gray-600 to-gray-800";
           }
 
           return (
-            <div key={player.id} className="w-full md:w-1/4 p-4">
-              <Link to={`/players/${player.id}`} className="block bg-gray-900 text-white p-6 rounded-lg shadow-lg">
+            <div
+              key={player.id}
+              className="group relative w-full sm:w-1/2 md:w-1/4 lg:w-1/5 bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+              <Link to={`/players/${player.id}`} className="block text-white">
+                {/* Player Image */}
                 <img
                   src={getPlayerImage(player.photo)}
-                  className="w-full h-auto object-cover rounded-lg"
                   alt={`${player.first_name} ${player.last_name}`}
+                  className="w-full h-48 object-cover rounded-t-lg group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="mt-4">
-                  {/* Player Name with Gradient */}
-                  <h3 className={`text-2xl font-bold text-transparent bg-clip-text ${nameGradient}`}>
+                {/* Player Info */}
+                <div className="p-4">
+                  <h3 className={`text-xl font-extrabold text-transparent bg-clip-text ${nameGradient}`}>
                     {player.first_name} {player.last_name}
                   </h3>
-                  {player.alias && <p className="text-lg italic">{player.alias}</p>}
-                  <p className="mt-2"><strong>Partidos Jugados:</strong> {player.matchesPlayed}</p>
-                  {/* Winrate with Gradient */}
-                  <p className={`text-4xl mt-4 text-transparent bg-clip-text ${winrateGradient}`}>
+                  {player.alias && (
+                    <p className="text-sm italic text-gray-300">{`"${player.alias}"`}</p>
+                  )}
+                  <p className="mt-2 text-sm">
+                    <strong>Partidos Jugados:</strong> {player.matchesPlayed}
+                  </p>
+                  <p
+                    className={`text-2xl font-bold mt-4 text-transparent bg-clip-text ${winrateGradient}`}>
                     {player.winrate}%
                   </p>
                 </div>
+                {/* Ribbon for Ranking */}
+                {index < 5 && (
+                  <div
+                    className="absolute top-0 right-0 px-3 py-1 text-sm font-bold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-bl-lg">
+                    #{index + 1}
+                  </div>
+                )}
               </Link>
             </div>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 };
 

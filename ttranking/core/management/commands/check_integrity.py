@@ -25,6 +25,11 @@ class Command(BaseCommand):
             action='store_true',
             help='Delete all players photos not being used in media folder'
         )
+        parser.add_argument(
+            '--correctseason',
+            action='store_true',
+            help='Correct season for all matches'
+        )
 
     def handle(self, *args, **options):
         message: str = 'You are about to make changes to the db.'
@@ -159,3 +164,10 @@ class Command(BaseCommand):
                 self.stdout.write(f'Removed unused photo: {photo}')
 
         self.stdout.write('Unused photos cleaned')
+
+    def correct_season(self):
+        self.stdout.write('Correcting season...')
+        for single_match in SinglesMatch.objects.all():
+            single_match.save()
+        for doubles_match in DoublesMatch.objects.all():
+            doubles_match.save()
