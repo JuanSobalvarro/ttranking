@@ -93,6 +93,20 @@ export const adminLogin = async (username, password) => {
   }
 };
 
+// Rankings
+
+export const getRanking = async () => {
+    try {
+        const response = await publicApi.get('/players/rankings/');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching rankings:', error);
+        throw error;
+    }
+}
+
+// Players
+
 export const getPlayers = async (page = 1, pageSize = 10) => {
   try {
     const response = await publicApi.get('/players/', {
@@ -130,6 +144,19 @@ export const addPlayer = async (data) => {
     throw error;
   }
 };
+
+export const deletePlayer = async (id) => {
+    try {
+        if (!id) {
+        throw new Error('Player ID is required');
+        }
+        const response = await adminApi.delete(`/players/${id}/`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting player:', error);
+        throw error;
+    }
+}
 
 export const getCountryChoices = async () => {
   try {

@@ -2,7 +2,7 @@ from django.db import models
 from django.db.transaction import commit
 from django.utils.timezone import datetime
 from django.core.exceptions import ValidationError
-from players.models import Player
+from players.models import Player, Ranking
 from seasons.models import Season
 
 
@@ -115,38 +115,38 @@ class SinglesMatch(models.Model):
         winning_points = Season.objects.get(pk=self.season.pk).singles_points_for_win
         losing_points = Season.objects.get(pk=self.season.pk).singles_points_for_loss
 
-        player1 = Player.objects.get(pk=self.player1.pk)
-        player2 = Player.objects.get(pk=self.player2.pk)
+        player1_ranking = Ranking.objects.get(player=self.player1, season=self.season)
+        player2_ranking = Ranking.objects.get(player=self.player2, season=self.season)
 
         # Check if the match is already created and remove the points from the previous winner and add points to the loser
         if self.pk:
             previous_match = SinglesMatch.objects.select_related('player1', 'player2').get(pk=self.pk)
-            prev_player1 = Player.objects.get(pk=previous_match.player1.pk)
-            prev_player2 = Player.objects.get(pk=previous_match.player2.pk)
+            prev_player1_ranking = Ranking.objects.get(pk=previous_match.player1.pk)
+            prev_player2_ranking = Ranking.objects.get(pk=previous_match.player2.pk)
 
             # First remove points from winner and add points to loser
             if previous_match.winner == previous_match.player1:
-                prev_player1.remove_points(winning_points)
-                prev_player2.add_points(losing_points)
+                prev_player1_ranking.remove_points(winning_points)
+                prev_player2_ranking.add_points(losing_points)
             elif previous_match.winner == previous_match.player2:
-                prev_player2.remove_points(winning_points)
-                prev_player1.add_points(losing_points)
+                prev_player2_ranking.remove_points(winning_points)
+                prev_player1_ranking.add_points(losing_points)
 
             # Remove the matches played from the previous players
-            prev_player1.remove_match()
-            prev_player2.remove_match()
+            prev_player1_ranking.remove_match()
+            prev_player2_ranking.remove_match()
 
         # Then add points to winner and remove points from loser
         # print("Updating points given winner: ", self.winner)
         if self.winner == self.player1:
-            player1.add_points(winning_points)
-            player2.remove_points(losing_points)
+            player1_ranking.add_points(winning_points)
+            player2_ranking.remove_points(losing_points)
         elif self.winner == self.player2:
-            player2.add_points(winning_points)
-            player1.remove_points(losing_points)
+            player2_ranking.add_points(winning_points)
+            player1_ranking.remove_points(losing_points)
 
-        player1.add_match()
-        player2.add_match()
+        player1_ranking.add_match()
+        player2_ranking.add_match()
 
 
     def save(self, *args, **kwargs):

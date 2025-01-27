@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 import { getPlayerImage } from "services/helpers.js";
 import 'styles/tailwind.css';
 
-const SubSpotlight = ({ topByWinrate }) => {
+const SubSpotlight = ({ topByWinrateRanking }) => {
   return (
-    <section className="mx-10 my-12 p-8 bg-gradient-to-r from-green-600 to-green-800 text-white rounded-lg max-w-screen-xl shadow-lg">
+    <section className="mx-auto my-12 p-8 bg-gradient-to-r from-green-600 to-green-800 text-white rounded-lg max-w-screen-xl shadow-lg">
       <h2 className="text-4xl font-extrabold mb-6 text-center">Jugadores Play2Win</h2>
       <p className="text-xl mb-8 text-center">
         Estos jugadores se destacan por su winrate, ganándose el título de "Play2Win", jugar para ganar.
       </p>
       <div className="flex flex-wrap justify-center gap-6">
-        {topByWinrate.map((player, index) => {
+        {topByWinrateRanking.map((ranking, index) => {
           let winrateGradient;
           let nameGradient;
 
@@ -44,29 +44,29 @@ const SubSpotlight = ({ topByWinrate }) => {
 
           return (
             <div
-              key={player.id}
+              key={ranking.player.id}
               className="group relative w-full sm:w-1/2 md:w-1/4 lg:w-1/5 bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
-              <Link to={`/players/${player.id}`} className="block text-white">
+              <Link to={`/players/${ranking.player.id}`} className="block text-white">
                 {/* Player Image */}
                 <img
-                  src={getPlayerImage(player.photo)}
-                  alt={`${player.first_name} ${player.last_name}`}
+                  src={getPlayerImage(ranking.player.photo)}
+                  alt={`${ranking.player.first_name} ${ranking.player.last_name}`}
                   className="w-full h-48 object-cover rounded-t-lg group-hover:scale-105 transition-transform duration-300"
                 />
                 {/* Player Info */}
                 <div className="p-4">
                   <h3 className={`text-xl font-extrabold text-transparent bg-clip-text ${nameGradient}`}>
-                    {player.first_name} {player.last_name}
+                    {ranking.player.first_name} {ranking.player.last_name}
                   </h3>
-                  {player.alias && (
-                    <p className="text-sm italic text-gray-300">{`"${player.alias}"`}</p>
+                  {ranking.alias && (
+                    <p className="text-sm italic text-gray-300">{`"${ranking.alias}"`}</p>
                   )}
                   <p className="mt-2 text-sm">
-                    <strong>Partidos Jugados:</strong> {player.matchesPlayed}
+                    <strong>Partidos Jugados:</strong> {ranking.matches_played}
                   </p>
                   <p
                     className={`text-2xl font-bold mt-4 text-transparent bg-clip-text ${winrateGradient}`}>
-                    {player.winrate}%
+                    {ranking.winrate}%
                   </p>
                 </div>
                 {/* Ribbon for Ranking */}

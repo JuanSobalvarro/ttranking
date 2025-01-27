@@ -24,9 +24,9 @@ const RankingTable = ({ ranking }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
-            {ranking.map((player, index) => (
+            {ranking.map((rank, index) => (
               <tr
-                key={player.id}
+                key={rank.player.id}
                 className={`${
                   index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
                 } hover:bg-gray-600 transition-all duration-300 text-gray-200`}
@@ -46,32 +46,32 @@ const RankingTable = ({ ranking }) => {
                 {/* Player Info */}
                 <td className="py-3 px-6 flex items-center">
                   <Link
-                    to={`/players/${player.id}`}
+                    to={`/players/${rank.player.id}`}
                     className="flex items-center no-underline text-gray-200 hover:text-green-400"
                   >
                     <img
-                      src={getPlayerImage(player.photo)}
-                      alt={`${player.first_name} ${player.last_name}`}
+                      src={getPlayerImage(rank.player.photo)}
+                      alt={`${rank.player.first_name} ${rank.player.last_name}`}
                       className="w-12 h-12 rounded-full mr-4 object-cover shadow-md"
                     />
                     <div>
-                      <strong className="block text-lg">{`${player.first_name} ${player.last_name}`}</strong>
-                      {player.alias && (
-                        <span className="text-sm text-gray-400">{`"${player.alias}"`}</span>
+                      <strong className="block text-lg">{`${rank.player.first_name} ${rank.player.last_name}`}</strong>
+                      {rank.player.alias && (
+                        <span className="text-sm text-gray-400">{`"${rank.player.alias}"`}</span>
                       )}
                     </div>
                   </Link>
                 </td>
                 {/* Nationality */}
                 <td className="py-3 px-6 text-center">
-                  {player.nationality ? (
+                  {rank.player.nationality ? (
                     <div className="flex justify-center items-center gap-2">
                       <img
-                        src={`https://flagsapi.com/${player.nationality}/flat/32.png`}
-                        alt={`Bandera de ${player.nationality}`}
+                        src={`https://flagsapi.com/${rank.player.nationality}/flat/32.png`}
+                        alt={`Bandera de ${rank.player.nationality}`}
                         className="inline-block"
                       />
-                      <span className="text-sm">{player.nationality}</span>
+                      <span className="text-sm">{rank.player.nationality}</span>
                     </div>
                   ) : (
                     <span className="text-gray-500">N/D</span>
@@ -79,25 +79,25 @@ const RankingTable = ({ ranking }) => {
                 </td>
                 {/* Points */}
                 <td className="py-3 px-6 text-center font-medium text-gray-300">
-                  {player.ranking}
+                  {rank.ranking}
                 </td>
                 {/* Matches Played */}
-                <td className="py-3 px-6 text-center">{player.matches_played}</td>
+                <td className="py-3 px-6 text-center">{rank.matches_played}</td>
                 {/* Victories */}
                 <td className="py-3 px-6 text-center text-green-400 font-bold">
-                  {player.victories}
+                  {rank.victories}
                 </td>
                 {/* Winrate */}
                 <td
                   className={`py-3 px-6 text-center font-bold ${
-                    player.winrate >= 80
+                    rank.winrate >= 80
                       ? "text-green-400"
-                      : player.winrate >= 50
+                      : rank.winrate >= 50
                       ? "text-yellow-400"
                       : "text-red-400"
                   }`}
                 >
-                  {player.winrate}%
+                  {rank.winrate}%
                 </td>
               </tr>
             ))}

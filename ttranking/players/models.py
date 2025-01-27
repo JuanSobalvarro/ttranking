@@ -6,7 +6,7 @@ from PIL import Image
 import io
 import os
 from uuid import uuid4
-import math
+from seasons.models import Season
 
 # Define a tuple of tuples with country code and country name
 COUNTRY_CHOICES = [
@@ -214,6 +214,8 @@ DESIRED_SIZE = (600, 600)
 
 def get_image_upload_path(instance, filename):
     # Generate a new filename using the player's ID or a UUID
+    if not filename:
+        return None
     ext = instance.photo.name.split('.')[-1]
     new_filename = f'{instance.id or uuid4().hex}.{ext}'
     return os.path.join('player_photos/', new_filename)
@@ -225,8 +227,6 @@ class Player(models.Model):
     gender = models.CharField(max_length=100, null=False, blank=True, choices=GENDER_CHOICES)
     date_of_birth = models.DateField(null=True, blank=True)
     nationality = models.CharField(max_length=2, choices=COUNTRY_CHOICES, blank=True, null=True)
-    ranking = models.IntegerField(default=0, blank=True)
-    matches_played = models.IntegerField(default=0, blank=True)
     photo = models.ImageField(upload_to=get_image_upload_path, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
@@ -244,32 +244,6 @@ class Player(models.Model):
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
-
-    @property
-    def victories(self):
-        return int(self.ranking / 2)
-
-    @property
-    def winrate(self) -> float:
-        if self.matches_played == 0:
-            return 0
-        return math.trunc(self.ranking / self.matches_played * 50)
-
-    def add_match(self):
-        self.matches_played += 1
-        self.save()
-
-    def remove_match(self):
-        self.matches_played -= 1
-        self.save()
-
-    def add_points(self, points):
-        self.ranking += points
-        self.save()
-
-    def remove_points(self, points):
-        self.ranking -= points
-        self.save()
 
     def save(self, *args, **kwargs):
         # Step 1: Check if this is an update and get the old instance
@@ -304,6 +278,13 @@ class Player(models.Model):
         # Step 3: Call the original save method to save the rest of the fields
         super(Player, self).save(*args, **kwargs)
 
+        # # Step 4: Create the player rankings for all seasons
+        # seasons = Season.objects.all()
+        # for season in seasons:
+        #     if not Ranking.objects.filter(player=self, season=season).exists():
+        #         Ranking.objects.create(player=self, season=season)
+        #         print(f"Created ranking for {self} in {season}")
+
     def resize_and_crop(self, image, size):
         # Resize the image without preserving the aspect ratio
         image = image.convert('RGBA')
@@ -312,3 +293,39 @@ class Player(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+class Ranking(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='season_rankings')
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='player_rankings')
+    ranking = models.IntegerField(default=0)
+    matches_played = models.IntegerField(default=0)
+    victories = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ('player', 'season')
+
+    @property
+    def winrate(self):
+        if self.matches_played == 0:
+            return 0
+        return round((self.victories / self.matches_played) * 100, 2)
+
+    def add_match(self):
+        self.matches_played += 1
+        self.save()
+
+    def remove_match(self):
+        self.matches_played -= 1
+        self.save()
+
+    def add_points(self, points):
+        self.ranking += points
+        self.save()
+
+    def remove_points(self, points):
+        self.ranking -= points
+        self.save()
+
+    def __str__(self):
+        return f"{self.player} - {self.season.name}"

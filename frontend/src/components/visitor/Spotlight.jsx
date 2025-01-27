@@ -3,8 +3,8 @@ import { Carousel } from "flowbite-react";
 import "styles/tailwind.css";
 import { getPlayerImage, getAge } from "services/helpers.js";
 
-const Spotlight = ({ topPlayers }) => {
-  if (!topPlayers || topPlayers.length === 0) {
+const Spotlight = ({ topPlayersRanking }) => {
+  if (!topPlayersRanking || topPlayersRanking.length === 0) {
     return <p className="text-center text-white py-5">No hay jugadores destacados.</p>;
   }
 
@@ -21,6 +21,8 @@ const Spotlight = ({ topPlayers }) => {
     }
   };
 
+  console.log(topPlayersRanking);
+
   return (
     <div className="mx-auto my-12 w-[95%] max-w-7xl bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-lg overflow-hidden relative">
       {/* Title */}
@@ -31,14 +33,14 @@ const Spotlight = ({ topPlayers }) => {
       </div>
 
       <Carousel indicators className="h-[500px] mt-20 md:mt-5">
-        {topPlayers.map((player, index) => (
-          <div key={player.id} className="flex flex-col md:flex-row items-center md:items-stretch h-full">
+        {topPlayersRanking.map((ranking, index) => (
+          <div key={ranking.player.id} className="flex flex-col md:flex-row items-center md:items-stretch h-full">
             {/* Player Image */}
             <div className="w-full md:w-1/3 h-1/2 md:h-full flex justify-center items-center">
               <div className="relative w-[200px] h-[200px] md:w-[300px] md:h-[300px] overflow-hidden rounded-lg shadow-lg">
                 <img
-                  src={getPlayerImage(player.photo) || "/placeholder.png"}
-                  alt={`Imagen de ${player.first_name || "Jugador"}`}
+                  src={getPlayerImage(ranking.player.photo) || "/placeholder.png"}
+                  alt={`Imagen de ${ranking.player.first_name || "Jugador"}`}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -51,10 +53,10 @@ const Spotlight = ({ topPlayers }) => {
                   index
                 )}`}
               >
-                {player.first_name} {player.last_name}
+                {ranking.player.first_name} {ranking.player.last_name}
               </h3>
               <p className="text-sm md:text-lg italic text-gray-300">
-                {player.alias || ""}
+                {ranking.player.alias || ""}
               </p>
               <div className="mt-4 flex items-center">
                 {/* Rank */}
@@ -68,21 +70,21 @@ const Spotlight = ({ topPlayers }) => {
                 {/* Details */}
                 <div className="ml-4 border-l border-gray-300 pl-4">
                   <p className="text-sm md:text-lg font-bold">
-                    {player.nationality ? (
+                    {ranking.player.nationality ? (
                       <img
-                        src={`https://flagsapi.com/${player.nationality}/flat/32.png`}
-                        alt={`Bandera de ${player.nationality}`}
+                        src={`https://flagsapi.com/${ranking.player.nationality}/flat/32.png`}
+                        alt={`Bandera de ${ranking.player.nationality}`}
                         className="inline-block"
                       />
                     ) : (
                       "N/D"
                     )}{" "}
-                    {player.nationality || "N/D"}
+                    {ranking.player.nationality || "N/D"}
                   </p>
                   <p className="text-sm md:text-lg">
-                    {getAge(player.date_of_birth) ? (
+                    {getAge(ranking.player.date_of_birth) ? (
                       <>
-                        {getAge(player.date_of_birth)}{" "}
+                        {getAge(ranking.player.date_of_birth)}{" "}
                         <span className="text-xs md:text-sm">años</span>
                       </>
                     ) : (

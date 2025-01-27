@@ -14,6 +14,7 @@ function Home() {
   const [topPlayers, setTopPlayers] = useState([]);
   const [topByWinrate, setTopByWinrate] = useState([]);
   const [ranking, setRanking] = useState([]);
+  const [currentSeason, setCurrentSeason] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,6 +25,7 @@ function Home() {
         setTopPlayers(data.topPlayers);
         setTopByWinrate(data.topByWinrate);
         setRanking(data.ranking);
+        setCurrentSeason(data.currentSeason);
       } catch (error) {
         console.error('Error fetching home data:', error);
       }
@@ -31,6 +33,8 @@ function Home() {
 
     fetchData();
   }, []);
+
+  // console.log(topPlayers);
 
   return (
     <div className='bg-gray-900'>
@@ -60,9 +64,9 @@ function Home() {
         </div>
       </div>
 
-      <Spotlight topPlayers={topPlayers} />
+      <Spotlight topPlayersRanking={topPlayers} />
 
-      <SubSpotlight topByWinrate={topByWinrate} />
+      <SubSpotlight topByWinrateRanking={topByWinrate} />
 
       <RankingTable ranking={ranking} />
 
@@ -76,15 +80,28 @@ function Home() {
           función de los resultados de sus victorias.
         </p>
         <p className="text-xl mb-6">
-          Ya sean principiantes, avanzados o profesionales todos pueden participar de nuestro grupo y ser
-          registrado/a en nuestra clasificación.
+          Ya sean principiantes, avanzados o profesionales, todos pueden participar en nuestro grupo y ser
+          registrados/as en nuestra clasificación.
         </p>
         <h3 className="text-2xl font-bold mb-6">Temporada actual</h3>
-        <p className="text-xl">
-          La temporada actual empezó lunes 5 de agosto, se otorgan 2 puntos por cada victoria y las derrotas no
-          restan puntos a los participantes.
-        </p>
+        {currentSeason ? (
+          <>
+            <p className="text-xl mb-6">
+              La temporada actual empezó el <strong>{new Date(currentSeason.start_date).toLocaleDateString()}</strong>,
+              se otorgan <strong>{currentSeason.points_per_victory}</strong> puntos por cada victoria y las derrotas no
+              restan puntos a los participantes.
+            </p>
+            {currentSeason.description && (
+              <p className="text-xl italic text-gray-300">
+                "{currentSeason.description}"
+              </p>
+            )}
+          </>
+        ) : (
+          <p className="text-xl">No hay una temporada activa</p>
+        )}
       </div>
+
 
       <Footer />
     </div>

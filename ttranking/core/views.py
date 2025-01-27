@@ -8,11 +8,15 @@ from django.template import loader
 
 from django.utils import timezone
 
-from players.models import Player
-from players.serializers import PlayerSerializer
+from players.models import Player, Ranking
+from players.serializers import PlayerSerializer, RankingSerializer
 
 from matches.models import SinglesMatch, DoublesMatch
 from matches.serializers import SinglesMatchSerializer, DoublesMatchSerializer
+
+from seasons.models import Season
+from seasons.serializers import SeasonSerializer
+
 
 from django.urls import reverse
 
@@ -20,6 +24,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAd
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
+
 
 
 class APIRootView(APIView):
@@ -40,20 +45,39 @@ class APIRootView(APIView):
 class HomeView(APIView):
     permission_classes = [AllowAny]
 
+    def order_by_winrate(self, queryset):
+        return sorted(queryset, key=lambda x: x.winrate, reverse=True)
+
     def get(self, request):
-        ranking = Player.objects.order_by('-ranking', 'matches_played')[:20]
+        current_season = Season.get_season_for_datetime(timezone.make_aware(timezone.datetime.now()))
+
+        if not current_season:
+            return Response({
+                'matchesPlayed': 0,
+                'currentSeason': None,
+                'topPlayers': [],
+                'topByWinrate': [],
+                'ranking': [],
+            })
+
+        print(Ranking.objects.all())
+
+        ranking = Ranking.objects.filter(season=current_season).order_by('ranking')
 
         top = ranking[:3]
 
-        top_winrate = sorted(Player.objects.all().order_by('-matches_played'), key=lambda player: player.winrate, reverse=True)[:6]
+        top_winrate = self.order_by_winrate(ranking)[:6]
 
-        matches_played = SinglesMatch.objects.count() + DoublesMatch.objects.count()
+        matches_played = 0
+        for player in ranking:
+            matches_played += player.matches_played
 
         data = {
             'matchesPlayed': matches_played,
-            'topPlayers': PlayerSerializer(top, many=True).data,
-            'topByWinrate': PlayerSerializer(top_winrate, many=True).data,
-            'ranking': PlayerSerializer(ranking, many=True).data,
+            'currentSeason': SeasonSerializer(current_season).data,
+            'topPlayers': PlayerRankingSerializer(top, many=True).data,
+            'topByWinrate': PlayerRankingSerializer(top_winrate, many=True).data,
+            'ranking': PlayerRankingSerializer(ranking[:20], many=True).data,
         }
 
         return Response(data)
@@ -99,7 +123,6 @@ class AdminHomeView(APIView):
                 player_match_counts[entry[player]] = player_match_counts.get(entry[player], 0) + entry['matches_played']
 
         most_active_players_last_week = sorted(player_match_counts.items(), key=lambda x: x[1], reverse=True)[:5]
-
 
         # Prepare response data
         data = {

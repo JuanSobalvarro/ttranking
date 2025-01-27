@@ -33,22 +33,37 @@ function PlayerAdd() {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "photo") {
-      const file = files[0];
+  const { name, value, files } = e.target;
+
+  if (name === "photo") {
+    const file = files[0];
+
+    if (file) {
+      // If a file is selected, update formData with the file and set preview
       setFormData({ ...formData, photo: file });
-      setPhotoPreview(URL.createObjectURL(file));
+      setPhotoPreview(URL.createObjectURL(file)); // Set preview for the selected image
     } else {
-      setFormData({ ...formData, [name]: value });
+      // If no file is selected, clear the photo field and preview
+      setFormData({ ...formData, photo: null });
+      setPhotoPreview(null);
     }
-  };
+  } else {
+    // For other form fields, just update the form data
+    setFormData({ ...formData, [name]: value });
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
+
+    // Append other fields normally
     for (const key in formData) {
+      // Don't append the photo if it's null
+      if (key === "photo" && formData[key] === null) continue;
       data.append(key, formData[key]);
     }
+
     try {
       await addPlayer(data);
       navigate("/admin/players");
@@ -56,6 +71,7 @@ function PlayerAdd() {
       console.error("Error adding player:", error);
     }
   };
+
 
   return (
     <div>

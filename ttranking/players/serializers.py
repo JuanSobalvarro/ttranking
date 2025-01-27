@@ -1,21 +1,26 @@
 from rest_framework import serializers
-from .models import Player
-import math
+from .models import Player, Ranking
 
 
 class PlayerSerializer(serializers.ModelSerializer):
     # id = serializers.IntegerField()
-    winrate = serializers.SerializerMethodField()
-    victories = serializers.SerializerMethodField()
+    photo = serializers.ImageField(required=False)  # Make the photo field optional
 
     class Meta:
         model = Player
         fields = '__all__'  # or specify fields explicitly like ['id', 'name', 'age', 'team']
 
+class RankingSerializer(serializers.ModelSerializer):
+    player = PlayerSerializer(read_only=True)
+    winrate = serializers.SerializerMethodField(read_only=True)
+
+
+    class Meta:
+        model = Ranking
+        fields = '__all__'
+
     def get_winrate(self, obj):
-        if obj.matches_played == 0:
-            return 0
         return obj.winrate
 
-    def get_victories(self, obj):
-        return obj.victories
+    def get_player(self, obj):
+        return obj.player
