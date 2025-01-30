@@ -75,9 +75,9 @@ class HomeView(APIView):
         data = {
             'matchesPlayed': matches_played,
             'currentSeason': SeasonSerializer(current_season).data,
-            'topPlayers': PlayerRankingSerializer(top, many=True).data,
-            'topByWinrate': PlayerRankingSerializer(top_winrate, many=True).data,
-            'ranking': PlayerRankingSerializer(ranking[:20], many=True).data,
+            'topPlayers': RankingSerializer(top, many=True).data,
+            'topByWinrate': RankingSerializer(top_winrate, many=True).data,
+            'ranking': RankingSerializer(ranking[:20], many=True).data,
         }
 
         return Response(data)

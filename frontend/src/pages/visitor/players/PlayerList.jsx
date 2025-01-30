@@ -1,25 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getPlayers, getRanking } from 'services/api.js';
+import { getPlayers } from 'services/api.js';
 import Header from 'components/visitor/Header';
 import Footer from 'components/visitor/Footer';
 import 'styles/tailwind.css';
 
 function PlayerList() {
   const [players, setPlayers] = useState([]);
-  const [rankings, setRankings] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const fetchPlayers = async (page = 1) => {
     try {
       const playersPerPage = 12;
-
-      const result = await getPlayers(page, playersPerPage); // Pass the playersPerPage to the API request
-      const resultRankings = await getRanking();
-      setRankings(resultRankings);
-      setPlayers(result.results);
-      setTotalPages(Math.ceil(result.count / playersPerPage)); // Use playersPerPage for total page calculation
+      const resultPlayers = await getPlayers(page, playersPerPage);
+      setPlayers(resultPlayers.results);
+      setTotalPages(Math.ceil(resultPlayers.count / playersPerPage)); // Use playersPerPage for total page calculation
     } catch (error) {
       console.error('Error fetching players:', error);
     }
@@ -36,8 +32,6 @@ function PlayerList() {
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage((prevPage) => prevPage - 1);
   };
-
-  console.log(rankings);
 
   return (
     <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen text-white flex flex-col">
@@ -60,7 +54,7 @@ function PlayerList() {
                 <div className="p-6 h-32 text-center flex flex-col justify-between">
                   <h5 className="text-xl font-bold">{player.first_name} {player.last_name}</h5>
                   <p className="text-sm italic text-gray-300">{player.alias || ''}</p>
-                  <p className="mt-2 text-sm text-gray-400">Ranking: <span className="font-semibold">{player.ranking || 'N/A'}</span></p>
+                  {/*<p className="mt-2 text-sm text-gray-400">Ranking: <span className="font-semibold">{player.ranking || 'N/A'}</span></p>*/}
                 </div>
               </div>
             </Link>

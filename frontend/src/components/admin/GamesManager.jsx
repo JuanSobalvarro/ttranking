@@ -9,14 +9,14 @@ const GamesManager = ({ games, handleGameScoreChange, addNewGame, removeGame }) 
       >
         <div className="flex items-center space-x-4">
           <button
-            onClick={() => handleGameScoreChange(index, 'player1Score', -1)}
+            onClick={() => handleGameScoreChange(index, 'team1_score', -1)}
             className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
           >
             -
           </button>
-          <span>{game.player1Score}</span>
+          <span>{game.team1_score}</span>
           <button
-            onClick={() => handleGameScoreChange(index, 'player1Score', 1)}
+            onClick={() => handleGameScoreChange(index, 'team1_score', 1)}
             className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
           >
             +
@@ -25,14 +25,15 @@ const GamesManager = ({ games, handleGameScoreChange, addNewGame, removeGame }) 
         <span>Juego {index + 1}</span>
         <div className="flex items-center space-x-4">
           <button
-            onClick={() => handleGameScoreChange(index, 'player2Score', -1)}
+            onClick={() => handleGameScoreChange(index, 'team2_score', -1)}
             className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
           >
             -
           </button>
-          <span>{game.player2Score}</span>
+            {console.log(game)}
+          <span>{game.team2_score}</span>
           <button
-            onClick={() => handleGameScoreChange(index, 'player2Score', 1)}
+            onClick={() => handleGameScoreChange(index, 'team2_score', 1)}
             className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
           >
             +

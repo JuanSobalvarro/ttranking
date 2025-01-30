@@ -149,7 +149,7 @@ function AdminMatchList() {
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex justify-center space-x-2">
                   <a
-                    href={`/matches/${type === 'single' ? 'singles' : 'doubles'}/${match.id}/edit`}
+                    href={`/admin/matches/${type === 'single' ? 'singles' : 'doubles'}/edit/${match.id}`}
                     className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                   >
                     Editar

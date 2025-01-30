@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { getPlayer } from 'services/api.js';
+import { getPlayer, getRankingForPlayer, getSeasonForDate } from 'services/api.js';
 import ColorThief from 'colorthief';
 import Header from 'components/visitor/Header';
 import Footer from 'components/visitor/Footer';
@@ -12,12 +12,18 @@ function PlayerDetail() {
   const [loading, setLoading] = useState(true);
   const [radialGradient, setRadialGradient] = useState('');
   const [palette, setPalette] = useState([]);
+  const [ranking, setRanking] = useState([]);
   const imgRef = useRef(null);
 
   useEffect(() => {
     const fetchPlayer = async () => {
       try {
         const result = await getPlayer(id);
+        const season = await getSeasonForDate(new Date());
+        console.log(season);
+        const rankingResult = await getRankingForPlayer(id, season.id);
+        console.log(rankingResult.results[0]);
+        setRanking(rankingResult.results[0]);
         setPlayer(result);
         setLoading(false);
       } catch (error) {
@@ -130,11 +136,11 @@ function PlayerDetail() {
               </span>
             </p>
             <p className="text-lg text-gray-200 mb-2">
-              Ranking: <span className="font-semibold text-neutral-100">{player.ranking}</span>
+              Ranking: <span className="font-semibold text-neutral-100">{ranking.ranking}</span>
             </p>
             <p className="text-lg text-gray-200 mb-2">
               Partidos jugados:{' '}
-              <span className="font-semibold text-neutral-100">{player.matches_played}</span>
+              <span className="font-semibold text-neutral-100">{ranking.matches_played}</span>
             </p>
           </div>
         </div>

@@ -8,6 +8,7 @@ import 'styles/pingpong.css'
 import Spotlight from "components/visitor/Spotlight.jsx";
 import SubSpotlight from "components/visitor/SubSpotlight.jsx";
 import RankingTable from "components/visitor/RankingTable.jsx";
+import SeasonDescription from "components/visitor/SeasonDescription.jsx";
 
 function Home() {
   const [matchesPlayed, setMatchesPlayed] = useState(0);
@@ -68,7 +69,8 @@ function Home() {
 
       <SubSpotlight topByWinrateRanking={topByWinrate} />
 
-      <RankingTable ranking={ranking} />
+      {console.log(ranking)}
+      <RankingTable ranking={ranking} title="🏆 Top 20 Jugadores 🏆" />
 
 
       {/* Description Section */}
@@ -83,23 +85,7 @@ function Home() {
           Ya sean principiantes, avanzados o profesionales, todos pueden participar en nuestro grupo y ser
           registrados/as en nuestra clasificación.
         </p>
-        <h3 className="text-2xl font-bold mb-6">Temporada actual</h3>
-        {currentSeason ? (
-          <>
-            <p className="text-xl mb-6">
-              La temporada actual empezó el <strong>{new Date(currentSeason.start_date).toLocaleDateString()}</strong>,
-              se otorgan <strong>{currentSeason.points_per_victory}</strong> puntos por cada victoria y las derrotas no
-              restan puntos a los participantes.
-            </p>
-            {currentSeason.description && (
-              <p className="text-xl italic text-gray-300">
-                "{currentSeason.description}"
-              </p>
-            )}
-          </>
-        ) : (
-          <p className="text-xl">No hay una temporada activa</p>
-        )}
+        <SeasonDescription season={currentSeason} />
       </div>
 
 

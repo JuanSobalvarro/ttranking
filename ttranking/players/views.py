@@ -56,7 +56,7 @@ class RankingPagination(PageNumberPagination):
     max_page_size = 20
 
 class RankingViewSet(viewsets.ModelViewSet):
-    queryset = Ranking.objects.all()
+    queryset = Ranking.objects.all().order_by('ranking')
     serializer_class = RankingSerializer
     pagination_class = RankingPagination
 
@@ -66,6 +66,16 @@ class RankingViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
+
+    def get_queryset(self):
+        """
+        Get ranking given a season
+        :return:
+        """
+        season = self.request.query_params.get('season', None)
+        if season:
+            return Ranking.objects.filter(season=season).order_by('ranking')
+        return Ranking.objects.all().order_by('ranking')
 
     # def list(self, request):
     #     pass

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getSingleMatches, getDoubleMatches, getPlayer } from 'services/api.js';
 import Header from 'components/visitor/Header';
 import Footer from 'components/visitor/Footer';
 import 'styles/tailwind.css';
-import { Spinner } from 'flowbite-react';
-import ConfirmationModal from "components/admin/ConfirmationModal.jsx";
+import { Spinner, Button } from 'flowbite-react';
 
 function MatchList() {
   const [singleMatches, setSingleMatches] = useState([]);
@@ -15,6 +15,7 @@ function MatchList() {
   const [totalSinglesPages, setTotalSinglesPages] = useState(1);
   const [totalDoublesPages, setTotalDoublesPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const matchesPerPage = 10;
 
@@ -64,88 +65,71 @@ function MatchList() {
   const getPlayerName = (id) => players[id] || 'N/A';
 
   const renderMatches = (matches, type) => (
-      <div>
-      <h3 className="text-2xl font-bold mb-4">{type === 'single' ? 'Partidos Individuales' : 'Partidos Dobles'}</h3>
+    <div>
+      <h3 className="text-2xl font-bold mb-4">
+        {type === 'singles' ? 'Partidos Individuales' : 'Partidos Dobles'}
+      </h3>
       <table className="table-auto w-full border-collapse border border-gray-300 text-center text-sm">
         <thead>
           <tr className="bg-gray-800">
             <th className="border border-gray-300 px-4 py-2">Fecha</th>
-            <th className="border border-gray-300 px-4 py-2">{type === 'single' ? 'Jugador 1' : 'Equipo 1'}</th>
-            <th className="border border-gray-300 px-4 py-2">{type === 'single' ? 'Jugador 2' : 'Equipo 2'}</th>
+            <th className="border border-gray-300 px-4 py-2">
+              {type === 'singles' ? 'Jugador 1' : 'Equipo 1'}
+            </th>
+            <th className="border border-gray-300 px-4 py-2">
+              {type === 'singles' ? 'Jugador 2' : 'Equipo 2'}
+            </th>
             <th className="border border-gray-300 px-4 py-2">Juegos ganados</th>
             <th className="border border-gray-300 px-4 py-2">Ganador</th>
-            <th className="border border-gray-300 px-4 py-2">Acciones</th>
+            <th className="border border-gray-300 px-4 py-2">Detalles</th>
           </tr>
         </thead>
         <tbody>
           {matches.length > 0 ? (
             matches.map((match) => (
               <tr key={match.id} className="hover:bg-gray-600">
-                <td className="border border-gray-300 px-4 py-2">{new Date(match.date).toLocaleString()}</td>
                 <td className="border border-gray-300 px-4 py-2">
-                  {type === 'single'
+                  {new Date(match.date).toLocaleString()}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {type === 'singles'
                     ? getPlayerName(match.player1)
                     : `${getPlayerName(match.team1_player1)} / ${getPlayerName(match.team1_player2)}`}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
-                  {type === 'single'
+                  {type === 'singles'
                     ? getPlayerName(match.player2)
                     : `${getPlayerName(match.team2_player1)} / ${getPlayerName(match.team2_player2)}`}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
-                  {type === 'single'
+                  {type === 'singles'
                     ? `${match.player1_games}-${match.player2_games}`
                     : `${match.team1_games}-${match.team2_games}`}
                 </td>
-                <td className="border border-gray-300 px-4 py-2">{type === 'single' ? getPlayerName(match.winner) : match.winners}</td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {type === 'singles' ? getPlayerName(match.winner) : match.winners}
+                </td>
                 <td className="border border-gray-300 px-4 py-2">
                   <div className="flex justify-center space-x-2">
-                    <a
-                      href={`/matches/${type === 'single' ? 'singles' : 'doubles'}/${match.id}/edit`}
-                      className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                    <Button
+                      onClick={() => navigate(`/matches/${type}/${match.id}`)}
+                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-red-600"
                     >
-                      Editar
-                    </a>
-                    <button
-                        onClick={() => handleDeleteClick(match)}
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                    >
-                      Eliminar
-                    </button>
+                      Ver detalles
+                    </Button>
                   </div>
                 </td>
               </tr>
             ))
           ) : (
-              <tr>
-                <td colSpan="6" className="text-center text-gray-500 py-4">
+            <tr>
+              <td colSpan="6" className="text-center text-gray-500 py-4">
                 No hay partidos registrados.
               </td>
             </tr>
           )}
         </tbody>
       </table>
-      <div className="flex justify-between mt-4">
-        <button
-          onClick={() => (type === 'single' ? setCurrentSinglesPage : setCurrentDoublesPage)((prev) => Math.max(prev - 1, 1))}
-          disabled={type === 'single' ? currentSinglesPage === 1 : currentDoublesPage === 1}
-          className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300"
-        >
-          Anterior
-        </button>
-        <span className="text-gray-600">
-          {`Página ${
-            type === 'single' ? currentSinglesPage : currentDoublesPage
-          } de ${type === 'single' ? totalSinglesPages : totalDoublesPages}`}
-        </span>
-        <button
-          onClick={() => (type === 'single' ? setCurrentSinglesPage : setCurrentDoublesPage)((prev) => prev + 1)}
-          disabled={type === 'single' ? currentSinglesPage === totalSinglesPages : currentDoublesPage === totalDoublesPages}
-          className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300"
-        >
-          Siguiente
-        </button>
-      </div>
     </div>
   );
 
@@ -160,8 +144,8 @@ function MatchList() {
           </div>
         ) : (
           <>
-            {renderMatches(singleMatches, 'single')}
-            {renderMatches(doubleMatches, 'double')}
+            {renderMatches(singleMatches, 'singles')}
+            {renderMatches(doubleMatches, 'doubles')}
           </>
         )}
       </main>

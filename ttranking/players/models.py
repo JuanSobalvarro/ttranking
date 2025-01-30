@@ -278,12 +278,15 @@ class Player(models.Model):
         # Step 3: Call the original save method to save the rest of the fields
         super(Player, self).save(*args, **kwargs)
 
-        # # Step 4: Create the player rankings for all seasons
-        # seasons = Season.objects.all()
-        # for season in seasons:
-        #     if not Ranking.objects.filter(player=self, season=season).exists():
-        #         Ranking.objects.create(player=self, season=season)
-        #         print(f"Created ranking for {self} in {season}")
+        self.create_rankings()
+
+    def create_rankings(self):
+        # Step 4: Create the player rankings for all seasons
+        seasons = Season.objects.all()
+        for season in seasons:
+            if not Ranking.objects.filter(player=self, season=season).exists():
+                Ranking.objects.create(player=self, season=season)
+                print(f"Created ranking for {self} in {season}")
 
     def resize_and_crop(self, image, size):
         # Resize the image without preserving the aspect ratio

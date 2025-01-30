@@ -95,12 +95,26 @@ export const adminLogin = async (username, password) => {
 
 // Rankings
 
-export const getRanking = async () => {
+export const getRankings = async (page, playersPerPage, seasonDate) => {
     try {
-        const response = await publicApi.get('/players/rankings/');
+        const response = await publicApi.get('/players/ranking/', {
+            params: { page, page_size: playersPerPage, season_date: seasonDate },
+        });
         return response.data;
     } catch (error) {
         console.error('Error fetching rankings:', error);
+        throw error;
+    }
+}
+
+export const getRankingForPlayer = async (player, season) => {
+    try {
+        const response = await publicApi.get('/players/ranking/', {
+            params: { 'player_id': player, 'season_id': season },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching ranking:', error);
         throw error;
     }
 }
@@ -109,7 +123,7 @@ export const getRanking = async () => {
 
 export const getPlayers = async (page = 1, pageSize = 10) => {
   try {
-    const response = await publicApi.get('/players/', {
+    const response = await publicApi.get('/players/player/', {
       params: { page, page_size: pageSize },
     });
     return response.data;
@@ -124,7 +138,7 @@ export const getPlayer = async (id) => {
         if (!id) {
           throw new Error('Player ID is required');
         }
-        const response = await publicApi.get(`/players/${id}/`);
+        const response = await publicApi.get(`/players/player/${id}/`);
         return response.data;
     } catch (error) {
         console.error('Error fetching player:', error);
@@ -135,7 +149,7 @@ export const getPlayer = async (id) => {
 
 export const addPlayer = async (data) => {
   try {
-    const response = await adminApi.post('/players/', data, {
+    const response = await adminApi.post('/players/player/', data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return response.data;
@@ -145,12 +159,27 @@ export const addPlayer = async (data) => {
   }
 };
 
+export const updatePlayer = async (id, data) => {
+    try {
+        if (!id) {
+        throw new Error('Player ID is required');
+        }
+        const response = await adminApi.put(`/players/player/${id}/`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating player:', error);
+        throw error;
+    }
+}
+
 export const deletePlayer = async (id) => {
     try {
         if (!id) {
         throw new Error('Player ID is required');
         }
-        const response = await adminApi.delete(`/players/${id}/`);
+        const response = await adminApi.delete(`/players/player/${id}/`);
         return response.data;
     } catch (error) {
         console.error('Error deleting player:', error);
@@ -171,10 +200,10 @@ export const getCountryChoices = async () => {
 
 // Matches
 
-export const getSingleMatches = async (page = 1, pageSize = 10) => {
+export const getSingleMatches = async (page = 1, pageSize = 10, season_id) => {
     try {
         const response = await publicApi.get('/matches/singles/', {
-            params: { page, page_size: pageSize },
+            params: { page, page_size: pageSize, 'season_id': season_id },
         });
         return response.data;
     } catch (error) {
@@ -183,10 +212,10 @@ export const getSingleMatches = async (page = 1, pageSize = 10) => {
     }
 }
 
-export const getDoubleMatches = async (page = 1, pageSize = 10) => {
+export const getDoubleMatches = async (page = 1, pageSize = 10, season_id) => {
     try {
         const response = await publicApi.get('/matches/doubles/',
-            {params: { page, page_size: pageSize },
+            {params: { page, page_size: pageSize, 'season_id': season_id },
         });
         return response.data;
     } catch (error) {
@@ -218,6 +247,19 @@ export const postSingleMatch = async (data) => {
     }
 }
 
+export const putSingleMatch = async (id, data) => {
+    try {
+        if (!id) {
+          throw new Error('Match ID is required');
+        }
+        const response = await adminApi.put(`/matches/singles/${id}/`, data);
+        return response.data;
+    } catch (error) {
+      console.error('Error updating match:', error);
+      throw error;
+    }
+}
+
 export const deleteMatch = async (id, type) => {
     try {
         if (!id) {
@@ -231,6 +273,21 @@ export const deleteMatch = async (id, type) => {
     }
 }
 
+export const getMatchGames = async (matchID, type) => {
+    try {
+        if (!matchID) {
+          throw new Error('Match ID is required');
+        }
+        const response = await publicApi.get(`/matches/${type}-games/`, {
+          params: { match_id: matchID },
+        });
+        return response.data;
+    } catch (error) {
+      console.error('Error fetching games:', error);
+      throw error;
+    }
+}
+
 export const postSingleGame = async (data) => {
     try {
         const response = await adminApi.post('/matches/singles-games/', data);
@@ -238,6 +295,19 @@ export const postSingleGame = async (data) => {
     } catch (error) {
         console.error('Error adding games:', error);
         throw error;
+    }
+}
+
+export const putSingleGame = async (id, data) => {
+    try {
+        if (!id) {
+          throw new Error('Game ID is required');
+        }
+        const response = await adminApi.put(`/matches/singles-games/${id}/`, data);
+        return response.data;
+    } catch (error) {
+      console.error('Error updating game:', error);
+      throw error;
     }
 }
 
@@ -276,6 +346,10 @@ export const postDoubleGame = async (data) => {
 
 // Seasons
 
+export const getCurrentSeason = async () => {
+    return await getSeasonForDate(new Date());
+}
+
 export const getSeasons = async (page = 1, pageSize = 10) => {
     try {
         const response = await publicApi.get('/seasons/', {
@@ -301,6 +375,28 @@ export const getSeason = async (id) => {
     }
 }
 
+export const getSeasonForDate = async (date) => {
+    try {
+        if (!date) {
+          throw new Error('Season date is required');
+        }
+        const response = await publicApi.get('/seasons/');
+
+        // Now look through the seasons to find the one that matches the date
+        const seasons = response.data.results;
+        const season = seasons.find((s) => {
+          const start = new Date(s.start_date);
+          const end = new Date(s.end_date);
+          return date >= start && date <= end;
+        });
+
+        return season;
+    } catch (error) {
+        console.error('Error fetching season:', error);
+        throw error;
+    }
+}
+
 export const postSeason = async (data) => {
     try {
         const response = await adminApi.post('/seasons/', data);
@@ -322,4 +418,9 @@ export const deleteSeason = async (id) => {
       console.error('Error deleting season:', error);
       throw error;
     }
+}
+
+export const getSeasonLastMatches = (season_id) => {
+    const lastMatches = getSingleMatches(1, 10, season_id)
+    return lastMatches;
 }

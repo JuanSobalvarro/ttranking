@@ -4,11 +4,11 @@ import 'styles/tailwind.css';
 import { Table } from 'flowbite-react';
 import { getPlayerImage } from "services/helpers.js";
 
-const RankingTable = ({ ranking }) => {
+const RankingTable = ({ ranking, title }) => {
   return (
     <div className="container mx-auto my-12 px-4">
       <h2 className="text-center text-4xl font-extrabold mb-8 text-gray-100">
-        🏆 Top 20 Jugadores 🏆
+        {title}
       </h2>
       <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-700 bg-gray-800">
         <Table striped hoverable>

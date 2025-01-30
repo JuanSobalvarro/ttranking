@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', default=False)
 
-ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '0.0.0.0', '[::1]', 'ttranking.juansobalvarro.site', 'backend']
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '0.0.0.0', '[::1]', 'ttranking.juansobalvarro.site', 'backend', '*']
 
 
 # Application definition
@@ -187,3 +187,5 @@ CORS_ALLOW_METHODS = [
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8080',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True

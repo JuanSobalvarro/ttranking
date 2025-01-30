@@ -14,7 +14,6 @@ class RankingSerializer(serializers.ModelSerializer):
     player = PlayerSerializer(read_only=True)
     winrate = serializers.SerializerMethodField(read_only=True)
 
-
     class Meta:
         model = Ranking
         fields = '__all__'

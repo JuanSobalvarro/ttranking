@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'; // For extracting the season ID from the URL
-import { getSeason } from 'services/api'; // Assumes an API service to fetch season details
+import { useParams } from 'react-router-dom';
+import { getSeason, getRankings, getSeasonLastMatches } from 'services/api'; // Assumes an API service to fetch season details
 import Header from 'components/visitor/Header';
 import Footer from 'components/visitor/Footer';
+import RankingTable from "components/visitor/RankingTable.jsx";
 import 'styles/tailwind.css';
 
 const SeasonDetail = () => {
-  const { id } = useParams(); // Extract season ID from the URL
+  const { id } = useParams();
   const [season, setSeason] = useState(null);
+  const [ranking, setRanking] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [lastMatches, setLastMatches] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchSeason = async () => {
       try {
-        const data = await getSeason(id); // Fetch the season details by ID
+        const data = await getSeason(id); // Fetch season details
+        const ranking = await getRankings(1, 100, data.start_date);
+        const lastMatches = await getSeasonLastMatches(data.id);
+        setLastMatches(lastMatches.results);
         setSeason(data);
+        setRanking(ranking.results);
       } catch (err) {
         setError('Error al obtener la información de la temporada.');
         console.error(err);
@@ -55,24 +62,57 @@ const SeasonDetail = () => {
         ) : error ? (
           <div className="text-center text-red-500">{error}</div>
         ) : (
-          <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h3 className="text-3xl font-bold mb-4">{season.name}</h3>
-            <p className="mb-2">
-              <strong>Fecha de Inicio:</strong>{' '}
-              {new Date(season.start_date).toLocaleDateString()}
-            </p>
-            <p className="mb-2">
-              <strong>Fecha de Fin:</strong>{' '}
-              {new Date(season.end_date).toLocaleDateString()}
-            </p>
-            <p className="mb-4">
-              <strong>Estado:</strong> {calculateSeasonStatus()}
-            </p>
-            {calculateSeasonStatus() === 'En curso' && (
-              <p className="text-emerald-400 font-semibold">
-                Esta temporada está actualmente activa.
+          <div>
+            {/* Season Info */}
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+              <h3 className="text-3xl font-bold mb-4">{season.name}</h3>
+              <p className="mb-2">
+                <strong>Descripción:</strong> {season.description}
               </p>
-            )}
+              <p className="mb-2">
+                <strong>Fecha de Inicio:</strong>{' '}
+                {new Date(season.start_date).toLocaleDateString()}
+              </p>
+              <p className="mb-2">
+                <strong>Fecha de Fin:</strong>{' '}
+                {new Date(season.end_date).toLocaleDateString()}
+              </p>
+              <p className="mb-4">
+                <strong>Estado:</strong> {calculateSeasonStatus()}
+              </p>
+              {calculateSeasonStatus() === 'En curso' && (
+                <p className="text-emerald-400 font-semibold">
+                  Esta temporada está actualmente activa.
+                </p>
+              )}
+            </div>
+            {console.log(ranking)}
+            {/* Player Rankings */}
+            <RankingTable ranking={ranking} title="Ranking de temporada" />
+
+            {/* Recent Matches */}
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+              <h4 className="text-2xl font-bold mb-4">Últimos Partidos</h4>
+              <ul className="space-y-4">
+                {lastMatches.map((match) => (
+                  <li
+                    key={match.id}
+                    className="border-b border-gray-700 pb-4 last:border-b-0"
+                  >
+                    <p>
+                      <strong>Partido:</strong> {match.player1} vs {match.player2}
+                    </p>
+                    <p>
+                      <strong>Resultado:</strong> {match.result}
+                    </p>
+                    <p>
+                      <strong>Fecha:</strong>{' '}
+                      {new Date(match.date).toLocaleDateString()}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         )}
       </main>

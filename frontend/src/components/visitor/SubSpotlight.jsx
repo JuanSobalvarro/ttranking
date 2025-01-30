@@ -5,7 +5,7 @@ import 'styles/tailwind.css';
 
 const SubSpotlight = ({ topByWinrateRanking }) => {
   return (
-    <section className="mx-auto my-12 p-8 bg-gradient-to-r from-green-600 to-green-800 text-white rounded-lg max-w-screen-xl shadow-lg">
+    <section className="max-20 sm:mx-auto my-12 p-8 bg-gradient-to-r from-green-600 to-green-800 text-white rounded-lg max-w-screen-xl shadow-lg">
       <h2 className="text-4xl font-extrabold mb-6 text-center">Jugadores Play2Win</h2>
       <p className="text-xl mb-8 text-center">
         Estos jugadores se destacan por su winrate, ganándose el título de "Play2Win", jugar para ganar.

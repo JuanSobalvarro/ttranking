@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from 'flowbite-react';
-import AdminHeader from 'components/admin/AdminHeader';
-import AdminFooter from 'components/admin/AdminFooter';
-import { getRanking, getPlayers, deletePlayer } from 'services/api.js';
-import 'styles/tailwind.css';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "flowbite-react";
+import AdminHeader from "components/admin/AdminHeader";
+import AdminFooter from "components/admin/AdminFooter";
+import { getRankings, getPlayers, deletePlayer } from "services/api.js";
 import ConfirmationModal from "components/admin/ConfirmationModal.jsx";
+import "styles/tailwind.css";
 
 function AdminPlayerList() {
   const [players, setPlayers] = useState([]);
@@ -14,24 +14,23 @@ function AdminPlayerList() {
   const [totalPages, setTotalPages] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [playerToDelete, setPlayerToDelete] = useState(null);
+  const navigate = useNavigate(); // For programmatic navigation
 
   const fetchPlayers = async (page = 1) => {
     try {
       const result = await getPlayers(page);
-      const resultRankings = await getRanking();
+      const resultRankings = await getRankings();
       setRankings(resultRankings);
-      setPlayers(result.results); // Assuming the API returns { results: [], count: 0, ... }
-      setTotalPages(Math.ceil(result.count / 10)); // Update based on page size
+      setPlayers(result.results); // API response structure: { results: [], count: 0, ... }
+      setTotalPages(Math.ceil(result.count / 10)); // Assuming 10 players per page
     } catch (error) {
-      console.error('Error fetching players:', error);
+      console.error("Error fetching players:", error);
     }
   };
 
-
   useEffect(() => {
     fetchPlayers(currentPage);
-    console.log(rankings);
-  }, [currentPage]);
+  }, [currentPage]); // Remove unnecessary logs
 
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage((prevPage) => prevPage + 1);
@@ -44,21 +43,21 @@ function AdminPlayerList() {
   const handleDeletePlayer = (playerId) => {
     setPlayerToDelete(playerId);
     setIsModalOpen(true);
-  }
+  };
 
-    const handleConfirmDelete = async () => {
-      try {
-        await deletePlayer(playerToDelete);
-        fetchPlayers(currentPage);
-        setIsModalOpen(false);
-      } catch (error) {
-        console.error('Error deleting player:', error);
-      }
-    };
-
-    const handleCancelDelete = () => {
-        setIsModalOpen(false);
+  const handleConfirmDelete = async () => {
+    try {
+      await deletePlayer(playerToDelete);
+      fetchPlayers(currentPage);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error deleting player:", error);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div>
@@ -68,22 +67,46 @@ function AdminPlayerList() {
           isOpen={isModalOpen}
           onConfirm={handleConfirmDelete}
           onCancel={handleCancelDelete}
-          message={`Seguro que quieres borrar este jugador? Esta acción no se puede deshacer.`}
-          deleteItem={'Borrar jugador'}
-          cancelItem={'Cancelar'}
+          message="¿Seguro que quieres borrar este jugador? Esta acción no se puede deshacer."
+          deleteItem="Borrar jugador"
+          cancelItem="Cancelar"
         />
         <h2 className="text-3xl font-bold mb-6">Lista de Jugadores</h2>
-        <Link to="/admin/players/add" className="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600 mb-6 inline-block">Agregar Nuevo Jugador</Link>
+        <Link
+          to="/admin/players/add"
+          className="inline-block bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600 mb-6"
+        >
+          Agregar Nuevo Jugador
+        </Link>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {players.map(player => (
-            <div key={player.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <img src={player.photo ? player.photo : '/src/assets/images/defaultPlayer.png'} alt={`${player.first_name} ${player.last_name}`} className="w-full h-48 object-cover" />
-              <div className="p-6">
-                <h5 className="text-xl font-semibold mb-2">{player.first_name} {player.last_name}</h5>
-                <p className="text-gray-600 mb-4">{player.alias}</p>
-                <p className="text-gray-800 mb-4">Ranking: {player.ranking}</p>
-                <Button to={`/admin/players/edit/${player.id}`} className="bg-yellow-400 text-white px-4 py-2 rounded hover:bg-yellow-600">Editar</Button>
-                <Button onClick={() => handleDeletePlayer(player.id)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ml-2">Eliminar</Button>
+          {players.map((player) => (
+            <div
+              key={player.id}
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-200"
+            >
+              <img
+                src={player.photo ? player.photo : "/src/assets/images/defaultPlayer.png"}
+                alt={`${player.first_name} ${player.last_name}`}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <h5 className="text-xl font-semibold">{player.first_name} {player.last_name}</h5>
+                <p className="text-gray-600">{player.alias}</p>
+                <p className="text-gray-800 font-semibold">Ranking: {player.ranking}</p>
+                <div className="mt-4 flex justify-between">
+                  <Link
+                    to={`/admin/players/edit/${player.id}`}
+                    className="bg-yellow-400 text-white px-4 py-2 rounded hover:bg-yellow-500"
+                  >
+                    Editar
+                  </Link>
+                  <button
+                    onClick={() => handleDeletePlayer(player.id)}
+                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                  >
+                    Eliminar
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -92,15 +115,21 @@ function AdminPlayerList() {
           <button
             onClick={handlePrevPage}
             disabled={currentPage === 1}
-            className={`px-4 py-2 rounded ${currentPage === 1 ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
+            className={`px-4 py-2 rounded ${
+              currentPage === 1 ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+            } text-white`}
           >
             Anterior
           </button>
-          <span className="text-lg font-medium">Página {currentPage} de {totalPages}</span>
+          <span className="text-lg font-medium">
+            Página {currentPage} de {totalPages}
+          </span>
           <button
             onClick={handleNextPage}
             disabled={currentPage === totalPages}
-            className={`px-4 py-2 rounded ${currentPage === totalPages ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
+            className={`px-4 py-2 rounded ${
+              currentPage === totalPages ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+            } text-white`}
           >
             Siguiente
           </button>

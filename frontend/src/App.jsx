@@ -12,13 +12,19 @@ import SeasonDetail from "pages/visitor/seasons/SeasonDetail.jsx";
 import ProtectedRoute from 'components/ProtectedRoute.jsx';
 import AdminHome from 'pages/admin/Home.jsx';
 import AdminLogin from 'pages/admin/AdminLogin.jsx';
+
 import AdminPlayerList from 'pages/admin/players/PlayerList.jsx';
 import AdminPlayerAdd from 'pages/admin/players/PlayerAdd.jsx';
+import AdminPlayerEdit from 'pages/admin/players/PlayerEdit.jsx';
+
 import AdminMatchesList from 'pages/admin/matches/MatchList.jsx';
 import SingleMatchAdd from "pages/admin/matches/SingleMatchAdd.jsx";
+import SingleMatchEdit from "pages/admin/matches/SingleMatchEdit.jsx";
+import DoubleMatchAdd from "pages/admin/matches/DoubleMatchAdd.jsx";
+
+
 import AdminSeasonList from "pages/admin/seasons/SeasonList.jsx";
 import SeasonAdd from "pages/admin/seasons/SeasonAdd.jsx";
-import DoubleMatchAdd from "pages/admin/matches/DoubleMatchAdd.jsx";
 
 function App() {
   return (
@@ -57,6 +63,13 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/admin/players/edit/:id"
+            element={
+              <ProtectedRoute>
+                <AdminPlayerEdit />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/admin/matches"
             element={
               <ProtectedRoute>
@@ -68,6 +81,13 @@ function App() {
             element={
               <ProtectedRoute>
                 <SingleMatchAdd />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/admin/matches/singles/edit/:id"
+            element={
+              <ProtectedRoute>
+                <SingleMatchEdit />
               </ProtectedRoute>
             }
           />
