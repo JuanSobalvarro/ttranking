@@ -1,12 +1,8 @@
 import os
 import csv
+import argparse
 import requests
 from typing import Tuple
-
-# Define your backend API URL
-API_URL = 'https://ttranking.juansobalvarro.site/api'  # Replace with your actual API URL
-USERNAME = 'juan'  # Replace with your username
-PASSWORD = 'uwunyanichan'  # Replace with your password
 
 # Define the list of CSV files and their corresponding endpoints
 CSV_ENDPOINT = [
@@ -17,9 +13,7 @@ CSV_ENDPOINT = [
 
 
 def get_auth_token(api_url: str, username: str, password: str) -> Tuple[str, str]:
-    """
-    Retrieve a new authentication token and refresh token.
-    """
+    """Retrieve a new authentication token and refresh token."""
     try:
         response = requests.post(f"{api_url}/token/", json={'username': username, 'password': password})
         response.raise_for_status()
@@ -31,9 +25,7 @@ def get_auth_token(api_url: str, username: str, password: str) -> Tuple[str, str
 
 
 def refresh_auth_token(api_url: str, refresh_token: str) -> str:
-    """
-    Refresh the authentication token using the refresh token.
-    """
+    """Refresh the authentication token using the refresh token."""
     try:
         response = requests.post(f"{api_url}/token-refresh/", json={'refresh': refresh_token})
         response.raise_for_status()
@@ -44,23 +36,21 @@ def refresh_auth_token(api_url: str, refresh_token: str) -> str:
 
 
 def import_players(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_token, username, password):
-    """
-    Import players from a CSV file and upload photos as files, avoiding duplicates.
-    Refresh the token after every 50 requests.
-    """
+    """Import players from a CSV file and upload photos as files, avoiding duplicates."""
     headers = {'Authorization': f"Bearer {auth_token}"}
     PHOTOS_PATH = 'D:/backups/player_photos/'
     request_count = 0  # Track the number of requests made
     csv_path = os.path.join('./mysql_csv', csv_endpoint[0])
 
-    file = open(csv_path, mode='r', encoding='utf-8')
-    reader = csv.DictReader(file)
-    rows = list(reader)
+    with open(csv_path, mode='r', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        rows = list(reader)
 
     for row in rows:
         print(f"Adding player with {row['id']}: {row['first_name']} {row['last_name']}")
-        # Refresh the token every 50 requests
-        if request_count % 50 == 0 and request_count > 0:
+
+        # Refresh token every 50 requests
+        if request_count % 10 == 0 and request_count > 0:
             print("Refreshing token...")
             auth_token = refresh_auth_token(api_url, refresh_token)
             if not auth_token:
@@ -70,7 +60,7 @@ def import_players(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_t
             print("Token refreshed")
 
         # Check if the resource already exists
-        player_id = row.get('id')  # Use the ID field as a unique identifier
+        player_id = row.get('id')
         if player_id:
             check_response = requests.get(f"{api_url}/{csv_endpoint[1]}/{player_id}/", headers=headers)
             if check_response.status_code == 200:
@@ -87,7 +77,7 @@ def import_players(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_t
                 print(f"Photo not found for player ID {row['id']}, skipping photo upload.")
                 row.pop('photo', None)
 
-        # Post the data if it does not already exist
+        # Post data if it does not exist
         try:
             response = requests.post(
                 f"{api_url}/{csv_endpoint[1]}",
@@ -107,15 +97,10 @@ def import_players(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_t
             if files:
                 files['photo'].close()
 
-            # print("Response: ", response)
-
             if response.status_code == 201:
                 print(f"Data inserted into {csv_endpoint[1]}: {row}")
-            elif response.status_code == 500:
-                print(f"Error inserting data into {csv_endpoint[1]}: {response.status_code}")
-                return
-            elif response.status_code == 401:
-                print(f"Unauthorized: Token might have expired.")
+            elif response.status_code in [500, 401]:
+                print(f"Error inserting data: {response.status_code}. Stopping process.")
                 return
             else:
                 print(f"Error inserting data into {csv_endpoint[1]}: {response.status_code}")
@@ -127,22 +112,22 @@ def import_players(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_t
 
     print(f"Processed {len(rows)} entries from file: {csv_endpoint[0]}")
 
+
 def import_matches(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_token, username, password):
-    """
-    Since the old matches all were of 1 single game, we can just import them as the game data.
-    """
+    """Import matches from a CSV file."""
     headers = {'Authorization': f"Bearer {auth_token}"}
     request_count = 0  # Track the number of requests made
     csv_path = os.path.join('./mysql_csv', csv_endpoint[0])
 
-    file = open(csv_path, mode='r', encoding='utf-8')
-    reader = csv.DictReader(file)
-    rows = list(reader)
+    with open(csv_path, mode='r', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        rows = list(reader)
 
     for row in rows:
         print(f"Adding match with {row['id']}")
-        # Refresh the token every 50 requests
-        if request_count % 50 == 0 and request_count > 0:
+
+        # Refresh token every 50 requests
+        if request_count % 10 == 0 and request_count > 0:
             print("Refreshing token...")
             auth_token = refresh_auth_token(api_url, refresh_token)
             if not auth_token:
@@ -151,17 +136,7 @@ def import_matches(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_t
             headers['Authorization'] = f"Bearer {auth_token}"
             print("Token refreshed")
 
-        # Check if the resource already exists
-        # match_id = row.get('id')  # Use the ID field as a unique identifier
-        # if match_id:
-        #     check_response = requests.get(f"{api_url}/{csv_endpoint[1]}/{match_id}/", headers=headers)
-        #     if check_response.status_code == 200:
-        #         print(f"Resource with ID {match_id} already exists in {csv_endpoint[1]}, skipping...")
-        #         continue
-
-        # Post the data if it does not already exist
         try:
-            # Create match first and then add the game
             if csv_endpoint[1] == 'matches/singles':
                 response_match = requests.post(
                     f"{api_url}/{csv_endpoint[1]}/",
@@ -173,13 +148,12 @@ def import_matches(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_t
                     headers=headers
                 )
 
-                if response_match.status_code != 201:
-                    print(f"Error adding match: {response_match.status_code}")
-                    Exception("Error adding match")
+                if response_match.status_code == 201:
+                    print(f"Match added: {response_match.json()}")
+                else:
+                    raise Exception(f"Error adding match: {response_match.status_code}")
 
-                print(f"Match added successfully: {response_match.json()}")
-
-                response_game = requests.post(
+                requests.post(
                     f"{api_url}/matches/singles-games/",
                     data={
                         'match': response_match.json()['id'],
@@ -188,9 +162,6 @@ def import_matches(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_t
                     },
                     headers=headers
                 )
-
-                if response_game.status_code == 201:
-                    print(f"Game added successfully to match {response_match.json()['id']}")
 
             elif csv_endpoint[1] == 'matches/doubles':
                 response_match = requests.post(
@@ -205,11 +176,12 @@ def import_matches(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_t
                     headers=headers
                 )
 
-                if response_match.status_code != 201:
-                    print(f"Error adding match: {response_match.status_code}")
-                    Exception("Error adding match")
+                if response_match.status_code == 201:
+                    print(f"Match added: {response_match.json()}")
+                else:
+                    raise Exception(f"Error adding match: {response_match.status_code}")
 
-                response_game = requests.post(
+                requests.post(
                     f"{api_url}/matches/doubles-games/",
                     data={
                         'match': response_match.json()['id'],
@@ -218,44 +190,33 @@ def import_matches(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_t
                     },
                     headers=headers
                 )
+
         except Exception as e:
-            print(f"Exception occurred while uploading data: {e}")
+            print(f"Exception occurred: {e}")
+
 
 def main():
-    # Obtain initial authentication token and refresh token
-    auth_token, refresh_token = get_auth_token(API_URL, USERNAME, PASSWORD)
+    parser = argparse.ArgumentParser(description="Import data into the TT Ranking System API.")
+    parser.add_argument("--api_url", required=True, help="API URL (e.g., https://ttranking.example.com/api)")
+    parser.add_argument("--username", required=True, help="Username for authentication")
+    parser.add_argument("--password", required=True, help="Password for authentication")
+
+    args = parser.parse_args()
+    api_url = args.api_url
+    username = args.username
+    password = args.password
+
+    auth_token, refresh_token = get_auth_token(api_url, username, password)
     if not auth_token or not refresh_token:
-        print("Error: Unable to obtain initial authentication tokens.")
+        print("Error: Unable to obtain authentication tokens.")
         return
 
     print("Token obtained")
 
-    response_lookup_season = requests.get(f"{API_URL}/seasons/1", headers={'Authorization': f"Bearer {auth_token}"})
-
-    if response_lookup_season.status_code != 200:
-        response = requests.post(f"{API_URL}/seasons/", json={
-            'name': 'Default Season',
-            'description': 'Default season for testing purposes',
-            'start_date': '2024-01-01',
-            'end_date': '2024-12-31',
-            'singles_points_for_win': 2,
-            'singles_points_for_loss': 0,
-            'doubles_points_for_win': 2,
-            'doubles_points_for_loss': 0
-        },
-            headers={'Authorization': f"Bearer {auth_token}"})
-
-        if not response.status_code == 201:
-            print(f"Error creating default season: {response.status_code}")
-            return
-
-    # Call the import function
-    # import_csv_to_api(API_URL, CSV_ENDPOINT, auth_token=AUTH_TOKEN, refresh_token=REFRESH_TOKEN, username=USERNAME, password=PASSWORD)
-
     print("Loading players")
-    import_players(API_URL, CSV_ENDPOINT[0], auth_token, refresh_token, USERNAME, PASSWORD)
-    import_matches(API_URL, CSV_ENDPOINT[1], auth_token, refresh_token, USERNAME, PASSWORD)
-    import_matches(API_URL, CSV_ENDPOINT[2], auth_token, refresh_token, USERNAME, PASSWORD)
+    import_players(api_url, CSV_ENDPOINT[0], auth_token, refresh_token, username, password)
+    import_matches(api_url, CSV_ENDPOINT[1], auth_token, refresh_token, username, password)
+    import_matches(api_url, CSV_ENDPOINT[2], auth_token, refresh_token, username, password)
 
     print("Everything finished")
 
