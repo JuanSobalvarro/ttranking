@@ -4,6 +4,7 @@ import { getSingleMatch, getPlayer } from 'services/api'; // Assume this API fun
 import Header from 'components/visitor/Header';
 import Footer from 'components/visitor/Footer';
 import 'styles/tailwind.css';
+import MatchDetailCard from "components/visitor/MatchDetailCard.jsx";
 
 function SingleMatchDetail() {
   const { id } = useParams();
@@ -49,47 +50,7 @@ function SingleMatchDetail() {
   return (
     <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen text-white flex flex-col">
       <Header />
-      <main className="container mx-auto px-4 py-8 flex-grow">
-        <h2 className="text-center text-4xl font-bold mb-8">Match Details</h2>
-        <div className="bg-gray-700 rounded-lg shadow-lg p-6 space-y-8">
-          {match ? (
-            <>
-              <div className="flex justify-center items-center space-x-8">
-                {/* Player 1 */}
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={player1.photo || '/src/assets/images/defaultPlayer.png'}
-                    alt={player1.first_name + ' ' + player1.last_name || 'Player 1'}
-                    className="w-24 h-24 rounded-full object-cover"
-                  />
-                  <div className="text-lg font-semibold">{player1.first_name + ' ' + player1.last_name || 'Unknown Player'}</div>
-                </div>
-
-                {/* VS */}
-                <div className="text-4xl font-bold text-white">VS</div>
-
-                {/* Player 2 */}
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={player2.photo || '/src/assets/images/defaultPlayer.png'}
-                    alt={player2.first_name + ' ' + player2.last_name || 'Player 2'}
-                    className="w-24 h-24 rounded-full object-cover"
-                  />
-                  <div className="text-lg font-semibold">{player2.first_name + ' ' + player2.last_name || 'Unknown Player'}</div>
-                </div>
-              </div>
-              <div className="mt-4 text-lg space-y-2">
-                <p><strong>Date:</strong> {new Date(match.date).toLocaleString()}</p>
-                <p><strong>Season:</strong> {match.season || 'N/A'}</p>
-                <p><strong>Score:</strong> {match.player1_score} - {match.player2_score}</p>
-                <p><strong>Winner:</strong> {winner.first_name + ' ' + winner.last_name || 'No winner'}</p>
-              </div>
-            </>
-          ) : (
-            <p className="text-center">Match details are unavailable.</p>
-          )}
-        </div>
-      </main>
+      <MatchDetailCard matchType={'singles'} />
       <Footer />
     </div>
   );

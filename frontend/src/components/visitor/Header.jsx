@@ -31,7 +31,7 @@ function Header() {
       {/* Header */}
       {!isSidebarOpen && (
         <header
-          className={`sticky top-0 z-50 bg-green-700 shadow-md transition-opacity duration-300`}
+          className={`sticky w-full top-0 z-50 bg-gray-900 shadow-md transition-opacity duration-300`}
           style={{ opacity }}
         >
           <div className="container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-10 py-3 sm:py-4">
@@ -64,7 +64,7 @@ function Header() {
             </nav>
 
             {/* Hamburger Icon (Mobile) */}
-            <Button className="text-white sm:hidden bg-green-700" onClick={toggleSidebar} aria-label="Toggle menu">
+            <Button className="text-white sm:hidden bg-gray-900" onClick={toggleSidebar} aria-label="Toggle menu">
               <Bars3Icon className="h-7 w-7" />
             </Button>
           </div>
@@ -73,13 +73,13 @@ function Header() {
 
       {/* Sidebar (Mobile) */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-green-700 transform ${
+        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 shadow-lg z-40`}
       >
         <div className="flex items-center justify-between px-4 py-4">
           <span className="text-white text-lg font-semibold">Menú</span>
-          <Button className="text-white bg-green-700" onClick={toggleSidebar} aria-label="Close menu">
+          <Button className="text-white bg-gray-800" onClick={toggleSidebar} aria-label="Close menu">
             <XMarkIcon className="h-7 w-7" />
           </Button>
         </div>

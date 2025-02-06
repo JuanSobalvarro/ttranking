@@ -1,7 +1,7 @@
 # ttranking/players/urls.py
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PlayerViewSet, RankingViewSet, country_choices
+from .views import PlayerViewSet, RankingViewSet, country_choices, ranking_integrity
 
 app_name = 'players'
 
@@ -14,5 +14,6 @@ router.register(r'ranking', RankingViewSet)
 
 urlpatterns = [
     path('country-choices/', country_choices, name='country-choices'),
+    path('ranking-integrity/', ranking_integrity, name='ranking-integrity'),
     path('', include(router.urls)),
 ]

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getSeason, getRankings, getSeasonLastMatches } from 'services/api'; // Assumes an API service to fetch season details
+import { getSeason, getRankingsForSeason, getSeasonLastMatches } from 'services/api'; // Assumes an API service to fetch season details
 import Header from 'components/visitor/Header';
 import Footer from 'components/visitor/Footer';
 import RankingTable from "components/visitor/RankingTable.jsx";
@@ -18,10 +18,12 @@ const SeasonDetail = () => {
     const fetchSeason = async () => {
       try {
         const data = await getSeason(id); // Fetch season details
-        const ranking = await getRankings(1, 100, data.start_date);
+        console.log('Fetching for season id: ', id);
+        const ranking = await getRankingsForSeason(id);
         const lastMatches = await getSeasonLastMatches(data.id);
         setLastMatches(lastMatches.results);
         setSeason(data);
+        console.log('ranking: ', ranking);
         setRanking(ranking.results);
       } catch (err) {
         setError('Error al obtener la información de la temporada.');

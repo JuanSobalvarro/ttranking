@@ -62,15 +62,18 @@ class HomeView(APIView):
 
         print(Ranking.objects.all())
 
-        ranking = Ranking.objects.filter(season=current_season).order_by('ranking')
+        ranking = Ranking.objects.filter(season=current_season).order_by('-ranking')
 
         top = ranking[:3]
 
         top_winrate = self.order_by_winrate(ranking)[:6]
 
         matches_played = 0
-        for player in ranking:
-            matches_played += player.matches_played
+        for _ in SinglesMatch.objects.filter(season=current_season):
+            matches_played += 1
+
+        for _ in DoublesMatch.objects.filter(season=current_season):
+            matches_played += 1
 
         data = {
             'matchesPlayed': matches_played,

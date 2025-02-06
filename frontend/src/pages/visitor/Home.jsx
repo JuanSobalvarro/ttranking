@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getHomeData } from 'services/api.js';
+import { motion } from 'framer-motion';
+import { Button } from 'flowbite-react';
 import Header from 'components/visitor/Header.jsx';
 import Footer from 'components/visitor/Footer.jsx';
 import 'styles/tailwind.css';
@@ -41,41 +43,88 @@ function Home() {
     <div className='bg-gray-900'>
       <Header />
 
-
       {/* Hero Section with dynamic table tennis-inspired background */}
-      <section className="hero-section bg-gradient-to-r from-green-600 via-black to-green-900 text-white text-center relative overflow-hidden">
+      <motion.section
+          className="hero-section bg-gradient-to-r from-green-600 via-black to-green-900 text-white text-center relative overflow-hidden"
+          initial={{opacity: 0}}
+          animate={{opacity: 1}}
+          transition={{duration: 1}}
+      >
         {/* Animated Lights mimicking the fast movement of a ping-pong ball */}
         <div className="absolute inset-0 bg-opacity-50 bg-black z-0"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-green-900 via-teal-900 to-green-600 opacity-10 animate-pulse z-0"></div>
 
 
-        <div className="text-center py-16 z-10 relative">
-          <h1 className="text-4xl font-bold text-white">Bienvenido al Sistema de Clasificación de Tenis de Mesa</h1>
-          <p className="text-xl text-white mt-6">Sigue el rendimiento de los jugadores y consulta las últimas clasificaciones.</p>
-          <div className="mt-8">
-            <Link className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full mr-4 transition-all" to="/players">Ver Jugadores</Link>
-            <Link className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition-all" to="/matches">Ver Partidos</Link>
-          </div>
-        </div>
-      </section>
+        <motion.div
+            className="text-center py-16 relative z-10"
+            initial={{opacity: 0, scale: 0.9}}
+            animate={{opacity: 1, scale: 1}}
+            transition={{duration: 1}}
+        >
+          <h1 className="text-5xl font-extrabold tracking-wide">
+            Bienvenido al Sistema de Clasificación de Tenis de Mesa 🏓
+          </h1>
+          <p className="text-lg mt-6">
+            Sigue el rendimiento de los jugadores y consulta las últimas clasificaciones.
+          </p>
 
-      <div className="bg-green-500 text-white py-3">
+          <motion.div
+              className="mt-8 flex justify-center gap-4"
+              initial={{opacity: 0.5, y: 10}}
+              animate={{opacity: 1, y: 0}}
+              transition={{delay: 1}}
+          >
+              <Button gradientDuoTone="greenToBlue" as={Link} to="/players">
+                Ver Jugadores
+              </Button>
+              <Button gradientDuoTone="purpleToBlue" as={Link} to="/matches">
+                Ver Partidos
+              </Button>
+              <Button gradientDuoTone="greenToBlue" as={Link} to="/seasons">
+                Ver Temporadas
+              </Button>
+          </motion.div>
+        </motion.div>
+      </motion.section>
+
+      {/* Matches Played Bar */}
+      <motion.div
+        className="bg-green-500 text-white py-3"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1 }}
+      >
         <div className="text-center">
-          <div className="text-lg font-semibold">Total Partidos Jugados: {matchesPlayed}</div>
+          <motion.div
+            className="text-lg font-semibold"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 100 }}
+          >
+            🏆 Total Partidos Jugados: {matchesPlayed}
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
-      <Spotlight topPlayersRanking={topPlayers} />
-
-      <SubSpotlight topByWinrateRanking={topByWinrate} />
-
-      {console.log(ranking)}
-      <RankingTable ranking={ranking} title="🏆 Top 20 Jugadores 🏆" />
-
+      {/* Spotlight and Ranking Sections */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.3 }}
+      >
+        <Spotlight topPlayersRanking={topPlayers} />
+        <SubSpotlight topByWinrateRanking={topByWinrate} />
+        <RankingTable ranking={ranking} title="🏆 Top 20 Jugadores 🏆" />
+      </motion.div>
 
       {/* Description Section */}
-      <div className="container mx-auto my-12 text-center text-white">
-        <h2 className="text-3xl font-bold mb-6">Sobre el sistema de Clasificación</h2>
+      <motion.div
+          className="container mx-auto my-12 text-center text-white px-6"
+          initial={{opacity: 0, y: 20}}
+          animate={{opacity: 1, y: 0}}
+          transition={{duration: 1}}
+      >
+        <h2 className="text-3xl font-bold mb-6">📊 Sobre el sistema de Clasificación</h2>
         <p className="text-xl mb-6">
           Nuestro sistema de clasificación de tenis de mesa está diseñado para ofrecer una representación precisa
           y dinámica del rendimiento de los jugadores a lo largo del tiempo. Cada jugador acumula puntos en
@@ -85,8 +134,15 @@ function Home() {
           Ya sean principiantes, avanzados o profesionales, todos pueden participar en nuestro grupo y ser
           registrados/as en nuestra clasificación.
         </p>
-        <SeasonDescription season={currentSeason} />
-      </div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1 }}
+        >
+          <SeasonDescription season={currentSeason} />
+        </motion.div>
+      </motion.div>
 
 
       <Footer />

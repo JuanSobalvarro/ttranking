@@ -26,5 +26,25 @@ class Season(models.Model):
         date_only = dt.date()
         return Season.objects.filter(start_date__lte=date_only, end_date__gte=date_only).first()
 
+    def validate_date(self) -> bool:
+        """
+        Validates if the current date is within any season. If it overlaps with another season, it will raise an
+        exception.
+        :return:
+        """
+        print("Validating date for: ", self.start_date, self.end_date)
+        if self.start_date > self.end_date:
+            raise ValueError('Start date must be before end date')
+        if Season.objects.filter(start_date__lte=self.start_date, end_date__gte=self.start_date).exclude(pk=self.pk).exists():
+            raise ValueError('Start date overlaps with another season')
+        if Season.objects.filter(start_date__lte=self.end_date, end_date__gte=self.end_date).exclude(pk=self.pk).exists():
+            raise ValueError('End date overlaps with another season')
+        return True
+
+    def save(self, *args, **kwargs):
+        self.validate_date()
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name

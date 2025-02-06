@@ -3,7 +3,7 @@ from .models import Player, Ranking
 
 
 class PlayerSerializer(serializers.ModelSerializer):
-    # id = serializers.IntegerField()
+    id = serializers.IntegerField()
     photo = serializers.ImageField(required=False)  # Make the photo field optional
 
     class Meta:
@@ -13,6 +13,8 @@ class PlayerSerializer(serializers.ModelSerializer):
 class RankingSerializer(serializers.ModelSerializer):
     player = PlayerSerializer(read_only=True)
     winrate = serializers.SerializerMethodField(read_only=True)
+    victories = serializers.SerializerMethodField(read_only=True)
+    matches_played = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Ranking
@@ -23,3 +25,9 @@ class RankingSerializer(serializers.ModelSerializer):
 
     def get_player(self, obj):
         return obj.player
+
+    def get_victories(self, obj):
+        return obj.victories
+
+    def get_matches_played(self, obj):
+        return obj.matches_played

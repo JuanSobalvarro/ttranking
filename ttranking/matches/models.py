@@ -96,6 +96,10 @@ class SinglesMatch(models.Model):
         return player1_wins, player2_wins
 
     @property
+    def players(self):
+        return self.player1, self.player2
+
+    @property
     def get_season(self):
         return Season.get_season_for_datetime(self.date)
 
@@ -111,43 +115,50 @@ class SinglesMatch(models.Model):
 
         # print("Match winner updated: ", self.winner)
 
-    def update_players(self):
-        winning_points = Season.objects.get(pk=self.season.pk).singles_points_for_win
-        losing_points = Season.objects.get(pk=self.season.pk).singles_points_for_loss
-
-        player1_ranking = Ranking.objects.get(player=self.player1, season=self.season)
-        player2_ranking = Ranking.objects.get(player=self.player2, season=self.season)
+    def update_rankings(self):
+        players_ranking = [Ranking.objects.get_or_create(player=player, season=self.season) for player in self.players]
 
         # Check if the match is already created and remove the points from the previous winner and add points to the loser
         if self.pk:
             previous_match = SinglesMatch.objects.select_related('player1', 'player2').get(pk=self.pk)
-            prev_player1_ranking = Ranking.objects.get(pk=previous_match.player1.pk)
-            prev_player2_ranking = Ranking.objects.get(pk=previous_match.player2.pk)
 
-            # First remove points from winner and add points to loser
-            if previous_match.winner == previous_match.player1:
-                prev_player1_ranking.remove_points(winning_points)
-                prev_player2_ranking.add_points(losing_points)
-            elif previous_match.winner == previous_match.player2:
-                prev_player2_ranking.remove_points(winning_points)
-                prev_player1_ranking.add_points(losing_points)
+            prev_players_ranking = [Ranking.objects.get_or_create(player=player, season=self.season) for player in previous_match.players]
 
-            # Remove the matches played from the previous players
-            prev_player1_ranking.remove_match()
-            prev_player2_ranking.remove_match()
+            self.remove_match_from_players(prev_players_ranking[0], prev_players_ranking[1])
 
-        # Then add points to winner and remove points from loser
+        self.add_match_to_players(players_ranking[0], players_ranking[1])
+
+    def add_match_to_players(self, player1_ranking: Ranking, player2_ranking: Ranking):
+        """
+        This function calls the add_match function from ranking to each player
+        :param player1_ranking:
+        :param player2_ranking:
+        :return:
+        """
         # print("Updating points given winner: ", self.winner)
         if self.winner == self.player1:
-            player1_ranking.add_points(winning_points)
-            player2_ranking.remove_points(losing_points)
+            player1_ranking.add_match('singles', True)
+            player2_ranking.add_match('singles', False)
+
         elif self.winner == self.player2:
-            player2_ranking.add_points(winning_points)
-            player1_ranking.remove_points(losing_points)
+            player1_ranking.add_match('singles', False)
+            player2_ranking.add_match('singles', True)
 
-        player1_ranking.add_match()
-        player2_ranking.add_match()
+    def remove_match_from_players(self, player1_ranking, player2_ranking):
+        """
+        This function calls the remove_match function from ranking to each player
+        :param player1_ranking:
+        :param player2_ranking:
+        :return:
+        """
+        if self.winner == self.player1:
+            player1_ranking.remove_match('singles', True)
+            player2_ranking.remove_match('singles', False)
+        elif self.winner == self.player2:
+            player1_ranking.remove_match('singles', False)
+            player2_ranking.remove_match('singles', True)
 
+        print("Removing match from players")
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -156,7 +167,8 @@ class SinglesMatch(models.Model):
             self.season = self.get_season
 
         self.update_winner()
-        self.update_players()
+        if self.winner:
+            self.update_rankings()
         # print("Saving match with winner: ", self.winner)
         super().save(*args, **kwargs)
 
@@ -165,18 +177,11 @@ class SinglesMatch(models.Model):
             raise ValidationError("Player 1 and Player 2 cannot be the same.")
 
     def delete(self, *args, **kwargs):
-        winning_points = Season.objects.get(pk=self.season.pk).singles_points_for_win
-        losing_points = Season.objects.get(pk=self.season.pk).singles_points_for_loss
+        player1_ranking = Ranking.objects.get_or_create(player=self.player1.pk, season=self.season)
+        player2_ranking = Ranking.objects.get_or_create(player=self.player2.pk, season=self.season)
 
-        if self.player1 == self.winner:
-            self.player1.remove_points(winning_points)
-            self.player2.add_points(losing_points)
-        elif self.player2 == self.winner:
-            self.player2.remove_points(winning_points)
-            self.player1.add_points(losing_points)
-
-        self.player1.remove_match()
-        self.player2.remove_match()
+        if player1_ranking and player2_ranking:
+            self.remove_match_from_players(player1_ranking, player2_ranking)
 
         super().delete(*args, **kwargs)
 
@@ -207,6 +212,10 @@ class DoublesMatch(models.Model):
         return Season.get_season_for_datetime(self.date)
 
     @property
+    def players(self):
+        return self.team1_player1, self.team1_player2, self.team2_player1, self.team2_player2
+
+    @property
     def games_won(self):
         """
         Returns the number of games won by each team.
@@ -231,59 +240,65 @@ class DoublesMatch(models.Model):
             self.winner_1 = None
             self.winner_2 = None
 
-    def update_players(self):
-        winning_points = Season.objects.get(pk=self.season.pk).doubles_points_for_win
-        losing_points = Season.objects.get(pk=self.season.pk).doubles_points_for_loss
-
-        player1 = Player.objects.get(pk=self.team1_player1.pk)
-        player2 = Player.objects.get(pk=self.team1_player2.pk)
-        player3 = Player.objects.get(pk=self.team2_player1.pk)
-        player4 = Player.objects.get(pk=self.team2_player2.pk)
+    def update_rankings(self):
+        players_ranking = [Ranking.objects.get_or_create(player=player, season=self.season) for player in self.players]
 
         # Check if the match is already created
         if self.pk:
             previous_match = DoublesMatch.objects.select_related('team1_player1', 'team1_player2', 'team2_player1', 'team2_player2').get(pk=self.pk)
-            prev_player1 = Player.objects.get(pk=previous_match.team1_player1.pk)
-            prev_player2 = Player.objects.get(pk=previous_match.team1_player2.pk)
-            prev_player3 = Player.objects.get(pk=previous_match.team2_player1.pk)
-            prev_player4 = Player.objects.get(pk=previous_match.team2_player2.pk)
 
-            # First remove points from winner and add points to loser
-            if previous_match.winner_1 == previous_match.team1_player1 and previous_match.winner_2 == previous_match.team1_player2:
-                prev_player1.remove_points(winning_points)
-                prev_player2.remove_points(winning_points)
-                prev_player3.add_points(losing_points)
-                prev_player4.add_points(losing_points)
-            elif previous_match.winner_1 == previous_match.team2_player1 and previous_match.winner_2 == previous_match.team2_player2:
-                prev_player3.remove_points(winning_points)
-                prev_player4.remove_points(winning_points)
-                prev_player1.add_points(losing_points)
-                prev_player2.add_points(losing_points)
+            prev_players_ranking = [Ranking.objects.get_or_create(player=player, season=self.season) for player in previous_match.players]
 
-            # Remove the matches played from the previous players
-            prev_player1.remove_match()
-            prev_player2.remove_match()
-            prev_player3.remove_match()
-            prev_player4.remove_match()
+            self.remove_match_from_players(prev_players_ranking[0], prev_players_ranking[1], prev_players_ranking[2], prev_players_ranking[3])
 
+        self.add_match_to_players(players_ranking[0], players_ranking[1], players_ranking[2], players_ranking[3])
 
-        # Then add points to winner and remove points from loser
+    def add_match_to_players(self, player1_ranking, player2_ranking, player3_ranking, player4_ranking):
+
+        # print("Updating points given winner: ", self.winner)
         if self.winner_1 == self.team1_player1 and self.winner_2 == self.team1_player2:
-            player1.add_points(winning_points)
-            player2.add_points(winning_points)
-            player3.remove_points(losing_points)
-            player4.remove_points(losing_points)
+            player1_ranking.add_match('doubles', True)
+            player2_ranking.add_match('doubles', True)
+            player3_ranking.add_match('doubles', False)
+            player4_ranking.add_match('doubles', False)
+
         elif self.winner_1 == self.team2_player1 and self.winner_2 == self.team2_player2:
-            player3.add_points(winning_points)
-            player4.add_points(winning_points)
-            player1.remove_points(losing_points)
-            player2.remove_points(losing_points)
+            player1_ranking.add_match('doubles', False)
+            player2_ranking.add_match('doubles', False)
+            player3_ranking.add_match('doubles', True)
+            player4_ranking.add_match('doubles', True)
 
-        player1.add_match()
-        player2.add_match()
-        player3.add_match()
-        player4.add_match()
+        print("Adding match to players")
 
+    def remove_match_from_players(self, player1_ranking, player2_ranking, player3_ranking, player4_ranking):
+        if self.winner_1 == self.team1_player1 and self.winner_2 == self.team1_player2:
+            player1_ranking.remove_match('doubles', True)
+            player2_ranking.remove_match('doubles', True)
+            player3_ranking.remove_match('doubles', False)
+            player4_ranking.remove_match('doubles', False)
+
+        elif self.winner_1 == self.team2_player1 and self.winner_2 == self.team2_player2:
+            player1_ranking.remove_match('doubles', False)
+            player2_ranking.remove_match('doubles', False)
+            player3_ranking.remove_match('doubles', True)
+            player4_ranking.remove_match('doubles', True)
+
+        print("Removing match from players")
+
+    def check_rankings(self):
+        """
+        This functions validates that all players have a ranking for the season.
+        :return:
+        """
+        season = Season.objects.get(pk=self.season.pk)
+        if not Ranking.objects.filter(player=self.team1_player1, season=season).exists():
+            raise ValidationError("Player 1 of team 1 does not have a ranking for the season.")
+        if not Ranking.objects.filter(player=self.team1_player2, season=season).exists():
+            raise ValidationError("Player 2 of team 1 does not have a ranking for the season.")
+        if not Ranking.objects.filter(player=self.team2_player1, season=season).exists():
+            raise ValidationError("Player 1 of team 2 does not have a ranking for the season.")
+        if not Ranking.objects.filter(player=self.team2_player2, season=season).exists():
+            raise ValidationError("Player 2 of team 2 does not have a ranking for the season.")
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -291,8 +306,13 @@ class DoublesMatch(models.Model):
         if not self.season:
             self.season = self.get_season
 
+        if not self.season:
+            raise ValidationError("There is not a season defined")
+
+        # self.check_rankings()
+
         self.update_winner()
-        self.update_players()
+        self.update_rankings()
         # print("Saving doubles match with winners: ", self.winner_1, self.winner_2)
         super().save(*args, **kwargs)
 
@@ -304,24 +324,13 @@ class DoublesMatch(models.Model):
             raise ValidationError("Players cannot be repeated across teams.")
 
     def delete(self, *args, **kwargs):
-        winning_points = Season.objects.get(pk=self.season.pk).doubles_points_for_win
-        losing_points = Season.objects.get(pk=self.season.pk).doubles_points_for_loss
+        player1_ranking = Ranking.objects.get_or_create(player=self.team1_player1.pk, season=self.season)
+        player2_ranking = Ranking.objects.get_or_create(player=self.team1_player2.pk, season=self.season)
+        player3_ranking = Ranking.objects.get_or_create(player=self.team2_player1.pk, season=self.season)
+        player4_ranking = Ranking.objects.get_or_create(player=self.team2_player2.pk, season=self.season)
 
-        if self.winner_1 == self.team1_player1 and self.winner_2 == self.team1_player2:
-            self.team1_player1.remove_points(winning_points)
-            self.team1_player2.remove_points(winning_points)
-            self.team2_player1.add_points(losing_points)
-            self.team2_player2.add_points(losing_points)
-        elif self.winner_1 == self.team2_player1 and self.winner_2 == self.team2_player2:
-            self.team2_player1.remove_points(winning_points)
-            self.team2_player2.remove_points(winning_points)
-            self.team1_player1.add_points(losing_points)
-            self.team1_player2.add_points(losing_points)
-
-        self.team1_player1.remove_match()
-        self.team1_player2.remove_match()
-        self.team2_player1.remove_match()
-        self.team2_player2.remove_match()
+        if player1_ranking and player2_ranking and player3_ranking and player4_ranking:
+            self.remove_match_from_players(player1_ranking, player2_ranking, player3_ranking, player4_ranking)
 
         super().delete(*args, **kwargs)
 

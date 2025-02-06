@@ -25,7 +25,7 @@ class SeasonPagination(PageNumberPagination):
     max_page_size = 100
 
 class SeasonViewSet(viewsets.ModelViewSet):
-    queryset = Season.objects.all().order_by('start_date')
+    queryset = Season.objects.all().order_by('-start_date')
     serializer_class = SeasonSerializer
     pagination_class = SeasonPagination
 

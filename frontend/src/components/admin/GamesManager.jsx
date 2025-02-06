@@ -30,7 +30,7 @@ const GamesManager = ({ games, handleGameScoreChange, addNewGame, removeGame }) 
           >
             -
           </button>
-            {console.log(game)}
+            {/*{console.log(game)}*/}
           <span>{game.team2_score}</span>
           <button
             onClick={() => handleGameScoreChange(index, 'team2_score', 1)}

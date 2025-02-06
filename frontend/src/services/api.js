@@ -95,6 +95,16 @@ export const adminLogin = async (username, password) => {
 
 // Rankings
 
+export const rankings_integrity = async () => {
+  try {
+    const response = await adminApi.get('/players/ranking-integrity/');
+    return response;
+  } catch (error) {
+    console.error('Error fetching rankings:', error);
+    throw error;
+  }
+};
+
 export const getRankings = async (page, playersPerPage, seasonDate) => {
     try {
         const response = await publicApi.get('/players/ranking/', {
@@ -119,9 +129,22 @@ export const getRankingForPlayer = async (player, season) => {
     }
 }
 
+export const getRankingsForSeason = async (season_id) => {
+    try {
+        const response = await publicApi.get('/players/ranking/', {
+            params: { page: 1, page_size: 100, 'season_id': season_id },
+        });
+        console.log('Rankings for season:', season_id);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching rankings:', error);
+        throw error;
+    }
+}
+
 // Players
 
-export const getPlayers = async (page = 1, pageSize = 10) => {
+export const getPlayers = async (page = 1, pageSize = 100) => {
   try {
     const response = await publicApi.get('/players/player/', {
       params: { page, page_size: pageSize },
@@ -199,6 +222,19 @@ export const getCountryChoices = async () => {
 
 
 // Matches
+
+export const checkMatchCountIntegrity = async (season_id) => {
+    try {
+      const response = await adminApi.get('/matches/match-count-integrity/', {
+        params: { season: season_id },
+      });
+      return response.data;
+    } catch (error) {
+        console.error('Error doing matchcountintegrity')
+        throw error;
+    }
+};
+
 
 export const getSingleMatches = async (page = 1, pageSize = 10, season_id) => {
     try {
@@ -384,10 +420,15 @@ export const getSeasonForDate = async (date) => {
 
         // Now look through the seasons to find the one that matches the date
         const seasons = response.data.results;
+        // console.log('Seasons got from api: ', seasons);
+        // console.log('Looking for date: ', date.split('T')[0]);
         const season = seasons.find((s) => {
           const start = new Date(s.start_date);
           const end = new Date(s.end_date);
-          return date >= start && date <= end;
+          const looking_date = new Date(date);
+          console.log('Checking season: ', start, end);
+          console.log('Looking date: ', looking_date)
+          return looking_date >= start && looking_date <= end;
         });
 
         return season;
@@ -404,6 +445,19 @@ export const postSeason = async (data) => {
     } catch (error) {
         console.error('Error adding season:', error);
         throw error;
+    }
+}
+
+export const putSeason = async (id, data) => {
+    try {
+        if (!id) {
+          throw new Error('Season ID is required');
+        }
+        const response = await adminApi.put(`/seasons/${id}/`, data);
+        return response.data;
+    } catch (error) {
+      console.error('Error updating season:', error);
+      throw error;
     }
 }
 

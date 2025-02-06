@@ -1,5 +1,9 @@
 const url = 'http://localhost:8000';
 
+export const getPlayerFullname = (player) => {
+    return `${player.first_name} ${player.last_name}`;
+}
+
 // Helper function to get player image
 export const getPlayerImage = (photoUrl) => {
   if (photoUrl) {
@@ -33,4 +37,11 @@ export const getCurrentDateTime = () => {
 
 export const isDateInBetween = (date, startDate, endDate) => {
     return date >= startDate && date <= endDate;
+}
+
+export const getImgObj = async (photoUrl) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = photoUrl;
+    return img;
 }

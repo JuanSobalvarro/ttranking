@@ -25,6 +25,7 @@ import DoubleMatchAdd from "pages/admin/matches/DoubleMatchAdd.jsx";
 
 import AdminSeasonList from "pages/admin/seasons/SeasonList.jsx";
 import SeasonAdd from "pages/admin/seasons/SeasonAdd.jsx";
+import SeasonEdit from "pages/admin/seasons/SeasonEdit.jsx";
 
 function App() {
   return (
@@ -109,6 +110,13 @@ function App() {
             element={
               <ProtectedRoute>
                 <SeasonAdd />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/admin/seasons/edit/:id"
+            element={
+              <ProtectedRoute>
+                <SeasonEdit />
               </ProtectedRoute>
             }
           />

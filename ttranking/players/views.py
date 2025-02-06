@@ -14,10 +14,27 @@ def country_choices(request):
     countries = COUNTRY_CHOICES
     return Response(countries)
 
+
+@api_view(['GET'])
+def ranking_integrity(request):
+    """
+    Populates ranking for every player in all seasons
+    :param request:
+    :return:
+    """
+    response = {}
+
+    players = Player.objects.all()
+    for player in players:
+        player.create_rankings()
+        response[player.id] = f"Ranking verified for player {player.full_name}"
+
+    return Response(response, status=status.HTTP_200_OK)
+
 class PlayerPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
-    max_page_size = 20
+    max_page_size = 100
 
 
 class PlayerViewSet(viewsets.ModelViewSet):
@@ -56,7 +73,7 @@ class RankingPagination(PageNumberPagination):
     max_page_size = 20
 
 class RankingViewSet(viewsets.ModelViewSet):
-    queryset = Ranking.objects.all().order_by('ranking')
+    queryset = Ranking.objects.all().order_by('-ranking')
     serializer_class = RankingSerializer
     pagination_class = RankingPagination
 
@@ -72,10 +89,21 @@ class RankingViewSet(viewsets.ModelViewSet):
         Get ranking given a season
         :return:
         """
-        season = self.request.query_params.get('season', None)
-        if season:
-            return Ranking.objects.filter(season=season).order_by('ranking')
-        return Ranking.objects.all().order_by('ranking')
+        season = self.request.query_params.get('season_id', None)
+        player = self.request.query_params.get('player_id', None)
+
+        ranking = Ranking.objects.all().order_by('-ranking')
+        if season and player:
+            ranking = Ranking.objects.filter(season=season, player=player).order_by('-ranking')
+        elif season:
+            ranking = Ranking.objects.filter(season=season).order_by('-ranking')
+        elif player:
+            ranking = Ranking.objects.filter(player=player).order_by('-ranking')
+
+
+        print("Returning rankings: ", ranking)
+
+        return ranking
 
     # def list(self, request):
     #     pass
