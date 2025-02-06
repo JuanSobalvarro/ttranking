@@ -1,6 +1,5 @@
 services:
   backend:
-    mem_limit: 128m
     build:
       context: ./ttranking
     ports:
@@ -21,7 +20,6 @@ services:
              fi"  
 
   frontend:
-    mem_limit: 256m
     build:
       context: ./frontend
     ports:
@@ -36,7 +34,7 @@ services:
       sh -c "if [ ${DEBUG} = 'true' ]; then
                npm run dev;
              else
-               NODE_OPTIONS="--max-old-space-size=256" npm run build;
+              npm run build;
              fi"
 
   db:
