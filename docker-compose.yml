@@ -1,6 +1,6 @@
 services:
   backend:
-    mem_limit: 256m
+    mem_limit: 128m
     build:
       context: ./ttranking
     ports:
@@ -21,7 +21,7 @@ services:
              fi"  
 
   frontend:
-    mem_limit: 256m
+    mem_limit: 128m
     build:
       context: ./frontend
     ports:
