@@ -36,7 +36,7 @@ services:
       sh -c "if [ ${DEBUG} = 'true' ]; then
                npm run dev;
              else
-               npm run build;
+               NODE_OPTIONS="--max-old-space-size=128" npm run build;
              fi"
 
   db:
