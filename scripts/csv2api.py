@@ -3,6 +3,18 @@ import csv
 import requests
 from typing import Tuple
 
+# Define your backend API URL
+API_URL = 'http://localhost:8000/api'  # Replace with your actual API URL
+USERNAME = 'admin'  # Replace with your username
+PASSWORD = 'admin'  # Replace with your password
+
+# Define the list of CSV files and their corresponding endpoints
+CSV_ENDPOINT = [
+    ('players_player.csv', 'players/player/'),
+    ('matches_singlesmatch.csv', 'matches/singles'),
+    ('matches_doublesmatch.csv', 'matches/doubles'),
+]
+
 
 def get_auth_token(api_url: str, username: str, password: str) -> Tuple[str, str]:
     """
@@ -210,27 +222,15 @@ def import_matches(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_t
             print(f"Exception occurred while uploading data: {e}")
 
 def main():
-    # Define your backend API URL
-    API_URL = 'http://localhost:8000/api'  # Replace with your actual API URL
-    USERNAME = 'admin'  # Replace with your username
-    PASSWORD = 'admin'  # Replace with your password
-
-    # Define the list of CSV files and their corresponding endpoints
-    CSV_ENDPOINT = [
-        ('players_player.csv', 'players/player/'),
-        ('matches_singlesmatch.csv', 'matches/singles'),
-        ('matches_doublesmatch.csv', 'matches/doubles'),
-    ]
-
     # Obtain initial authentication token and refresh token
-    AUTH_TOKEN, REFRESH_TOKEN = get_auth_token(API_URL, USERNAME, PASSWORD)
-    if not AUTH_TOKEN or not REFRESH_TOKEN:
+    auth_token, refresh_token = get_auth_token(API_URL, USERNAME, PASSWORD)
+    if not auth_token or not refresh_token:
         print("Error: Unable to obtain initial authentication tokens.")
         return
 
     print("Token obtained")
 
-    response_lookup_season = requests.get(f"{API_URL}/seasons/1", headers={'Authorization': f"Bearer {AUTH_TOKEN}"})
+    response_lookup_season = requests.get(f"{API_URL}/seasons/1", headers={'Authorization': f"Bearer {auth_token}"})
 
     if response_lookup_season.status_code != 200:
         response = requests.post(f"{API_URL}/seasons/", json={
@@ -243,7 +243,7 @@ def main():
             'doubles_points_for_win': 2,
             'doubles_points_for_loss': 0
         },
-            headers={'Authorization': f"Bearer {AUTH_TOKEN}"})
+            headers={'Authorization': f"Bearer {auth_token}"})
 
         if not response.status_code == 201:
             print(f"Error creating default season: {response.status_code}")
@@ -253,9 +253,9 @@ def main():
     # import_csv_to_api(API_URL, CSV_ENDPOINT, auth_token=AUTH_TOKEN, refresh_token=REFRESH_TOKEN, username=USERNAME, password=PASSWORD)
 
     print("Loading players")
-    import_players(API_URL, CSV_ENDPOINT[0], AUTH_TOKEN, REFRESH_TOKEN, USERNAME, PASSWORD)
-    import_matches(API_URL, CSV_ENDPOINT[1], AUTH_TOKEN, REFRESH_TOKEN, USERNAME, PASSWORD)
-    import_matches(API_URL, CSV_ENDPOINT[2], AUTH_TOKEN, REFRESH_TOKEN, USERNAME, PASSWORD)
+    import_players(API_URL, CSV_ENDPOINT[0], auth_token, refresh_token, USERNAME, PASSWORD)
+    import_matches(API_URL, CSV_ENDPOINT[1], auth_token, refresh_token, USERNAME, PASSWORD)
+    import_matches(API_URL, CSV_ENDPOINT[2], auth_token, refresh_token, USERNAME, PASSWORD)
 
     print("Everything finished")
 
