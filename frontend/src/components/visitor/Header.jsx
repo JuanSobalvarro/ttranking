@@ -38,7 +38,7 @@ function Header() {
             {/* Logo */}
             <Link to="/" className="flex items-center text-white space-x-3">
               <img
-                src="/src/assets/images/logo-white-48.png"
+                src="/assets/images/logo-white-48.png"
                 alt="Logo"
                 className="h-10 sm:h-12"
               />

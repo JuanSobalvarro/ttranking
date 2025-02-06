@@ -90,7 +90,7 @@ function PlayerDetail() {
           <div className="w-20 h-20 md:w-72 md:h-72 bg-gray-700 rounded-full overflow-hidden shadow-lg mb-6 md:mb-0">
             <img
               ref={imgRef}
-              src={player.photo ? player.photo : '/src/assets/images/defaultPlayer.png'}
+              src={player.photo ? player.photo : '/assets/images/defaultPlayer.png'}
               alt={`${player.first_name} ${player.last_name}`}
               className="w-full h-full object-cover shadow-xl"
             />

@@ -29,7 +29,7 @@ function AdminHeader() {
         <div className="relative">
           <button onClick={toggleDropdown} className="flex items-center focus:outline-none">
             <span className="mr-2">Administrador</span>
-            <img src={'/src/assets/adminAvatar.svg'} alt="Avatar" className="w-8 h-8 rounded-full" />
+            <img src={'/assets/adminAvatar.svg'} alt="Avatar" className="w-8 h-8 rounded-full" />
           </button>
           {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg py-2">

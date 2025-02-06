@@ -1,4 +1,4 @@
-const url = 'http://localhost:8000';
+const url = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';;
 
 export const getPlayerFullname = (player) => {
     return `${player.first_name} ${player.last_name}`;

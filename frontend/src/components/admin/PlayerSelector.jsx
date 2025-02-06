@@ -7,7 +7,7 @@ const PlayerSelector = ({ players, selectedPlayer, setSelectedPlayer, label }) =
 
   const getPlayerPhoto = (playerId) => {
     const player = players.find((p) => p.id === Number(playerId));
-    return player?.photo || '/src/assets/images/defaultPlayer.png';
+    return player?.photo || '/assets/images/defaultPlayer.png';
   };
 
 

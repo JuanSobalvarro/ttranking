@@ -4,9 +4,9 @@ import requests
 from typing import Tuple
 
 # Define your backend API URL
-API_URL = 'http://localhost:8000/api'  # Replace with your actual API URL
-USERNAME = 'admin'  # Replace with your username
-PASSWORD = 'admin'  # Replace with your password
+API_URL = 'https://ttranking.juansobalvarro.site/api'  # Replace with your actual API URL
+USERNAME = 'juan'  # Replace with your username
+PASSWORD = 'uwunyanichan'  # Replace with your password
 
 # Define the list of CSV files and their corresponding endpoints
 CSV_ENDPOINT = [

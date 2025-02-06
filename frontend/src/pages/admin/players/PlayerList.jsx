@@ -156,7 +156,7 @@ function AdminPlayerList() {
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-200"
             >
               <img
-                src={player.photo ? player.photo : "/src/assets/images/defaultPlayer.png"}
+                src={player.photo ? player.photo : "/assets/images/defaultPlayer.png"}
                 alt={`${player.first_name} ${player.last_name}`}
                 className="w-full h-48 object-cover"
               />

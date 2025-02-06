@@ -181,7 +181,7 @@ function MatchDetailCard({ matchType }) {
 const PlayerCard = ({ player }) => (
   <div className="flex flex-col items-center">
     <img
-      src={player?.photo || '/src/assets/images/defaultPlayer.png'}
+      src={player?.photo || '/assets/images/defaultPlayer.png'}
       alt={`${player?.first_name} ${player?.last_name}`}
       className="w-24 h-24 rounded-full object-cover shadow-lg"
     />
@@ -197,7 +197,7 @@ const TeamCard = ({ players, teamName }) => (
       {players.map((player, index) => (
         <img
           key={index}
-          src={player?.photo || '/src/assets/images/defaultPlayer.png'}
+          src={player?.photo || '/assets/images/defaultPlayer.png'}
           alt={`${player?.first_name} ${player?.last_name}`}
           className="w-24 h-24 rounded-full object-cover shadow-lg"
         />

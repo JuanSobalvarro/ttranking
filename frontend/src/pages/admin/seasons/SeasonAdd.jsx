@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { postSeason } from 'src/services/api.js';
+import { postSeason } from 'services/api.js';
 import AdminHeader from 'components/admin/AdminHeader.jsx';
 import AdminFooter from 'components/admin/AdminFooter.jsx';
 import SeasonForm from 'components/admin/SeasonForm.jsx';

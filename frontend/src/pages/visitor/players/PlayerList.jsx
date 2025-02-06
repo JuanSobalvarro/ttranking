@@ -46,7 +46,7 @@ function PlayerList() {
               <div className="bg-gray-700 rounded-lg shadow-lg overflow-hidden flex flex-col items-center">
                 {/* Player Image */}
                 <img
-                  src={player.photo ? player.photo : '/src/assets/images/defaultPlayer.png'}
+                  src={player.photo ? player.photo : '/assets/images/defaultPlayer.png'}
                   alt={`${player.first_name} ${player.last_name}`}
                   className="w-48 h-48 object-cover rounded-full mt-6"
                 />
