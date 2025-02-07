@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getSeason, getRankingsForSeason, getSeasonLastMatches } from 'services/api'; // Assumes an API service to fetch season details
+import { getSeason, getRankingsForSeason, getSeasonLastMatches, getPlayers } from 'services/api'; // Assumes an API service to fetch season details
+import { getPlayerFullname } from "services/helpers.js";
 import Header from 'components/visitor/Header';
 import Footer from 'components/visitor/Footer';
 import RankingTable from "components/visitor/RankingTable.jsx";
 import 'styles/tailwind.css';
 
+const getPlayerData = (ranking, playerId) => {
+    return ranking.find((player) => player.id === playerId) || { player: 'Desconocido' };
+};
+
 const SeasonDetail = () => {
   const { id } = useParams();
   const [season, setSeason] = useState(null);
   const [ranking, setRanking] = useState([]);
+  const [players, setPlayers] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [lastMatches, setLastMatches] = useState([]);
   const [error, setError] = useState(null);
@@ -21,7 +27,15 @@ const SeasonDetail = () => {
         console.log('Fetching for season id: ', id);
         const ranking = await getRankingsForSeason(id);
         const lastMatches = await getSeasonLastMatches(data.id);
+        const playersData = await getPlayers(1, 100);
+        // Convert players array into a dictionary for faster lookup
+        const playerMap = playersData.results.reduce((acc, player) => {
+          acc[player.id] = player;
+          return acc;
+        }, {});
         setLastMatches(lastMatches.results);
+        // Players should be a dictionary of ids and players object so we can access like players[playerID]
+        setPlayers(playerMap);
         setSeason(data);
         console.log('ranking: ', ranking);
         setRanking(ranking.results);
@@ -35,6 +49,8 @@ const SeasonDetail = () => {
 
     fetchSeason();
   }, [id]);
+
+
 
   const calculateSeasonStatus = () => {
     if (!season) return null;
@@ -94,31 +110,34 @@ const SeasonDetail = () => {
 
             {/* Recent Matches */}
             <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-              <h4 className="text-2xl font-bold mb-4">Últimos Partidos</h4>
+              <h4 className="text-2xl font-bold mb-4">Últimos Partidos Individuales</h4>
               <ul className="space-y-4">
-                {lastMatches.map((match) => (
-                  <li
-                    key={match.id}
-                    className="border-b border-gray-700 pb-4 last:border-b-0"
-                  >
-                    <p>
-                      <strong>Partido:</strong> {match.player1} vs {match.player2}
-                    </p>
-                    <p>
-                      <strong>Resultado:</strong> {match.result}
-                    </p>
-                    <p>
-                      <strong>Fecha:</strong>{' '}
-                      {new Date(match.date).toLocaleDateString()}
-                    </p>
-                  </li>
-                ))}
+                {lastMatches.map((match) => {
+                  return (
+                      <li
+                          key={match.id}
+                          className="border-b border-gray-700 pb-4 last:border-b-0"
+                      >
+                        <p>
+                          <strong>Partido:</strong>{' '}
+                          {players[match.player1] ? getPlayerFullname(players[match.player1]) : 'Jugador desconocido'} vs{' '}
+                          {players[match.player2] ? getPlayerFullname(players[match.player2]) : 'Jugador desconocido'}
+                        </p>
+                        <p>
+                          <strong>Resultado:</strong> {getPlayerFullname(players[match.winner])} ganó
+                        </p>
+                        <p>
+                          <strong>Fecha:</strong> {new Date(match.date).toLocaleDateString()}
+                        </p>
+                      </li>
+                  );
+                })}
               </ul>
             </div>
           </div>
         )}
       </main>
-      <Footer />
+      <Footer/>
     </div>
   );
 };
