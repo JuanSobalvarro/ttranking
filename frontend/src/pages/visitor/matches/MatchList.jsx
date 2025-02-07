@@ -40,6 +40,7 @@ function MatchList() {
         acc[player.id] = `${player.first_name} ${player.last_name}`;
         return acc;
       }, {});
+      // console.log(playerData);
       setPlayers(playerData);
     } catch (error) {
       console.error("Error fetching players:", error);

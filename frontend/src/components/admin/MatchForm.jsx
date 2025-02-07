@@ -78,32 +78,33 @@ const MatchForm = ({ matchType, postMatch, postGame, initialSelectedPlayers, ini
   const handleSave = async () => {
     const playerIds = Object.values(selectedPlayers);
     if (playerIds.some((id) => !id)) {
-      setAlert({
-        isOpen: true,
-        message: 'Please select all players.',
-        type: 'error',
-      });
-      return;
+        setAlert({
+            isOpen: true,
+            message: 'Please select all players.',
+            type: 'error',
+        });
+        return;
     }
 
     if (new Set(playerIds).size !== playerIds.length) {
-      setAlert({
-        isOpen: true,
-        message: 'A player cannot be in more than one team.',
-        type: 'error',
-      });
-      return;
+        setAlert({
+            isOpen: true,
+            message: 'A player cannot be in more than one team.',
+            type: 'error',
+        });
+        return;
     }
 
     if (!matchDateTime) {
-      setAlert({
-        isOpen: true,
-        message: 'Please select a date and time for the match.',
-        type: 'error',
-      });
-      return;
+        setAlert({
+            isOpen: true,
+            message: 'Please select a date and time for the match.',
+            type: 'error',
+        });
+        return;
     }
-    // check if the date has a season assigned
+
+    // Check if the date has a season assigned
     const season = await getSeasonForDate(matchDateTime);
     console.log("Season: ", season);
     if (!season) {
@@ -116,69 +117,103 @@ const MatchForm = ({ matchType, postMatch, postGame, initialSelectedPlayers, ini
     }
 
     if (games.length === 0) {
-      setAlert({
-        isOpen: true,
-        message: 'Please add at least one game.',
-        type: 'error',
-      });
-      return;
+        setAlert({
+            isOpen: true,
+            message: 'Please add at least one game.',
+            type: 'error',
+        });
+        return;
     }
 
     setSaving(true);
 
+    let matchId = null;
+    let gameIds = [];
+
     try {
-      const matchData = {
-        ...(matchType === 'singles'
-          ? {
-              player1: selectedPlayers[0],
-              player2: selectedPlayers[1],
-            }
-          : {
-              team1_player1: selectedPlayers[0],
-              team1_player2: selectedPlayers[1],
-              team2_player1: selectedPlayers[2],
-              team2_player2: selectedPlayers[3],
-            }),
-        date: matchDateTime,
-      };
-
-      const matchResponse = await postMatch(matchData);
-
-      for (let i = 0; i < games.length; i++) {
-        const gameData = {
-          match: matchResponse.id,
-          ...(matchType === 'singles'
-            ? {
-                player1_score: games[i].team1_score,
-                player2_score: games[i].team2_score,
-              }
-            : {
-                team1_score: games[i].team1_score,
-                team2_score: games[i].team2_score,
-              }),
+        const matchData = {
+            ...(matchType === 'singles'
+                ? {
+                    player1: selectedPlayers[0],
+                    player2: selectedPlayers[1],
+                }
+                : {
+                    team1_player1: selectedPlayers[0],
+                    team1_player2: selectedPlayers[1],
+                    team2_player1: selectedPlayers[2],
+                    team2_player2: selectedPlayers[3],
+                }),
+            date: matchDateTime,
         };
-        await postGame(gameData);
-      }
 
-      setAlert({
-        isOpen: true,
-        message: 'Match saved successfully.',
-        type: 'success',
-      });
-      setSelectedPlayers(initializeSelectedPlayers(matchType));
-      setMatchDateTime('');
-      setGames([{ team1_score: 0, team2_score: 0 }]);
+        // Save match
+        const matchResponse = await postMatch(matchData);
+        matchId = matchResponse.id;
+
+        // Save games
+        for (let i = 0; i < games.length; i++) {
+            const gameData = {
+                match: matchId,
+                ...(matchType === 'singles'
+                    ? {
+                        player1_score: games[i].team1_score,
+                        player2_score: games[i].team2_score,
+                    }
+                    : {
+                        team1_score: games[i].team1_score,
+                        team2_score: games[i].team2_score,
+                    }),
+            };
+
+            const gameResponse = await postGame(gameData);
+            gameIds.push(gameResponse.id);
+        }
+
+        setAlert({
+            isOpen: true,
+            message: 'Match saved successfully.',
+            type: 'success',
+        });
+
+        // Reset form
+        setSelectedPlayers(initializeSelectedPlayers(matchType));
+        setMatchDateTime('');
+        setGames([{ team1_score: 0, team2_score: 0 }]);
+
     } catch (error) {
-      console.error('Error saving match:', error);
-      setAlert({
-        isOpen: true,
-        message: 'An error occurred while saving the match.',
-        type: 'error',
-      });
+        console.error('Error saving match or games:', error);
+
+        // Rollback mechanism
+        if (gameIds.length > 0) {
+            console.log('Rolling back games...');
+            for (let gameId of gameIds) {
+                try {
+                    await deleteGame(gameId);
+                } catch (deleteError) {
+                    console.error(`Failed to delete game with ID ${gameId}:`, deleteError);
+                }
+            }
+        }
+
+        if (matchId) {
+            console.log('Rolling back match...');
+            try {
+                await deleteMatch(matchId);
+            } catch (deleteError) {
+                console.error(`Failed to delete match with ID ${matchId}:`, deleteError);
+            }
+        }
+
+        setAlert({
+            isOpen: true,
+            message: 'An error occurred while saving. Changes were rolled back.',
+            type: 'error',
+        });
     } finally {
-      setSaving(false);
+        setSaving(false);
     }
-  };
+};
+
 
   return (
     <div>

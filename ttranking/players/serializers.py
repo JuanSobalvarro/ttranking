@@ -3,7 +3,7 @@ from .models import Player, Ranking
 
 
 class PlayerSerializer(serializers.ModelSerializer):
-    # id = serializers.IntegerField()
+    id = serializers.IntegerField()
     photo = serializers.ImageField(required=False)  # Make the photo field optional
 
     class Meta:

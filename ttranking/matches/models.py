@@ -113,16 +113,18 @@ class SinglesMatch(models.Model):
         else:
             self.winner = None
 
-        # print("Match winner updated: ", self.winner)
+        print("Match winner updated: ", self.winner)
 
     def update_rankings(self):
-        players_ranking = [Ranking.objects.get_or_create(player=player, season=self.season) for player in self.players]
+        players_ranking = [Ranking.objects.get_or_create(player=player, season=self.season)[0] for player in self.players]
 
         # Check if the match is already created and remove the points from the previous winner and add points to the loser
         if self.pk:
             previous_match = SinglesMatch.objects.select_related('player1', 'player2').get(pk=self.pk)
 
-            prev_players_ranking = [Ranking.objects.get_or_create(player=player, season=self.season) for player in previous_match.players]
+            prev_players_ranking = [Ranking.objects.get_or_create(player=player, season=self.season)[0] for player in previous_match.players]
+
+            print("Previous players ranking: ", prev_players_ranking)
 
             self.remove_match_from_players(prev_players_ranking[0], prev_players_ranking[1])
 
@@ -169,7 +171,7 @@ class SinglesMatch(models.Model):
         self.update_winner()
         if self.winner:
             self.update_rankings()
-        # print("Saving match with winner: ", self.winner)
+        print("Saving match with winner: ", self.winner)
         super().save(*args, **kwargs)
 
     def clean(self):
@@ -177,8 +179,8 @@ class SinglesMatch(models.Model):
             raise ValidationError("Player 1 and Player 2 cannot be the same.")
 
     def delete(self, *args, **kwargs):
-        player1_ranking = Ranking.objects.get_or_create(player=self.player1.pk, season=self.season)
-        player2_ranking = Ranking.objects.get_or_create(player=self.player2.pk, season=self.season)
+        player1_ranking = Ranking.objects.get_or_create(player=self.player1.pk, season=self.season)[0]
+        player2_ranking = Ranking.objects.get_or_create(player=self.player2.pk, season=self.season)[0]
 
         if player1_ranking and player2_ranking:
             self.remove_match_from_players(player1_ranking, player2_ranking)
@@ -241,13 +243,13 @@ class DoublesMatch(models.Model):
             self.winner_2 = None
 
     def update_rankings(self):
-        players_ranking = [Ranking.objects.get_or_create(player=player, season=self.season) for player in self.players]
+        players_ranking = [Ranking.objects.get_or_create(player=player, season=self.season)[0] for player in self.players]
 
         # Check if the match is already created
         if self.pk:
             previous_match = DoublesMatch.objects.select_related('team1_player1', 'team1_player2', 'team2_player1', 'team2_player2').get(pk=self.pk)
 
-            prev_players_ranking = [Ranking.objects.get_or_create(player=player, season=self.season) for player in previous_match.players]
+            prev_players_ranking = [Ranking.objects.get_or_create(player=player, season=self.season)[0] for player in previous_match.players]
 
             self.remove_match_from_players(prev_players_ranking[0], prev_players_ranking[1], prev_players_ranking[2], prev_players_ranking[3])
 
@@ -324,10 +326,10 @@ class DoublesMatch(models.Model):
             raise ValidationError("Players cannot be repeated across teams.")
 
     def delete(self, *args, **kwargs):
-        player1_ranking = Ranking.objects.get_or_create(player=self.team1_player1.pk, season=self.season)
-        player2_ranking = Ranking.objects.get_or_create(player=self.team1_player2.pk, season=self.season)
-        player3_ranking = Ranking.objects.get_or_create(player=self.team2_player1.pk, season=self.season)
-        player4_ranking = Ranking.objects.get_or_create(player=self.team2_player2.pk, season=self.season)
+        player1_ranking = Ranking.objects.get_or_create(player=self.team1_player1.pk, season=self.season)[0]
+        player2_ranking = Ranking.objects.get_or_create(player=self.team1_player2.pk, season=self.season)[0]
+        player3_ranking = Ranking.objects.get_or_create(player=self.team2_player1.pk, season=self.season)[0]
+        player4_ranking = Ranking.objects.get_or_create(player=self.team2_player2.pk, season=self.season)[0]
 
         if player1_ranking and player2_ranking and player3_ranking and player4_ranking:
             self.remove_match_from_players(player1_ranking, player2_ranking, player3_ranking, player4_ranking)

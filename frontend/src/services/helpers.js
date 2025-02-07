@@ -1,6 +1,9 @@
-const url = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';;
+const url = import.meta.env.VITE_API_URL || 'http://localhost:8000/';;
 
 export const getPlayerFullname = (player) => {
+    if (!player) {
+        return null;
+    }
     return `${player.first_name} ${player.last_name}`;
 }
 
@@ -12,7 +15,7 @@ export const getPlayerImage = (photoUrl) => {
       }
     return url + photoUrl;
   }
-  return '/src/assets/images/defaultPlayer.png';
+  return '/assets/images/defaultPlayer.png';
 };
 
 export const getAge = (dateString) => {

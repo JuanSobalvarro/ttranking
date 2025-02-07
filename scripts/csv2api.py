@@ -152,12 +152,12 @@ def import_matches(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_t
             print("Token refreshed")
 
         # Check if the resource already exists
-        # match_id = row.get('id')  # Use the ID field as a unique identifier
-        # if match_id:
-        #     check_response = requests.get(f"{api_url}/{csv_endpoint[1]}/{match_id}/", headers=headers)
-        #     if check_response.status_code == 200:
-        #         print(f"Resource with ID {match_id} already exists in {csv_endpoint[1]}, skipping...")
-        #         continue
+        match_id = row.get('id')  # Use the ID field as a unique identifier
+        if match_id:
+            check_response = requests.get(f"{api_url}/{csv_endpoint[1]}/{match_id}/", headers=headers)
+            if check_response.status_code == 200:
+                print(f"Resource with ID {match_id} already exists in {csv_endpoint[1]}, skipping...")
+                continue
 
         # Post the data if it does not already exist
         try:
@@ -218,6 +218,9 @@ def import_matches(api_url, csv_endpoint: Tuple[str, str], auth_token, refresh_t
                     },
                     headers=headers
                 )
+
+                request_count += 1  # Increment request count
+
         except Exception as e:
             print(f"Exception occurred while uploading data: {e}")
 

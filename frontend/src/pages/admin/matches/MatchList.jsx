@@ -158,14 +158,6 @@ function AdminMatchList() {
 
   const renderMatches = (matches, type) => (
     <div className="mb-8">
-      <Button
-        color="blue"
-        onClick={() => navigate({ pathname: `/admin/matches/${type}/add` })}
-        className="font-medium"
-      >
-        Agregar Partido {type === 'singles' ? 'Individual' : 'Doble'}
-      </Button>
-
       <h3 className="text-2xl font-bold mb-4">{type === 'singles' ? 'Partidos Individuales' : 'Partidos Dobles'}</h3>
       <table className="table-auto w-full border-collapse border border-gray-300 text-center text-sm">
         <thead>
@@ -289,6 +281,20 @@ function AdminMatchList() {
           </div>
         ) : (
           <>
+            <Button
+              color="blue"
+              onClick={() => navigate({ pathname: `/admin/matches/singles/add` })}
+              className="font-medium"
+            >
+              Agregar Partido Individual
+            </Button>
+            <Button
+              color="blue"
+              onClick={() => navigate({ pathname: `/admin/matches/doubles/add` })}
+              className="font-medium"
+            >
+              Agregar Partido Doble
+            </Button>
             {singleMatches.length === 0 && doubleMatches.length === 0 ? (
               <p className="text-center text-gray-500">No hay partidos registrados para esta temporada.</p>
             ) : (
@@ -297,9 +303,7 @@ function AdminMatchList() {
                 <Button color="green" onClick={() => fetchMatches(selectedSeason)} className="mb-4">
                   Refrescar Partidos
                 </Button>
-                <h3 className="text-2xl font-bold mb-4">Partidos Individuales</h3>
                 {renderMatches(singleMatches, "singles")}
-                <h3 className="text-2xl font-bold mb-4">Partidos Dobles</h3>
                 {renderMatches(doubleMatches, "doubles")}
               </>
             )}
