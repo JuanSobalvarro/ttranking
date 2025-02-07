@@ -100,7 +100,7 @@ function MatchDetailCard({ matchType }) {
     return 'No hay ganador';
   };
 
-  const matchWinnerDisplay = (winner) => {
+  const matchWinnerDisplay = () => {
     if (matchType === 'singles') {
       return getPlayerFullname(players[match.winner]) || 'No hay ganador';
     } else if (matchType === 'doubles') {
@@ -123,7 +123,7 @@ function MatchDetailCard({ matchType }) {
           <div className="flex flex-col items-center rounded-lg p-4">
             <Badge color="yellow" className="text-lg font-semibold flex items-center space-x-2 px-4 py-2">
               <TrophyIcon className="h-6 w-6 text-yellow-500" />
-              <span>Ganador: {matchWinnerDisplay(match.winner) ? match.winner : "No hay ganador"}</span>
+              <span>Ganador: { match.winner ? matchWinnerDisplay()  : "No hay ganador"}</span>
             </Badge>
           </div>
 
@@ -163,7 +163,7 @@ function MatchDetailCard({ matchType }) {
                         ? `${players[match.player1]?.first_name}: ${game.player1_score} - ${players[match.player2]?.first_name}: ${game.player2_score}`
                         : `Equipo 1: ${game.team1_score} - Equipo 2: ${game.team2_score}`}
                     </p>
-                    <p><strong>Ganador:</strong> {matchWinnerDisplay(game.winner)}</p>
+                    <p><strong>Ganador:</strong> {gameWinnerDisplay(game.winner)}</p>
                   </div>
                 ))}
               </div>
