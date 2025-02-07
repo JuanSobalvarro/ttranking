@@ -146,7 +146,7 @@ class SinglesMatch(models.Model):
             player1_ranking.add_match('singles', False)
             player2_ranking.add_match('singles', True)
 
-    def remove_match_from_players(self, player1_ranking, player2_ranking):
+    def remove_match_from_players(self, player1_ranking: Ranking, player2_ranking: Ranking):
         """
         This function calls the remove_match function from ranking to each player
         :param player1_ranking:
