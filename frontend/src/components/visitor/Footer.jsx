@@ -71,7 +71,7 @@ function Footer() {
             className="text-gray-400 text-sm hover:text-white"
             aria-label="GitHub Repository"
           >
-            © 2024 Sistema de Clasificación de Tenis de Mesa
+            © 2024 Sistema de Clasificación de Tenis de Mesa v2.1.0
           </Link>
         </div>
       </div>

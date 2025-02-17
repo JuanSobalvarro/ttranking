@@ -101,28 +101,38 @@ function Home() {
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 100 }}
           >
-            🏆 Total Partidos Jugados: {matchesPlayed}
+            🏆 Total Partidos Jugados {currentSeason ? currentSeason.name : ''}: {matchesPlayed}
           </motion.div>
         </div>
       </motion.div>
 
       {/* Spotlight and Ranking Sections */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.3 }}
-      >
-        <Spotlight topPlayersRanking={topPlayers} />
-        <SubSpotlight topByWinrateRanking={topByWinrate} />
-        <RankingTable ranking={ranking} title="🏆 Top 20 Jugadores 🏆" />
-      </motion.div>
+        <motion.div
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            transition={{duration: 1, delay: 0.3}}
+        >
+            <Spotlight topPlayersRanking={topPlayers}/>
 
-      {/* Description Section */}
-      <motion.div
-          className="container mx-auto my-12 text-center text-white px-6"
-          initial={{opacity: 0, y: 20}}
-          animate={{opacity: 1, y: 0}}
-          transition={{duration: 1}}
+
+            <SubSpotlight topByWinrateRanking={topByWinrate}/>
+            <motion.div
+                className='container mx-auto my-12 text-center text-white px-6'
+                initial={{opacity: 0, scale: 0.9}}
+                animate={{opacity: 1, scale: 1}}
+                transition={{duration: 1}}
+            >
+                <SeasonDescription season={currentSeason}/>
+            </motion.div>
+            <RankingTable ranking={ranking} title="🏆 Top 20 Jugadores 🏆"/>
+        </motion.div>
+
+        {/* Description Section */}
+        <motion.div
+            className="container mx-auto my-12 text-center text-white px-6"
+            initial={{opacity: 0, y: 20}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 1}}
       >
         <h2 className="text-3xl font-bold mb-6">📊 Sobre el sistema de Clasificación</h2>
         <p className="text-xl mb-6">
@@ -134,14 +144,6 @@ function Home() {
           Ya sean principiantes, avanzados o profesionales, todos pueden participar en nuestro grupo y ser
           registrados/as en nuestra clasificación.
         </p>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-        >
-          <SeasonDescription season={currentSeason} />
-        </motion.div>
       </motion.div>
 
 
